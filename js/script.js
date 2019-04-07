@@ -9,7 +9,8 @@ init = function(){
             map1:null,
             map2:null,
             center1:starting_center1,
-            center2:starting_center2
+            center2:starting_center2,
+
         },
         methods: {
             initMap(){
@@ -33,21 +34,36 @@ init = function(){
     });
     app.initMap();
     trackMap();
-    request("https://api.openaq.org/v1/?coordinates=40.7590,-73.9845");
+    OpenAQSearch();
 }
-var request = function(location_name){
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function(){
-        if (req.readyState == 4 && req.status == 200){
-
-            //sucessfully recieved data!
-            
-            console.log(req)
-        }
+function OpenAQSearch()
+{
+    var request = {
+        url: "https://api.openaq.org/v1/measurements?date_from=2019-03-01&date_to=2019-04-07&coordinates=40.7590%2C-73.9845&radius=50000",
+        dataType: "json",
+        success: FillMarkers
     };
-    req.open("GET", location_name,true);
-    req.send();
-  
+    $.ajax(request);
+}
+function FillMarkers(data){
+    console.log(data.results);
+    for(var i=0; i < data.results.length; i++){
+        var marker = L.marker([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]).addTo(app.map2)
+            .bindPopup(
+                data.results[i].parameter
+                +" : " 
+                +data.results[i].value
+                +data.results[i].unit
+            );
+        marker.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        console.log("created marker at: " + [data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);
+        
+    }
 }
 
 trackMap = function(){
