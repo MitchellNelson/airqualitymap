@@ -1,7 +1,6 @@
 html{
 	font-size:100%;
 }
-
 body{
 	padding:0;
 	margin:0;
@@ -10,8 +9,28 @@ body{
 	color:#3b3d42;
 	font-size: 1.1rem;
 }
+table { 
+	border-collapse:collapse;
+	border-spacing: 0;
+ }
+ td{
+ 	padding:0;
+ 	margin:0;
+ 	border:#44484f 1px solid;
+ }
+ input{
+ 	margin:.5rem;
+ 	font-size: 1rem;
+ 	border:none;
+ 	border-radius: 10px;
+ }
+ input:focus,select:focus,textarea:focus,button:focus {
+    outline: none;
+}
 .nav{
 	height: 5vh;
+	background-color: #44484f;
+	color:white;
 }
 .maps{ 
 	height: 95vh;

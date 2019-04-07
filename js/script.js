@@ -33,6 +33,21 @@ init = function(){
     });
     app.initMap();
     trackMap();
+    request("https://api.openaq.org/v1/?coordinates=40.7590,-73.9845");
+}
+var request = function(location_name){
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function(){
+        if (req.readyState == 4 && req.status == 200){
+
+            //sucessfully recieved data!
+            
+            console.log(req)
+        }
+    };
+    req.open("GET", location_name,true);
+    req.send();
+  
 }
 
 trackMap = function(){
