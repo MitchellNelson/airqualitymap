@@ -19,8 +19,9 @@ table {
  	border:#44484f 1px solid;
  }
  input{
+ 	padding:5px;
  	margin:.5rem;
- 	font-size: 1rem;
+ 	font-size: .7rem;
  	border:none;
  	border-radius: 10px;
  }
@@ -28,6 +29,7 @@ table {
     outline: none;
 }
 .nav{
+	text-align: center;
 	height: 5vh;
 	background-color: #44484f;
 	color:white;
