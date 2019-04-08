@@ -10,7 +10,9 @@ init = function(){
             map2:null,
             center1:starting_center1,
             center2:starting_center2,
+            unique_markers:[]
         },
+        //computed - loop over data and 
         methods: {
             initMap(){
                 this.map1 = L.map('map1id').setView(starting_center1, 13);
@@ -48,7 +50,7 @@ function OpenAQSearch()
 
         url: "https://api.openaq.org/v1/measurements?order_by=location?date_from=2019-03-01&date_to=2019-04-07&coordinates=40.7590%2C-73.9845&radius=50000",
         dataType: "json",
-        success: FillMarkers
+        success: FillUniqueMarkers
     };
     $.ajax(request);
 }
@@ -91,11 +93,12 @@ function lngSearch2(event)
             app.map2.panTo(app.center2);
         }, 600);
 }
-function FillMarkers(data){
+function FillUniqueMarkers(data){
     console.log(data.results);
-    var unique_markers = [];
+    app.unique_markers
+    //var unique_markers = [];
     for(var i=0; i < data.results.length; i++){
-        var marker = addMarker([data.results[i].coordinates.latitude,data.results[i].coordinates.longitude], app.map2)
+        /*var marker = addMarker([data.results[i].coordinates.latitude,data.results[i].coordinates.longitude], app.map2)
             .bindPopup(
                 data.results[i].parameter
                 +" : " 
@@ -108,27 +111,55 @@ function FillMarkers(data){
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
-        console.log([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);
+        console.log([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);*/
 
-        if(unique_markers.length==0){
-            unique_markers.push([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);
+        //if there is no markers in the array, add the first
+        if(app.unique_markers.length==0){
+            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers.push(newmarker);
+            
         }
 
         //check that if the new marker already exists in the unique_markers
         var exists = false;
-        for(var j = 0; j < unique_markers.length; j++) {
-            if (unique_markers[j][0] == data.results[i].coordinates.latitude){
+        for(var j = 0; j < app.unique_markers.length; j++) {
+            if (app.unique_markers[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers[j].coordinates.longitude == data.results[i].coordinates.longitude){
                 exists = true;
+                app.unique_markers[j].addParameter(data.results[i].parameter,data.results[i].value);
                 console.log(exists);
             }
         }
-        if(exists){
-            console.log([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]+" exists");
+        if(!exists){
+            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers.push(newmarker);
         }
-        else{
-            unique_markers.push([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);
-            console.log([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]+" new");
-        }
+    }
+    console.log(app.unique_markers);
+}
+function ShowMarkers(unique_markers){
+    for(var i = 0; i<unique_markers.length; i++){
+
+    }
+}
+function unique_marker(lat, lng){
+    this.coordinates = [];
+    this.coordinates.latitude = lat;
+    this.coordinates.longitude = lng;
+    this.pm25 = [];
+    this.pm10 = [];
+    this.no2 = [];
+    this.o3 = [];
+    this.co = [];
+    this.bc = [];
+    this.addParameter = function (parameter,value){
+        if(parameter == "pm25"){this.pm25.push(value);}
+        if(parameter == "pm10"){this.pm10.push(value);}
+        if(parameter == "no2"){this.no2.push(value);}
+        if(parameter == "o3"){this.o3.push(value);}
+        if(parameter == "co"){this.co.push(value);}
+        if(parameter == "bc"){this.bc.push(value);}
     }
 }
 addMarker = function([lat,lng],map){

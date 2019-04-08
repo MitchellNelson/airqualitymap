@@ -21,15 +21,15 @@
     		<tr>
     			<td>
     				<div class="nav">
-				    	Latitude:<input id="latSearch1" @input="latSearch1" type="text" v-model="center1.lat" :value="center1.lat"></input>
-				    	Longitude:<input id="lngSearch1" @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
+				    	Latitude:<input @input="latSearch1" type="text" v-model="center1.lat" :value="center1.lat"></input>
+				    	Longitude:<input @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
 				    </div>
 				    <div id="map1id" class="maps"></div>
 				</td>
 				<td>
 					<div class="nav">
-				    	Latitude:<input id="latSearch2" @input="latSearch2" type="text" v-model="center2.lat" :value="center2.lat"></input>
-				    	Longitude:<input id="lngSearch2" @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
+				    	Latitude:<input @input="latSearch2" type="text" v-model="center2.lat" :value="center2.lat"></input>
+				    	Longitude:<input @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
 				    </div>
 				    <div id="map2id" class="maps"></div>
 				</td>
