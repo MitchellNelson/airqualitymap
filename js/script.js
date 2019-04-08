@@ -58,6 +58,7 @@ trackMap = function(){
     app.map1.addEventListener("move",function(){
         setTimeout(function(){ 
             app.center1=app.map1.getCenter();
+
         }, 200);
     });
     app.map2.addEventListener("move",function(){
@@ -113,7 +114,6 @@ function FillUniqueMarkers(data){
             if (app.unique_markers[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers[j].coordinates.longitude == data.results[i].coordinates.longitude){
                 exists = true;
                 app.unique_markers[j].addParameter(data.results[i].parameter,data.results[i].value);
-                console.log(exists);
             }
         }
         if(!exists){
@@ -135,11 +135,10 @@ function ShowMarkers(){
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
-        console.log(GetPopupString(unique_marker));
+        
     }
 }
 function GetPopupString(unique_marker){
-    console.log(unique_marker);
     var retstring="";
     if(unique_marker.pm25 != undefined && unique_marker.pm25.length>0){
         retstring = "pm25: " + getAvg(unique_marker.pm25) + "µg/m³" + "<br>" + retstring;
