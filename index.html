@@ -35,7 +35,8 @@
 				</td>
 			</tr>
 		</table>
-    <table id="firstTable">
+    <h1>{{unique_markers[0].co}}</h1>
+    <!--<table id="firstTable">
         <thead>
           <tr>
            <th>Latitude</th>
@@ -50,43 +51,59 @@
           </tr>
       </thead>
         <tbody>
-          <tr v-for="unique_marker in search_results">
-              <td>{{unique_marker.parameter}}</td>
+          <tr v-for="item in unique_marker">
+              <td>{{item.parameter}}</td>
               <td><span v-for= "value in unique_marker.parameter"> {{value}}, </span></td>
 
-              <!--<td>
+              <td>
                   <img v-if="item.images.length >0" :src = "item.images[0].url" height ="50px" width="auto"> 
                   <img v-else src ="thumbnail.jpeg" height = "50px" width= "auto"> 
-              </td>-->
+              </td>
           </tr>
         </tbody>
-      </table>
+      </table> 
       <table id="secondTable">
         <thead>
           <tr>
            <th>Latitude</th>
            <th>Longitude</th>
-           <th>co</th>
            <th>pm25</th>
            <th>pm10</th>
            <th>so2</th>
            <th>no2</th>
            <th>o3</th>
            <th>bc</th>
+           <th>co</th>
           </tr>
       </thead>
         <tbody>
-          <tr v-for="unique_marker in search_results">
-              <td>{{unique_marker.parameter}}</td>
-              <td><span v-for= "value in unique_marker.parameter"> {{value}}, </span></td>
-
-              <!--<td>
-                  <img v-if="item.images.length >0" :src = "item.images[0].url" height ="50px" width="auto"> 
-                  <img v-else src ="thumbnail.jpeg" height = "50px" width= "auto"> 
+          <tr v-for="item in unique_markers">
+            <h1>{{item}}</h1>
+              <td> <span v-if= "item.pm25.length > 0"> <span v-for= "value in item.pm25"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.pm10.length > 0"> <span v-for= "value in unique_marker.pm10"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.so2.length > 0"> <span v-for= "value in unique_marker.so2"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.no2.length > 0"> <span v-for= "value in unique_marker.no2"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.o3.length > 0"> <span v-for= "value in unique_marker.o3"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.bc.length > 0"> <span v-for= "value in unique_marker.bc"> {{value}}, </span></span></td>
+              <span v-else></span>
+              </td>
+              <td> <span v-if= "unique_marker.co.length > 0"> <span v-for= "value in unique_marker.co"> {{value}}, </span></span></td>
+              <span v-else></span>
               </td>-->
+
           </tr>
         </tbody>
-      </table>
+      </table>-->
     </div>
 </body>
 </html>
