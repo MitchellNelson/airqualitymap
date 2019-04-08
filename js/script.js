@@ -98,21 +98,7 @@ function FillUniqueMarkers(data){
     app.unique_markers
     //var unique_markers = [];
     for(var i=0; i < data.results.length; i++){
-        /*var marker = addMarker([data.results[i].coordinates.latitude,data.results[i].coordinates.longitude], app.map2)
-            .bindPopup(
-                data.results[i].parameter
-                +" : " 
-                +data.results[i].value
-                +data.results[i].unit
-            );
-        marker.on('mouseover', function (e) {
-            this.openPopup();
-        });
-        marker.on('mouseout', function (e) {
-            this.closePopup();
-        });
-        console.log([data.results[i].coordinates.latitude, data.results[i].coordinates.longitude]);*/
-
+        
         //if there is no markers in the array, add the first
         if(app.unique_markers.length==0){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
@@ -137,11 +123,50 @@ function FillUniqueMarkers(data){
         }
     }
     console.log(app.unique_markers);
+    ShowMarkers();
 }
-function ShowMarkers(unique_markers){
-    for(var i = 0; i<unique_markers.length; i++){
-
+function ShowMarkers(){
+    for(var i = 0; i<app.unique_markers.length; i++){
+        var marker = addMarker([app.unique_markers[i].coordinates.latitude,app.unique_markers[i].coordinates.longitude], app.map2)
+            .bindPopup(GetPopupString(app.unique_markers[i]));
+        marker.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        console.log(GetPopupString(unique_marker));
     }
+}
+function GetPopupString(unique_marker){
+    console.log(unique_marker);
+    var retstring="";
+    if(unique_marker.pm25 != undefined && unique_marker.pm25.length>0){
+        retstring = "pm25: " + getAvg(unique_marker.pm25) + "µg/m³" + "<br>" + retstring;
+    }
+    if(unique_marker.pm10 != undefined && unique_marker.pm10.length>0){
+        retstring = "pm10: " + getAvg(unique_marker.pm10) + "ppm" + "<br>" + retstring;
+    }
+    if(unique_marker.no2!= undefined && unique_marker.no2.length>0){
+        retstring = "no2: " + getAvg(unique_marker.no2) + "ppm" + "<br>" + retstring;
+    }
+    if(unique_marker.o3!= undefined && unique_marker.o3.length>0){
+        retstring = "o3: " + getAvg(unique_marker.o3) + "ppm" + "<br>" + retstring;
+    }
+    if(unique_marker.co!= undefined && unique_marker.co.length>0){
+        retstring = "co: " + getAvg(unique_marker.co) + "ppm"  + "<br>"+ retstring;
+    }
+    if(unique_marker.bc!= undefined && unique_marker.bc.length>0){
+        retstring = "bc: " + getAvg(unique_marker.pm25) + "bc"  + "<br>"+ retstring;
+    }
+    return retstring;
+}
+function getAvg(value){
+    ret = 0;
+    for(var i = 0; i<value.length; i++){
+        ret = ret + value[i];
+    }
+    return ret / value.length;
 }
 function unique_marker(lat, lng){
     this.coordinates = [];
