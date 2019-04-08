@@ -35,6 +35,58 @@
 				</td>
 			</tr>
 		</table>
+    <table id="firstTable">
+        <thead>
+          <tr>
+           <th>Latitude</th>
+           <th>Longitude</th>
+           <th>co</th>
+           <th>pm25</th>
+           <th>pm10</th>
+           <th>so2</th>
+           <th>no2</th>
+           <th>o3</th>
+           <th>bc</th>
+          </tr>
+      </thead>
+        <tbody>
+          <tr v-for="unique_marker in search_results">
+              <td>{{unique_marker.parameter}}</td>
+              <td><span v-for= "value in unique_marker.parameter"> {{value}}, </span></td>
+
+              <!--<td>
+                  <img v-if="item.images.length >0" :src = "item.images[0].url" height ="50px" width="auto"> 
+                  <img v-else src ="thumbnail.jpeg" height = "50px" width= "auto"> 
+              </td>-->
+          </tr>
+        </tbody>
+      </table>
+      <table id="secondTable">
+        <thead>
+          <tr>
+           <th>Latitude</th>
+           <th>Longitude</th>
+           <th>co</th>
+           <th>pm25</th>
+           <th>pm10</th>
+           <th>so2</th>
+           <th>no2</th>
+           <th>o3</th>
+           <th>bc</th>
+          </tr>
+      </thead>
+        <tbody>
+          <tr v-for="unique_marker in search_results">
+              <td>{{unique_marker.parameter}}</td>
+              <td><span v-for= "value in unique_marker.parameter"> {{value}}, </span></td>
+
+              <!--<td>
+                  <img v-if="item.images.length >0" :src = "item.images[0].url" height ="50px" width="auto"> 
+                  <img v-else src ="thumbnail.jpeg" height = "50px" width= "auto"> 
+              </td>-->
+          </tr>
+        </tbody>
+      </table>
     </div>
 </body>
 </html>
