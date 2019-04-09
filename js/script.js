@@ -10,7 +10,8 @@ init = function(){
             map2:null,
             center1:starting_center1,
             center2:starting_center2,
-            unique_markers:[]
+            unique_markers:[],
+            map2_marker_objects:[]
         },
         //computed - loop over data and 
         methods: {
@@ -59,54 +60,54 @@ trackMap = function(){
     app.map1.addEventListener("move",function(){
         setTimeout(function(){ 
             app.center1=app.map1.getCenter();
-
+        }, 200);
+    });
+    app.map2.addEventListener("move",function(){
+        setTimeout(function(){ 
+            app.center2=app.map2.getCenter();
         }, 200);
     });
     //drag
     app.map2.addEventListener("dragend",function(){
         setTimeout(function(){ 
-            app.center2=app.map2.getCenter();
+             DeleteOldMarkers();
             OpenAQSearch();
-        }, 200);
+        }, 100);
     });
     app.map2.addEventListener("zoomend",function(){
         setTimeout(function(){ 
-            app.center2=app.map2.getCenter();
+             DeleteOldMarkers();
             OpenAQSearch();
-        }, 200);
+        }, 100);
     });
 
 }
 
 /*  latSearch and lngSearch functions update the maps position
     when the user changes the input fields for lat and longitude    */
-function latSearch1(event)
-{
+function latSearch1(event){
     setTimeout(function(){ 
             app.map1.panTo(app.center1);
         }, 600);
 }
-function lngSearch1(event)
-{
+function lngSearch1(event){
     setTimeout(function(){ 
             app.map1.panTo(app.center1);
         }, 600);
 }
-function latSearch2(event)
-{
+function latSearch2(event){
     setTimeout(function(){ 
             app.map2.panTo(app.center2);
         }, 600);
 }
-function lngSearch2(event)
-{
+function lngSearch2(event){
     setTimeout(function(){ 
             app.map2.panTo(app.center2);
         }, 600);
 }
 function FillUniqueMarkers(data){
     console.log(data.results);
-    app.unique_markers
+    var num_new_markers=0;
     //var unique_markers = [];
     for(var i=0; i < data.results.length; i++){
         
@@ -115,7 +116,7 @@ function FillUniqueMarkers(data){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
             newmarker.addParameter(data.results[i].parameter,data.results[i].value);
             app.unique_markers.push(newmarker);
-            
+            num_new_markers++;
         }
 
         //check that if the new marker already exists in the unique_markers
@@ -130,22 +131,26 @@ function FillUniqueMarkers(data){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
             newmarker.addParameter(data.results[i].parameter,data.results[i].value);
             app.unique_markers.push(newmarker);
+            num_new_markers++;
         }
     }
     console.log(app.unique_markers);
-    ShowMarkers();
+    if(num_new_markers>0){
+        ShowMarkers(num_new_markers);
+    }
 }
-function ShowMarkers(){
-    for(var i = 0; i<app.unique_markers.length; i++){
-        var marker = addMarker([app.unique_markers[i].coordinates.latitude,app.unique_markers[i].coordinates.longitude], app.map2)
-            .bindPopup(GetPopupString(app.unique_markers[i]));
+function ShowMarkers(num_new_markers){
+    var num_old_markers = app.map2_marker_objects.length;
+    for(var i = 0; i<num_new_markers; i++){
+        var marker = addMarker([app.unique_markers[i+num_old_markers].coordinates.latitude,app.unique_markers[i+num_old_markers].coordinates.longitude], app.map2)
+            .bindPopup(GetPopupString(app.unique_markers[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
-        
+        app.map2_marker_objects.push(marker);
     }
 }
 function GetPopupString(unique_marker){
@@ -200,4 +205,20 @@ function unique_marker(lat, lng){
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
     return marker;
+}
+DeleteOldMarkers = function(){
+    for(var i = 0; i<app.unique_markers.length; i++){
+        //if unique_markers[i] is out of bounds, delete it.
+        if(!app.map2.getBounds().contains([app.unique_markers[i].coordinates.latitude,app.unique_markers[i].coordinates.longitude])){
+            app.unique_markers.splice(i, i);
+            //console.log("length of unique_marker: " + app.unique_markers.length);
+            //console.log("length of map2_marker_objects: " + app.map2_marker_objects.length);
+            //console.log(app.map2_marker_objects[i]);
+            app.map2.removeLayer(app.map2_marker_objects[i]);
+            app.map2_marker_objects.splice(i,i);
+            console.log(app.map2_marker_objects.length);
+            console.log("length of unique_marker: " + app.unique_markers.length);
+            console.log("length of map2_marker_objects: " + app.map2_marker_objects.length);
+        }
+    }
 }
