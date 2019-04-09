@@ -41,14 +41,15 @@ function OpenAQSearch()
 {
     //setup all vars to be plugged into the request url
     var d = new Date();
-    var date_from;
-    var date_to = Date.now();
-    var longitude;
-    var latitude;
-    var radius;
+    var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    d.setDate(d.getDate() - 30);
+    var date_from = (d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    console.log(date_from);
+    var bounds = app.map2.getBounds();
+    var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-
-        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from=2019-03-01&date_to=2019-04-07&coordinates=40.7590%2C-73.9845&radius=50000",
+       //url: "https://api.openaq.org/v1/measurements?order_by=location?date_from=2019-03-01&date_to=2019-04-07&coordinates=40.7590%2C-73.9845&radius=50000",
+        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000",
         dataType: "json",
         success: FillUniqueMarkers
     };
@@ -61,11 +62,20 @@ trackMap = function(){
 
         }, 200);
     });
-    app.map2.addEventListener("move",function(){
+    //drag
+    app.map2.addEventListener("dragend",function(){
         setTimeout(function(){ 
             app.center2=app.map2.getCenter();
+            OpenAQSearch();
         }, 200);
     });
+    app.map2.addEventListener("zoomend",function(){
+        setTimeout(function(){ 
+            app.center2=app.map2.getCenter();
+            OpenAQSearch();
+        }, 200);
+    });
+
 }
 
 /*  latSearch and lngSearch functions update the maps position
@@ -165,7 +175,8 @@ function getAvg(value){
     for(var i = 0; i<value.length; i++){
         ret = ret + value[i];
     }
-    return ret / value.length;
+    ret = ret/value.length
+    return Math.round(ret * 10000) / 10000;
 }
 function unique_marker(lat, lng){
     this.coordinates = [];
