@@ -38,18 +38,15 @@ init = function(){
     trackMap();
     OpenAQSearch();
 }
-function OpenAQSearch()
-{
+function OpenAQSearch(){
     //setup all vars to be plugged into the request url
     var d = new Date();
     var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     d.setDate(d.getDate() - 30);
     var date_from = (d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-    console.log(date_from);
     var bounds = app.map2.getBounds();
     var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-       //url: "https://api.openaq.org/v1/measurements?order_by=location?date_from=2019-03-01&date_to=2019-04-07&coordinates=40.7590%2C-73.9845&radius=50000",
         url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000",
         dataType: "json",
         success: FillUniqueMarkers
@@ -70,19 +67,17 @@ trackMap = function(){
     //drag
     app.map2.addEventListener("dragend",function(){
         setTimeout(function(){ 
-             DeleteOldMarkers();
+            DeleteOldMarkers();
             OpenAQSearch();
         }, 100);
     });
     app.map2.addEventListener("zoomend",function(){
         setTimeout(function(){ 
-             DeleteOldMarkers();
+            DeleteOldMarkers();
             OpenAQSearch();
         }, 100);
     });
-
 }
-
 /*  latSearch and lngSearch functions update the maps position
     when the user changes the input fields for lat and longitude    */
 function latSearch1(event){
@@ -134,8 +129,8 @@ function FillUniqueMarkers(data){
             num_new_markers++;
         }
     }
-    console.log(app.unique_markers);
     if(num_new_markers>0){
+        console.log("adding "+num_new_markers+"new markers");
         ShowMarkers(num_new_markers);
     }
 }
@@ -152,6 +147,7 @@ function ShowMarkers(num_new_markers){
         });
         app.map2_marker_objects.push(marker);
     }
+    console.log("currently have :"+app.unique_markers.length + " markers");
 }
 function GetPopupString(unique_marker){
     var retstring="";
@@ -207,18 +203,16 @@ addMarker = function([lat,lng],map){
     return marker;
 }
 DeleteOldMarkers = function(){
-    for(var i = 0; i<app.unique_markers.length; i++){
-        //if unique_markers[i] is out of bounds, delete it.
-        if(!app.map2.getBounds().contains([app.unique_markers[i].coordinates.latitude,app.unique_markers[i].coordinates.longitude])){
-            app.unique_markers.splice(i, i);
-            //console.log("length of unique_marker: " + app.unique_markers.length);
-            //console.log("length of map2_marker_objects: " + app.map2_marker_objects.length);
-            //console.log(app.map2_marker_objects[i]);
+    var num_deleted=0;//for printing purposes only
+    var i = app.unique_markers.length
+    while (i--) {
+        if(!app.map2.getBounds().contains([app.unique_markers[i].coordinates.latitude,app.unique_markers[i].coordinates.longitude])){ 
+            app.unique_markers.splice(i, 1);
             app.map2.removeLayer(app.map2_marker_objects[i]);
-            app.map2_marker_objects.splice(i,i);
-            console.log(app.map2_marker_objects.length);
-            console.log("length of unique_marker: " + app.unique_markers.length);
-            console.log("length of map2_marker_objects: " + app.map2_marker_objects.length);
-        }
+            app.map2_marker_objects.splice(i,1);
+            num_deleted++;
+        } 
     }
+    console.log("deleted :"+num_deleted + " markers");
+    console.log("currently have :"+app.unique_markers.length + " markers");
 }
