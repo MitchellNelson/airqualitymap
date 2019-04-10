@@ -1,6 +1,7 @@
 var app;
 var starting_center1 = L.latLng(44.9430, -93.1895);
 var starting_center2 = L.latLng(40.7590, -73.9845);
+var openAQRequest = null;
 
 init = function(){
     app = new Vue({
@@ -27,7 +28,8 @@ init = function(){
                 this.map2 = L.map('map2id').setView(starting_center2, 13);
                 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
                     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                    maxZoom: 30,
+                    maxZoom: 16,
+                    minZoom: 9,
                     id: 'mapbox.streets',
                     accessToken: 'pk.eyJ1IjoibmVsczQ5MjkiLCJhIjoiY2p1NGVqYjN3MHg0ejRkcnYzajRzOWhzYSJ9.EzP1fdcqxGe4aVr2_NqK1w'
                 }).addTo(this.map2);   
@@ -39,6 +41,7 @@ init = function(){
     OpenAQSearch();
 }
 function OpenAQSearch(){
+    console.log("sending request");
     //setup all vars to be plugged into the request url
     var d = new Date();
     var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
@@ -51,6 +54,7 @@ function OpenAQSearch(){
         dataType: "json",
         success: FillUniqueMarkers
     };
+    console.log(request.url);
     $.ajax(request);
 }
 trackMap = function(){
@@ -66,16 +70,26 @@ trackMap = function(){
     });
     //drag
     app.map2.addEventListener("dragend",function(){
-        setTimeout(function(){ 
+        if (openAQRequest!=null){
+            clearTimeout(openAQRequest);
+        }
+        openAQRequest = setTimeout(function(){ 
             DeleteOldMarkers();
             OpenAQSearch();
-        }, 100);
+            openAQRequest=null;
+        }, 1500);
     });
     app.map2.addEventListener("zoomend",function(){
-        setTimeout(function(){ 
+        if (openAQRequest!=null){
+            clearTimeout(openAQRequest);
+        }
+        console.log("zoomend");
+        openAQRequest = setTimeout(function(){ 
             DeleteOldMarkers();
             OpenAQSearch();
-        }, 100);
+            openAQRequest=null;
+            console.log("in timeout")
+        }, 1500);
     });
 }
 /*  latSearch and lngSearch functions update the maps position
@@ -202,6 +216,8 @@ addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
     return marker;
 }
+
+/*   Loops    */
 DeleteOldMarkers = function(){
     var num_deleted=0;//for printing purposes only
     var i = app.unique_markers.length
