@@ -77,7 +77,7 @@ trackMap = function(){
             DeleteOldMarkers();
             OpenAQSearch();
             openAQRequest=null;
-        }, 1500);
+        }, 200);
     });
     app.map2.addEventListener("zoomend",function(){
         if (openAQRequest!=null){
@@ -89,7 +89,7 @@ trackMap = function(){
             OpenAQSearch();
             openAQRequest=null;
             console.log("in timeout")
-        }, 1500);
+        }, 200);
     });
 }
 /*  latSearch and lngSearch functions update the maps position
@@ -232,3 +232,41 @@ DeleteOldMarkers = function(){
     console.log("deleted :"+num_deleted + " markers");
     console.log("currently have :"+app.unique_markers.length + " markers");
 }
+fullscreen1 = function(){
+    document.getElementById("map2_and_nav").style.display="none";
+    document.getElementsByClassName("maps")[0].style.width="100vw";
+    document.getElementById("fullscreen1").style.display="none";
+    document.getElementById("halfscreen1").style.display="inline";
+    app.map1.invalidateSize();
+    app.map2.invalidateSize();
+    halfscreen2();
+    //DeleteOldMarkers1();
+}
+halfscreen1 = function(){
+    document.getElementsByClassName("maps")[0].style.width="50vw";
+    document.getElementById("halfscreen1").style.display="none";
+    document.getElementById("fullscreen1").style.display="inline";
+    document.getElementById("map2_and_nav").style.display="table-cell";
+    app.map1.invalidateSize();
+    app.map2.invalidateSize();
+    //DeleteOldMarkers1();
+}
+fullscreen2 = function(){
+    document.getElementById("map1_and_nav").style.display="none";
+    document.getElementsByClassName("maps")[1].style.width="100vw";
+    document.getElementById("fullscreen2").style.display="none";
+    document.getElementById("halfscreen2").style.display="inline";
+    app.map1.invalidateSize();
+    app.map2.invalidateSize();
+    //DeleteOldMarkers();
+}
+halfscreen2 = function(){
+    document.getElementsByClassName("maps")[1].style.width="50vw";
+    document.getElementById("halfscreen2").style.display="none";
+    document.getElementById("fullscreen2").style.display="inline";
+    document.getElementById("map1_and_nav").style.display="table-cell";
+    app.map1.invalidateSize();
+    app.map2.invalidateSize();
+    //DeleteOldMarkers();
+}
+

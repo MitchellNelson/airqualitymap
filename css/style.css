@@ -38,3 +38,22 @@ table {
 	height: 95vh;
 	width: 50vw;
 }
+.screenButtons{
+	font-size: 1rem;
+	color:white;
+	border:none;
+	background-color: #44484f;
+}
+.screenButtons:hover{
+	color:#fae596;
+	cursor: pointer;
+	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+}
+#halfscreen1{
+	display:none;
+}
+#halfscreen2{
+	display:none;
+}
