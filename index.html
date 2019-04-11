@@ -15,6 +15,7 @@
    <script type="application/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="application/javascript" src="js/script.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body onload="init()">
     <div id="app">
@@ -26,8 +27,68 @@
 				    	Longitude:<input @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
 				    	<button id="fullscreen1" class="screenButtons"onclick="fullscreen1()"><i class="icon-resize-full"></i></i></button>
 				    	<button id="halfscreen1" class="screenButtons" onclick="halfscreen1()"><i class="icon-resize-small"></i></button>
+              <br>
+              Location: <input @input = "locSearch1" type="text" id="addr" v-model="location1" :value="location1"/>
+              <button type="button">Advanced Search</button>
 				    </div>
 				    <div id="map1id" class="maps"></div>
+            <table id="firstTable">
+            <thead>
+               <tr>
+               <th>Location</th>         
+               <th>pm25</th>
+               <th>pm10</th>
+               <th>no2</th>
+               <th>o3</th>
+               <th>bc</th>
+               <th>co</th>
+              </tr>
+            </thead>
+              <tbody>
+               <div v-if="unique_markers.length > 0">
+                <tr v-for="item in unique_markers">
+                  <td valign= "top" class = "location">
+                    <button class="collapsible">{{item.coordinates.latitude}},{{item.coordinates.longitude}}</button>
+                  </td>
+                  <td> 
+                    <div v-if= "item.pm25.length > 0"> 
+                      <span v-for= "value in item.pm25"> {{value}}, </span>
+                    </div>
+                  </td>
+               
+                  <td> 
+                    <div v-if= "item.pm10.length > 0"> 
+                      <span v-for= "value in item.pm10"> {{value}}, </span>
+                    </div>
+                  </td>
+
+                  <td> 
+                    <div v-if= "item.no2.length > 0"> 
+                      <span v-for= "value in item.no2"> {{value}}, </span>
+                    </div>
+                    </td>
+
+                    <td> 
+                      <div v-if= "item.o3.length > 0"> 
+                        <span v-for= "value in item.o3"> {{value}}, </span>
+                      </div>
+                    </td>
+
+                    <td> 
+                      <div v-if= "item.bc.length > 0"> 
+                        <span v-for= "value in item.bc"> {{value}}, </span>
+                      </div>
+                    </td>
+                    
+                    <td> 
+                      <div v-if= "item.co.length > 0"> 
+                        <span v-for= "value in item.co"> {{value}}, </span>
+                      </div>
+                    </td>
+                  </tr> 
+                </div>
+              </tbody>
+          </table>
 				</td>
 				<td id="map2_and_nav">
 					<div class="nav">
@@ -35,80 +96,72 @@
 				    	Longitude:<input @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
 				    	<button id="fullscreen2" class="screenButtons"onclick="fullscreen2()"><i class="icon-resize-full"></i></i></button>
 				    	<button id="halfscreen2" class="screenButtons" onclick="halfscreen2()"><i class="icon-resize-small"></i></button>
+              <br>
+              Location: <input @input = "locSearch2" type="text" id="addr" v-model="location2" :value="location2"/>
+              <button type="button">Advanced Search</button>
 				    </div>
 				    <div id="map2id" class="maps"></div>
-				</td>
-			</tr>
-		</table>
-    <p>{{unique_markers[0]}}</p>
-    <!--<table id="firstTable">
-        <thead>
-          <tr>
-           <th>Latitude</th>
-           <th>Longitude</th>
-           <th>co</th>
-           <th>pm25</th>
-           <th>pm10</th>
-           <th>so2</th>
-           <th>no2</th>
-           <th>o3</th>
-           <th>bc</th>
-          </tr>
-      </thead>
-        <tbody>
-          <tr v-for="item in unique_marker">
-              <td>{{item.parameter}}</td>
-              <td><span v-for= "value in unique_marker.parameter"> {{value}}, </span></td>
+            <table id="secondTable">
+           <thead>
+               <tr>
+               <th>Location</th>         
+               <th>pm25</th>
+               <th>pm10</th>
+               <th>no2</th>
+               <th>o3</th>
+               <th>bc</th>
+               <th>co</th>
+              </tr>
+          </thead>
+            <tbody>
+             <div v-if="unique_markers.length > 0">
+              <tr v-for="item in unique_markers">
+                <td valign= "top" class = "location">
+                  <button class="collapsible">{{item.coordinates.latitude}},{{item.coordinates.longitude}}</button>
+                </td>
+                <td> 
+                  <div v-if= "item.pm25.length > 0"> 
+                    <span v-for= "value in item.pm25"> {{value}}, </span>
+                  </div>
+                </td>
+             
+                <td> 
+                  <div v-if= "item.pm10.length > 0"> 
+                    <span v-for= "value in item.pm10"> {{value}}, </span>
+                  </div>
+                </td>
 
-              <td>
-                  <img v-if="item.images.length >0" :src = "item.images[0].url" height ="50px" width="auto"> 
-                  <img v-else src ="thumbnail.jpeg" height = "50px" width= "auto"> 
-              </td>
-          </tr>
-        </tbody>
-      </table> 
-      <table id="secondTable">
-        <thead>
-          <tr>
-           <th>Latitude</th>
-           <th>Longitude</th>
-           <th>pm25</th>
-           <th>pm10</th>
-           <th>so2</th>
-           <th>no2</th>
-           <th>o3</th>
-           <th>bc</th>
-           <th>co</th>
-          </tr>
-      </thead>
-        <tbody>
-          <tr v-for="item in unique_markers">
-            <h1>{{item}}</h1>
-              <td> <span v-if= "item.pm25.length > 0"> <span v-for= "value in item.pm25"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.pm10.length > 0"> <span v-for= "value in unique_marker.pm10"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.so2.length > 0"> <span v-for= "value in unique_marker.so2"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.no2.length > 0"> <span v-for= "value in unique_marker.no2"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.o3.length > 0"> <span v-for= "value in unique_marker.o3"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.bc.length > 0"> <span v-for= "value in unique_marker.bc"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>
-              <td> <span v-if= "unique_marker.co.length > 0"> <span v-for= "value in unique_marker.co"> {{value}}, </span></span></td>
-              <span v-else></span>
-              </td>-->
+                <td> 
+                  <div v-if= "item.no2.length > 0"> 
+                    <span v-for= "value in item.no2"> {{value}}, </span>
+                  </div>
+                  </td>
 
-          </tr>
-        </tbody>
-      </table>-->
+                  <td> 
+                    <div v-if= "item.o3.length > 0"> 
+                      <span v-for= "value in item.o3"> {{value}}, </span>
+                    </div>
+                  </td>
+
+                  <td> 
+                    <div v-if= "item.bc.length > 0"> 
+                      <span v-for= "value in item.bc"> {{value}}, </span>
+                    </div>
+                  </td>
+                  
+                  <td> 
+                    <div v-if= "item.co.length > 0"> 
+                      <span v-for= "value in item.co"> {{value}}, </span>
+                      </div>
+                    </td>
+                  </tr> 
+                </div>
+              </tbody>
+            </table>
+          </div>
+  			</td>
+  		</tr>
+  	</table>
     </div>
 </body>
 </html>

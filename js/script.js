@@ -12,7 +12,9 @@ init = function(){
             center1:starting_center1,
             center2:starting_center2,
             unique_markers:[],
-            map2_marker_objects:[]
+            map2_marker_objects:[],
+            location1: null,
+            location2:null
         },
         //computed - loop over data and 
         methods: {
@@ -33,6 +35,28 @@ init = function(){
                     id: 'mapbox.streets',
                     accessToken: 'pk.eyJ1IjoibmVsczQ5MjkiLCJhIjoiY2p1NGVqYjN3MHg0ejRkcnYzajRzOWhzYSJ9.EzP1fdcqxGe4aVr2_NqK1w'
                 }).addTo(this.map2);   
+            },
+            mounted() {
+                const self = this;
+                axios
+                .get('https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q='+self.location1+'&format=json&limit=1')
+                .then(response => {
+                    self.center1.lat = response.data[0].lat;
+                    self.center1.lng = response.data[0].lon;
+                })
+                console.log(this.center1);
+                this.map1.panTo(this.center1);
+            },
+            mounted2() {
+                const self = this;
+                axios
+                .get('https://nominatim.openstreetmap.org/?format=json&addressdetails=1&q='+self.location2+'&format=json&limit=1')
+                .then(response => {
+                    self.center2.lat = response.data[0].lat;
+                    self.center2.lng = response.data[0].lon;
+                })
+                console.log(this.center2);
+                this.map2.panTo(this.center2);
             },  
         }
     });
@@ -113,6 +137,17 @@ function lngSearch2(event){
     setTimeout(function(){ 
             app.map2.panTo(app.center2);
         }, 600);
+}
+function locSearch1(event){
+    setTimeout(function(){
+           app.mounted();  
+    },1000);
+}
+
+function locSearch2(event){
+    setTimeout(function(){
+        app.mounted2();   
+    },1000);
 }
 function FillUniqueMarkers(data){
     console.log(data.results);
