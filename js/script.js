@@ -1,7 +1,10 @@
 var app;
 var starting_center1 = L.latLng(44.9430, -93.1895);
 var starting_center2 = L.latLng(40.7590, -73.9845);
+var starting_location1 = "St. Paul";
+var starting_location2 = "New York City";
 var openAQRequest = null;
+var locationRequest = null;
 
 init = function(){
     app = new Vue({
@@ -13,8 +16,8 @@ init = function(){
             center2:starting_center2,
             unique_markers:[],
             map2_marker_objects:[],
-            location1: null,
-            location2:null
+            location1: starting_location1,
+            location2: starting_location2
         },
         //computed - loop over data and 
         methods: {
@@ -45,7 +48,7 @@ init = function(){
                     self.center1.lng = response.data[0].lon;
                 })
                 console.log(this.center1);
-                this.map1.panTo(this.center1);
+                //this.map1.panTo(this.center1);
             },
             mounted2() {
                 const self = this;
@@ -81,6 +84,16 @@ function OpenAQSearch(){
     console.log(request.url);
     $.ajax(request);
 }
+LocationFromLatLng = function(lat, lng, location) {
+    const self = this;
+    axios
+    .get('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng)
+    .then(response => {
+        if(response.data.address.city!=undefined){
+            app.location2 = response.data.address.city;
+        }
+    })
+}
 trackMap = function(){
     app.map1.addEventListener("move",function(){
         setTimeout(function(){ 
@@ -100,6 +113,7 @@ trackMap = function(){
         openAQRequest = setTimeout(function(){ 
             DeleteOldMarkers();
             OpenAQSearch();
+            LocationFromLatLng(app.center2.lat, app.center2.lng);
             openAQRequest=null;
         }, 200);
     });
@@ -111,6 +125,7 @@ trackMap = function(){
         openAQRequest = setTimeout(function(){ 
             DeleteOldMarkers();
             OpenAQSearch();
+            LocationFromLatLng(app.center2.lat, app.center2.lng, app.location2);
             openAQRequest=null;
             console.log("in timeout")
         }, 200);
@@ -146,7 +161,10 @@ function locSearch1(event){
 
 function locSearch2(event){
     setTimeout(function(){
-        app.mounted2();   
+        console.log("going to send a request")
+        app.mounted2();  
+        //app.map2.panTo(app.center2); 
+        //locationRequest= null;
     },1000);
 }
 function FillUniqueMarkers(data){
