@@ -21,7 +21,7 @@ table {
  }
  input{
  	padding:5px;
- 	margin:.5rem;
+ 	margin-left:.5rem;
  	font-size: .7rem;
  	border:none;
  	border-radius: 10px;
@@ -62,12 +62,18 @@ table {
 }
 .nav{
 	text-align: center;
-	height: 12vh;
+	height: 10vh;
 	background-color: #44484f;
 	color:white;
 }
+.location-search .location-search input{
+	font-size: 2rem;
+}
+.latlng, .latlng input{
+	font-size: .7rem;
+}
 .maps{ 
-	height: 95vh;
+	height: 90vh;
 	width: 50vw;
 }
 .screenButtons{
