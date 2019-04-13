@@ -60,14 +60,22 @@ table {
   overflow: hidden;
   background-color: #f1f1f1;
 }
-.nav{
-	text-align: center;
+.nav-wrapper{
+	text-align: left;
 	height: 10vh;
+	min-height: 94px;
 	background-color: #44484f;
 	color:white;
 }
+.nav{
+	margin-left: 1rem;
+}
+.filter-page{
+	display: none;
+}
 .location-search .location-search input{
-	font-size: 2rem;
+
+	font-size: 1.5rem;
 }
 .latlng, .latlng input{
 	font-size: .7rem;
@@ -77,10 +85,12 @@ table {
 	width: 50vw;
 }
 .screenButtons{
-	font-size: 1rem;
+	margin-right:1.2rem;
+	font-size: 1.2rem;
 	color:white;
 	border:none;
 	background-color: #44484f;
+	float: right;
 }
 .screenButtons:hover{
 	color:#fae596;
@@ -89,9 +99,6 @@ table {
   	-moz-transition:.5s;
   	-webkit-transition:.5s;
 }
-#halfscreen1{
-	display:none;
-}
-#halfscreen2{
+#halfscreen1, #halfscreen2{
 	display:none;
 }

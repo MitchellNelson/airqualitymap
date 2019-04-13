@@ -22,18 +22,25 @@
     	<table>
     		<tr>
     			<td id="map1_and_nav">
-    				<div class="nav">
-    					<div class="location-search">
-    						Location:<input @input = "locSearch1" type="text" id="addr" v-model="location1" :value="location1"/>
-    					</div>
-    					<br>
-				    	<div class="latlng" >
-				    		Latitude:<input @input="latSearch1" type="text" v-model="center1.lat" :value="center1.lat"></input>
-					    	Longitude:<input @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
+    				<div class="nav-wrapper">
+	    				<div id="nav1" class="nav">
+	    					<button id="showFilter1" class="screenButtons"onclick="showFilter1()"><i class="icon-cog"></i></i></button>
+	    					<div class="location-search">
+	    						Location:<input @input = "locSearch1" type="text" id="addr" v-model="location1" :value="location1"/>
+	    					</div>
+	    					<br>
+					    	<div class="latlng" >
+					    		Latitude:<input @input="latSearch1" type="text" v-model="center1.lat" :value="center1.lat"></input>
+						    	Longitude:<input @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
+					    	</div>
 					    	<button id="fullscreen1" class="screenButtons"onclick="fullscreen1()"><i class="icon-resize-full"></i></i></button>
-					    	<button id="halfscreen1" class="screenButtons" onclick="halfscreen1()"><i class="icon-resize-small"></i></button>
-				    	</div>
-				    </div>
+						    <button id="halfscreen1" class="screenButtons" onclick="halfscreen1()"><i class="icon-resize-small"></i></button>
+					    </div>
+					    <div id="filter-page1" class="filter-page">
+						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="icon-arrow-left"></i></button>
+	    					Where Filters will live
+					    </div>
+					</div>
 				    <div id="map1id" class="maps"></div>
             <table id="firstTable">
             <thead>
@@ -94,18 +101,26 @@
           </table>
 				</td>
 				<td id="map2_and_nav">
-					<div class="nav">
-						<div class="location-search">
-							Location:<input @input = "locSearch2" type="text" id="addr" v-model="location2" :value="location2"/>
-						</div>
-						<br>
-				    	<div class="latlng">
-				    		Latitude:<input @input="latSearch2" type="text" v-model="center2.lat" :value="center2.lat"></input>
-					    	Longitude:<input @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
-					    	<button id="fullscreen2" class="screenButtons"onclick="fullscreen2()"><i class="icon-resize-full"></i></i></button>
-					    	<button id="halfscreen2" class="screenButtons" onclick="halfscreen2()"><i class="icon-resize-small"></i></button>
+					<div class="nav-wrapper">
+						<div id="nav2" class="nav">
+	    					<button id="showFilter2" class="screenButtons"onclick="showFilter2()"><i class="icon-cog"></i></i></button>
+							<div class="location-search">
+								Location:<input @input = "locSearch2" type="text" id="addr" v-model="location2" :value="location2"/>
+							</div>
+							<br>
+					    	<div class="latlng">
+					    		Latitude:<input @input="latSearch2" type="text" v-model="center2.lat" :value="center2.lat"></input>
+						    	Longitude:<input @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
+						    </div>
+						
+					    <button id="fullscreen2" class="screenButtons"onclick="fullscreen2()"><i class="icon-resize-full"></i></i></button>
+					    <button id="halfscreen2" class="screenButtons" onclick="halfscreen2()"><i class="icon-resize-small"></i></button>
+				    	</div>
+				    	<div id="filter-page2" class="filter-page">
+						    <button id="showNav2" class="screenButtons" onclick="showNav2()"><i class="icon-arrow-left"></i></button>
+	    					Where Filters will live
 					    </div>
-				    </div>
+					</div>	
 				    <div id="map2id" class="maps"></div>
             <table id="secondTable">
            <thead>

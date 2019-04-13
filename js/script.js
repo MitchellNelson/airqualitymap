@@ -1,4 +1,5 @@
 var app;
+
 var starting_center1 = L.latLng(44.9430, -93.1895);
 var starting_center2 = L.latLng(40.7590, -73.9845);
 var starting_location1 = "St. Paul";
@@ -19,7 +20,8 @@ init = function(){
             map1_marker_objects:[],
             map2_marker_objects:[],
             location1: starting_location1,
-            location2: starting_location2
+            location2: starting_location2,
+            checkedNames: []
         },
         //computed - loop over data and 
         methods: {
@@ -395,7 +397,6 @@ fullscreen1 = function(){
     document.getElementById("halfscreen1").style.display="inline";
     app.map1.invalidateSize();
     app.map2.invalidateSize();
-    halfscreen2();
     //DeleteOldMarkers1();
 }
 halfscreen1 = function(){
@@ -425,3 +426,21 @@ halfscreen2 = function(){
     app.map2.invalidateSize();
     //DeleteOldMarkers();
 }
+showFilter1 = function(){
+    document.getElementById("nav1").style.display="none";
+    document.getElementById("filter-page1").style.display="inline";
+}
+showNav1 = function(){
+    document.getElementById("filter-page1").style.display="none";
+    document.getElementById("nav1").style.display="block";
+}
+showFilter2 = function(){
+    document.getElementById("nav2").style.display="none";
+    document.getElementById("filter-page2").style.display="inline";
+}
+showNav2 = function(){
+    document.getElementById("filter-page2").style.display="none";
+    document.getElementById("nav2").style.display="block";
+}
+
+
