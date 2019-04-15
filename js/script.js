@@ -21,7 +21,9 @@ init = function(){
             map2_marker_objects:[],
             location1: starting_location1,
             location2: starting_location2,
-            checkedNames: []
+            checkedNames: [],
+            allPoints1: [],
+            allPoints2: []
         },
         //computed - loop over data and 
         methods: {
@@ -65,6 +67,44 @@ init = function(){
                 })
                 console.log(this.center2);
                 this.map2.panTo(this.center2);
+            },
+            getClass(a) {
+            max =0
+            for(var i =0; i<a.length; i++)
+            {
+                if (a[i]>max)
+                {
+                    max = a[i]
+                }
+            }
+              if (max ==0) {
+                this.class=null
+                return this.class
+              }   
+              else if (max > 0 && max<=50) {
+                this.class="good"
+                return this.class
+              }
+              else if (max>50 && max<=100) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (max>100 && max<=150){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (max>150 && max<=200){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (max>200 && max<=300){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else {
+                this.class = "hazardous"
+                return this.class
+              }
             },  
         }
     });
@@ -250,6 +290,34 @@ function FillUniqueMarkers1(data){
             app.unique_markers1.push(newmarker);
             num_new_markers++;
         }
+        //if date & lat lon already exist
+        var exists = false;
+        for(var j = 0; j < app.allPoints1.length; j++) {
+            if (app.allPoints1[j].coordinates.latitude == data.results[i].coordinates.latitude && app.allPoints1[j].coordinates.longitude == data.results[i].coordinates.longitude && app.allPoints1[j].date ==data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T'))){
+                exists = true;
+                /* POTENTIALLY REMOVE DUPLICATES HERE
+                duplicate = false;
+                var par = data.results[i].parameter;
+                console.log(app.allPoints1[j].no2);
+                for(var k =0; k<app.allPoints1[j].par.length; k++)
+                {
+                    if(data.results[i].value == app.allPoints1[j].data.results[i].parameter.value[i])
+                    {
+                       //app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
+                       console.log(data.results[i].value , app.allPoints1[j].date);
+                    }
+                }
+                */
+                app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
+                
+            }
+        }
+        if(!exists){
+            var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
+            newPoint.addParameter(data.results[i].parameter,data.results[i].value);
+            app.allPoints1.push(newPoint);
+            
+        }
     }
     if(num_new_markers>0){
         console.log("adding "+num_new_markers+"new markers");
@@ -268,6 +336,7 @@ function FillUniqueMarkers2(data){
             newmarker.addParameter(data.results[i].parameter,data.results[i].value);
             app.unique_markers2.push(newmarker);
             num_new_markers++;
+            //add point to allPoints
         }
 
         //check that if the new marker already exists in the unique_markers
@@ -284,6 +353,10 @@ function FillUniqueMarkers2(data){
             app.unique_markers2.push(newmarker);
             num_new_markers++;
         }
+        var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
+        
+        newPoint.addParameter(data.results[i].parameter,data.results[i].value);
+        app.allPoints2.push(newPoint);
     }
     if(num_new_markers>0){
         console.log("adding "+num_new_markers+"new markers");
@@ -369,6 +442,27 @@ function unique_marker(lat, lng){
         if(parameter == "co"){this.co.push(value);}
         if(parameter == "bc"){this.bc.push(value);}
     }
+}
+function allPoints(lat,lng, date)
+{
+    this.coordinates = [];
+    this.coordinates.latitude = lat;
+    this.coordinates.longitude = lng;
+    this.date = date;
+    this.pm25 = [];
+    this.pm10 = [];
+    this.no2 = [];
+    this.o3 = [];
+    this.co = [];
+    this.bc = [];
+    this.addParameter = function (parameter,value){
+        if(parameter == "pm25"){this.pm25.push(value);}
+        if(parameter == "pm10"){this.pm10.push(value);}
+        if(parameter == "no2"){this.no2.push(value);}
+        if(parameter == "o3"){this.o3.push(value);}
+        if(parameter == "co"){this.co.push(value);}
+        if(parameter == "bc"){this.bc.push(value);}
+    } 
 }
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
