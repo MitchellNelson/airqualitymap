@@ -28,15 +28,20 @@ table {
  }
  th {
 	padding:5px;
-	position: -webkit-sticky;
-	position: sticky;
-	top: 0;
 	background-color: #44484f;
 	color:white;
 	font-weight: lighter;
 }
  input:focus,select:focus,textarea:focus,button:focus {
     outline: none;
+}
+thead {
+	height:5px;
+}
+.sticky{
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
 }
 .collapsible {
   background-color: #eee;
@@ -46,20 +51,7 @@ table {
   outline: none;
   font-size: 15px;
 }
-.active, .collapsible:hover {
-  background-color: #ccc;
-}
-.location{
-	position: -webkit-sticky;
-	position: sticky;
-	top: 4%;
-}
-.content {
-  padding: 0 18px;
-  /*display: none;*/
-  overflow: hidden;
-  background-color: #f1f1f1;
-}
+
 .nav-wrapper{
 	text-align: left;
 	height: 10vh;
@@ -98,6 +90,37 @@ table {
 	-ms-transition:.5s;
   	-moz-transition:.5s;
   	-webkit-transition:.5s;
+}
+.good{
+    background-color: green;
+    opacity: .7;
+    color:black;
+}
+.moderate {
+ 	background-color: yellow;
+ 	opacity: .7;
+ 	color:black;
+
+}
+.uhsg {
+	background-color: orange;
+	opacity: .7;
+	color:black;
+}
+.unhealthy {
+ 	background-color: red;
+ 	opacity: .7;
+ 	color:black;
+}
+.veryUnhealthy {
+	background-color: purple;
+	opacity: .7;
+	color:black;
+}
+.hazardous{
+	background-color: maroon;
+	opacity: .7;
+	color:black;
 }
 #halfscreen1, #halfscreen2{
 	display:none;
