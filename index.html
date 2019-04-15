@@ -44,15 +44,15 @@
 				    <div id="map1id" class="maps"></div>
             <table id="firstTable">
             <thead>
-             <!-- <tr>
+             <tr>
                 <th > Air Quality Index</th>
                 <th class = "good"> Good (0-50)</th>
                 <th class = "moderate"> Moderate (51-100)</th>
-                <th colspan ="2" class = "uhsg"style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
+                <th colspan ="2" class = "uhsg" style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
                 <th class = "unhealthy">Unhealthy (151-200)</th>
                 <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
                 <th class = "hazardous">Hazardous (301-500)</th>
-             </tr>-->
+             </tr>
                <tr>
                <th class="sticky">Location</th> 
                <th class="sticky">Date</th>          
@@ -73,34 +73,34 @@
                   <td>
                     <span> {{item.date}}</span>
                   </td>
-                  <td :class="getClass(`${item.pm25}`)">
+                  <td :class="getClassPM25(`${item.pm25}`)">
                     <div v-if= "item.pm25.length > 0"> 
-                      <span v-for= "value in item.pm25"> {{value}}, </span>
+                      <span v-for= "value in item.pm25"> {{value}} ug/m^3 </span>
                     </div>
                   </td>
-                  <td :class="getClass(`${item.pm10}`)">
+                  <td :class="getClassPM10(`${item.pm10}`)">
                     <div v-if= "item.pm10.length > 0"> 
-                      <span v-for= "value in item.pm10"> {{value}}, </span>
+                      <span v-for= "value in item.pm10"> {{value}} ug/m^3 </span>
                     </div>
                   </td>
-                  <td :class="getClass(`${item.no2}`)"> 
+                  <td :class="getClassNO2(`${item.no2}`)"> 
                     <div v-if= "item.no2.length > 0"> 
-                      <span v-for= "value in item.no2"> {{value}}, </span>
+                      <span v-for= "value in item.no2"> {{value}} ppb </span>
                     </div>
                     </td>
-                    <td :class="getClass(`${item.o3}`)"> 
+                    <td  v-if= "item.o3.length > 0" :class="getClassO3(`${item.o3}`)"> 
                       <div v-if= "item.o3.length > 0"> 
-                        <span v-for= "value in item.o3"> {{value}}, </span>
+                        <span v-for= "value in item.o3"> {{value}} ppm </span>
                       </div>
                     </td>
-                    <td :class="getClass(`${item.bc}`)"> 
+                    <td :class="getClassO3(`${item.bc}`)"> 
                       <div v-if= "item.bc.length > 0"> 
-                        <span v-for= "value in item.bc"> {{value}}, </span>
+                        <span v-for= "value in item.bc"> {{value}} </span>
                       </div>
                     </td>
-                    <td :class="getClass(`${item.co}`)"> 
+                    <td :class="getClassCO(`${item.co}`)"> 
                       <div v-if= "item.co.length > 0" > 
-                        <span v-for= "value in item.co"> {{value}},</span>
+                        <span v-for= "value in item.co"> {{value}} ppm</span>
                       </div>
                     </td>
                   </tr> 
@@ -132,7 +132,7 @@
 				    <div id="map2id" class="maps"></div>
           <table id="secondTable">
            <thead>
-            <!-- <tr>
+            <tr>
                 <th > Air Quality Index</th>
                 <th class = "good"> Good (0-50)</th>
                 <th class = "moderate"> Moderate (51-100)</th>
@@ -140,7 +140,7 @@
                 <th class = "unhealthy">Unhealthy (151-200)</th>
                 <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
                 <th class = "hazardous">Hazardous (301-500)</th>
-             </tr>-->
+             </tr>
                <tr>
                <th class="sticky">Location</th> 
                <th class="sticky">Date</th>          
@@ -161,39 +161,34 @@
                   <td>
                     <span> {{item.date}}</span>
                   </td>
-                  <td :class="getClass(`${item.pm25}`)">
+                  <td :class="getClassPM25(`${item.pm25}`)">
                     <div v-if= "item.pm25.length > 0"> 
-                      <span v-for= "value in item.pm25">{{value}}, </span>
+                      <span v-for= "value in item.pm25"> {{value}} ug/m^3 </span>
                     </div>
                   </td>
-               
-                  <td :class="getClass(`${item.pm10}`)">
+                  <td :class="getClassPM10(`${item.pm10}`)">
                     <div v-if= "item.pm10.length > 0"> 
-                      <span v-for= "value in item.pm10"> {{value}}, </span>
+                      <span v-for= "value in item.pm10"> {{value}} ug/m^3 </span>
                     </div>
                   </td>
-
-                  <td :class="getClass(`${item.no2}`)"> 
+                  <td :class="getClassNO2(`${item.no2}`)"> 
                     <div v-if= "item.no2.length > 0"> 
-                      <span v-for= "value in item.no2"> {{value}}, </span>
+                      <span v-for= "value in item.no2"> {{value}} ppb </span>
                     </div>
                     </td>
-
-                    <td :class="getClass(`${item.o3}`)"> 
+                    <td :class="getClassO3(`${item.o3}`)"> 
                       <div v-if= "item.o3.length > 0"> 
-                        <span v-for= "value in item.o3"> {{value}}, </span>
+                        <span v-for= "value in item.o3"> {{value}} ppm </span>
                       </div>
                     </td>
-
-                    <td :class="getClass(`${item.bc}`)"> 
+                    <td :class="getClassO3(`${item.bc}`)"> 
                       <div v-if= "item.bc.length > 0"> 
-                        <span v-for= "value in item.bc"> {{value}}, </span>
+                        <span v-for= "value in item.bc"> {{value}} </span>
                       </div>
                     </td>
-                    
-                    <td :class="getClass(`${item.co}`)"> 
+                    <td :class="getClassCO(`${item.co}`)"> 
                       <div v-if= "item.co.length > 0" > 
-                        <span v-for= "value in item.co"> {{value}},</span>
+                        <span v-for= "value in item.co"> {{value}} ppm</span>
                       </div>
                     </td>
                   </tr> 
