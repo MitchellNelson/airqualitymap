@@ -15,6 +15,7 @@ table {
 	width:50vw;
  }
  td{
+ 	vertical-align :top;
  	padding:0;
  	margin:0;
  	border:#44484f 1px solid;
@@ -74,7 +75,7 @@ thead {
 }
 .maps{ 
 	height: 90vh;
-	width: 50vw;
+	width: 40vw;
 }
 .screenButtons{
 	margin-right:1.2rem;
