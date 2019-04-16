@@ -20,7 +20,9 @@ init = function(){
             location1: starting_location1,
             location2: starting_location2,
             checkedParams: [],
+            commentsToShow: 2
         },
+        
         //computed - loop over data and 
         methods: {
             initMap(){
@@ -260,7 +262,7 @@ function locSearch2(event){
     },1000);
 }
 function FillUniqueMarkers(data,arr,map){
-    console.log(data.results);
+    //console.log(data.results);
     var num_new_markers=0;
 
     //if there is no markers in the array, add the first
@@ -310,6 +312,7 @@ function FillUniqueMarkers(data,arr,map){
         console.log(map);
     }
 }
+
 function ShowMarkers(num_new_markers,arr, map){
     var num_old_markers = arr.length-num_new_markers;
     for(var i = 0; i<num_new_markers; i++){
@@ -393,7 +396,7 @@ addMarker = function([lat,lng],map){
 /*   Loops    */
 DeleteOldMarkers = function(arr,map){
     var num_deleted=0;//for printing purposes only
-    var i = app.unique_markers2.length
+    var i = arr.length
     while (i--) {
         if(!map.getBounds().contains([arr[i].coordinates.latitude,arr[i].coordinates.longitude])){ 
             map.removeLayer(arr[i].marker);

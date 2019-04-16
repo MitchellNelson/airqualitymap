@@ -43,6 +43,7 @@ thead {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
+	z-index: 10000;
 }
 .collapsible {
   background-color: #eee;
