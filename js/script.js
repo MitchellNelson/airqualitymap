@@ -17,13 +17,9 @@ init = function(){
             center2:starting_center2,
             unique_markers1:[],
             unique_markers2:[],
-            map1_marker_objects:[],
-            map2_marker_objects:[],
             location1: starting_location1,
             location2: starting_location2,
-            checkedNames: [],
-            allPoints1: [],
-            allPoints2: []
+            checkedParams: [],
         },
         //computed - loop over data and 
         methods: {
@@ -70,38 +66,31 @@ init = function(){
             },
             getClass(a) {
             max =0
-            for(var i =0; i<a.length; i++)
-            {
-                if (a[i]>max)
-                {
-                    max = a[i]
-                }
-            }
-              if (max ==0) {
+              if (a ==0) {
                 this.class=null
                 return this.class
               }   
-              else if (max > 0 && max<=50) {
+              else if (a > 0 && a<=50) {
                 this.class="good"
                 return this.class
               }
-              else if (max>50 && max<=100) {
+              else if (a>50 && a<=100) {
                 this.class = "moderate"
                 return this.class
               }
-              else if (max>100 && max<=150){
+              else if (a>100 && a<=150){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (max>150 && max<=200){
+              else if (a>150 && a<=200){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (max>200 && max<=300){
+              else if (a>200 && a<=300){
                 this.class = "veryUnhealthy"
                 return this.class
               }
-              else {
+              else if(a>300) {
                 this.class = "hazardous"
                 return this.class
               }
@@ -256,14 +245,16 @@ function lngSearch2(event){
 }
 function locSearch1(event){
     setTimeout(function(){
-           app.mounted();  
-           OpenAQSearch1();
+        DeleteOldMarkers(app.unique_markers1,app.map1);
+        app.mounted();  
+        OpenAQSearch1();
     },1000);
 }
 
 function locSearch2(event){
     setTimeout(function(){
         console.log("going to send a request")
+        DeleteOldMarkers(app.unique_markers2,app.map2);
         app.mounted2(); 
         OpenAQSearch2(); 
     },1000);
