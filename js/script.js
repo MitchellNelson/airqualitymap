@@ -1,7 +1,7 @@
 var app;
 
 var starting_center1 = L.latLng(44.9430, -93.1895);
-var starting_center2 = L.latLng(40.7590, -73.9845);
+var starting_center2 = L.latLng(40.82789112974715, -73.93912754952909);
 var starting_location1 = "St. Paul";
 var starting_location2 = "New York City";
 var openAQRequest = null;
@@ -269,7 +269,7 @@ function locSearch2(event){
     },1000);
 }
 function FillUniqueMarkers(data,arr,map){
-    console.log(data.results);
+    //console.log(data.results);
     var num_new_markers=0;
 
     //if there is no markers in the array, add the first
@@ -405,9 +405,8 @@ DeleteOldMarkers = function(){
     var i = app.unique_markers2.length
     while (i--) {
         if(!app.map2.getBounds().contains([app.unique_markers2[i].coordinates.latitude,app.unique_markers2[i].coordinates.longitude])){ 
+            app.map2.removeLayer(app.unique_markers2[i].marker);
             app.unique_markers2.splice(i, 1);
-            app.map2.removeLayer(app.map2_marker_objects[i]);
-            app.map2_marker_objects.splice(i,1);
             num_deleted++;
         } 
     }
