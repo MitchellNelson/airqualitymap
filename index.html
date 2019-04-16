@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Air Quality Map</title>
     <link rel="stylesheet" href="css/style.css"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
    crossorigin=""/>
@@ -24,7 +24,7 @@
     			<td style="vertical-align:top" id="map1_and_nav">
     				<div class="nav-wrapper">
 	    				<div id="nav1" class="nav">
-	    					<button id="showFilter1" class="screenButtons"onclick="showFilter1()"><i class="icon-cog"></i></i></button>
+	    					<button id="showFilter1" class="screenButtons"onclick="showFilter1()"><i class="fas fa-sliders-h"></i></button>
 	    					<div class="location-search">
 	    						Location:<input @input = "locSearch1" type="text" id="addr" v-model="location1" :value="location1"/>
 	    					</div>
@@ -33,12 +33,25 @@
 					    		Latitude:<input @input="latSearch1" type="text" v-model="center1.lat" :value="center1.lat"></input>
 						    	Longitude:<input @input="lngSearch1" type="text" v-model="center1.lng" :value="center1.lng"></input>
 					    	</div>
-					    	<button id="fullscreen1" class="screenButtons"onclick="fullscreen1()"><i class="icon-resize-full"></i></i></button>
-						    <button id="halfscreen1" class="screenButtons" onclick="halfscreen1()"><i class="icon-resize-small"></i></button>
+					    	<button id="fullscreen1" class="screenButtons"onclick="fullscreen1()"><i class="far fa-square"></i></button>
+						    <button id="halfscreen1" class="screenButtons" onclick="halfscreen1()"><i class="fas fa-compress-arrows-alt"></i></button>
 					    </div>
 					    <div id="filter-page1" class="filter-page">
-						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="icon-arrow-left"></i></button>
-	    					Where Filters 1 will live
+						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
+	    					<div id='example-3'>
+                  <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams">
+                  <label for="pm25">pm25</label>
+                  <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams">
+                  <label for="pm10">pm10</label>
+                  <input type="checkbox" id="no2" value="no2" v-model="checkedParams">
+                  <label for="no2">no2</label>
+                  <input type="checkbox" id="o3" value="o3" v-model="checkedParams">
+                  <label for="o3">o3</label>
+                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams">
+                  <label for="bc">bc</label>
+                  <input type="checkbox" id="co" value="co" v-model="checkedParams">
+                  <label for="co">co</label>
+                </div>
 					    </div>
 					  </div>
 				    <div id="map1id" class="maps"></div>
@@ -57,12 +70,12 @@
                  <tr>
                  <th class="sticky">Location</th> 
                  <th class="sticky">Date</th>          
-                 <th class="sticky">pm25</th>
-                 <th class="sticky">pm10</th>
-                 <th class="sticky">no2</th>
-                 <th class="sticky">o3</th>
-                 <th class="sticky">bc</th>
-                 <th class="sticky">co</th>
+                 <th v-if="checkedParams.includes('pm25')" class="sticky">pm25</th>
+                 <th v-if="checkedParams.includes('pm10')"class="sticky">pm10</th>
+                 <th v-if="checkedParams.includes('no2')"class="sticky">no2</th>
+                 <th v-if="checkedParams.includes('o3')"class="sticky">o3</th>
+                 <th v-if="checkedParams.includes('bc')"lass="sticky">bc</th>
+                 <th v-if="checkedParams.includes('co')"class="sticky">co</th>
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
@@ -74,32 +87,32 @@
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td :class="getClass(`${entry.pm25}`)">
+                    <td v-if="checkedParams.includes('pm25')" :class="getClass(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.pm10}`)">
+                    <td v-if="checkedParams.includes('pm10')" :class="getClass(`${entry.pm10}`)">
                       <div v-if= "entry.pm10!= null">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.no2}`)"> 
+                    <td v-if="checkedParams.includes('no2')" :class="getClass(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.o3}`)"> 
+                    <td v-if="checkedParams.includes('o3')" :class="getClass(`${entry.o3}`)"> 
                       <div v-if= "entry.o3!= null">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.bc}`)"> 
+                    <td v-if="checkedParams.includes('bc')" :class="getClass(`${entry.bc}`)"> 
                       <div v-if= "entry.bc!= null">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.co}`)"> 
+                    <td v-if="checkedParams.includes('co')" :class="getClass(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
@@ -113,7 +126,7 @@
 				<td style="vertical-align:top" id="map2_and_nav">
 					<div class="nav-wrapper">
 						<div id="nav2" class="nav">
-	    					<button id="showFilter2" class="screenButtons"onclick="showFilter2()"><i class="icon-cog"></i></i></button>
+	    					<button id="showFilter2" class="screenButtons"onclick="showFilter2()"><i class="fas fa-sliders-h"></i></button>
 							<div class="location-search">
 								Location:<input @input = "locSearch2" type="text" id="addr" v-model="location2" :value="location2"/>
 							</div>
@@ -123,11 +136,11 @@
 						    	Longitude:<input @input="lngSearch2" type="text" v-model="center2.lng" :value="center2.lng"></input>
 						    </div>
 						
-					    <button id="fullscreen2" class="screenButtons"onclick="fullscreen2()"><i class="icon-resize-full"></i></i></button>
-					    <button id="halfscreen2" class="screenButtons" onclick="halfscreen2()"><i class="icon-resize-small"></i></button>
+					    <button id="fullscreen2" class="screenButtons"onclick="fullscreen2()"><i class="far fa-square"></i></button>
+					    <button id="halfscreen2" class="screenButtons" onclick="halfscreen2()"><i class="fas fa-compress-arrows-alt"></i></button>
 				    	</div>
 				    	<div id="filter-page2" class="filter-page">
-						    <button id="showNav2" class="screenButtons" onclick="showNav2()"><i class="icon-arrow-left"></i></button>
+						    <button id="showNav2" class="screenButtons" onclick="showNav2()"><i class="fas fa-arrow-circle-left"></i></button>
 	    					Where Filters 2 will live
 					    </div>
 					</div>	

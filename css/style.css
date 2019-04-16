@@ -12,7 +12,7 @@ body{
 table { 
 	border-collapse:collapse;
 	border-spacing: 0;
-	width:50vw;
+	max-width:50vw;
  }
  td{
  	
@@ -28,16 +28,20 @@ table {
  	border-radius: 10px;
  }
  th {
-	padding:5px;
+	padding:.5rem;
 	background-color: #44484f;
 	color:white;
 	font-weight: lighter;
 }
+th:hover{
+	opacity: .9;
+}
  input:focus,select:focus,textarea:focus,button:focus {
     outline: none;
 }
-thead {
-	height:5px;
+thead tr{
+	max-width:50vw;
+	font-size: .8rem;
 }
 .sticky{
 	position: -webkit-sticky;

@@ -3,7 +3,7 @@ var app;
 var starting_center1 = L.latLng(44.9430, -93.1895);
 var starting_center2 = L.latLng(39.916451274939206, 116.38215586686088);
 var starting_location1 = "St. Paul";
-var starting_location2 = "New York City";
+var starting_location2 = "Bejing";
 var openAQRequest = null;
 var locationRequest = null;
 
@@ -19,10 +19,8 @@ init = function(){
             unique_markers2:[],
             location1: starting_location1,
             location2: starting_location2,
-            checkedParams: [],
-            commentsToShow: 2
+            checkedParams: ["pm25","pm10","no2","o3","bc","co"]
         },
-        
         //computed - loop over data and 
         methods: {
             initMap(){
@@ -54,6 +52,7 @@ init = function(){
                 })
                 console.log(this.center1);
                 this.map1.panTo(this.center1);
+                OpenAQSearch1();
             },
             mounted2() {
                 const self = this;
@@ -65,6 +64,8 @@ init = function(){
                 })
                 console.log(this.center2);
                 this.map2.panTo(this.center2);
+                OpenAQSearch2();
+
             },
             getClass(a) {
             max =0
@@ -246,19 +247,17 @@ function lngSearch2(event){
         }, 600);
 }
 function locSearch1(event){
-    setTimeout(function(){
-        DeleteOldMarkers(app.unique_markers1,app.map1);
+    setTimeout(function(){ 
         app.mounted();  
-        OpenAQSearch1();
+        DeleteOldMarkers(app.unique_markers1,app.map1);
     },1000);
 }
 
 function locSearch2(event){
     setTimeout(function(){
-        console.log("going to send a request")
+        console.log("going to send a request") 
+        app.mounted2();  
         DeleteOldMarkers(app.unique_markers2,app.map2);
-        app.mounted2(); 
-        OpenAQSearch2(); 
     },1000);
 }
 function FillUniqueMarkers(data,arr,map){
@@ -332,26 +331,26 @@ function ShowMarkers(num_new_markers,arr, map){
 function GetPopupString(unique_marker){
     var retstring="";
     if(unique_marker.pm25 != undefined && unique_marker.pm25.length>0){
-        retstring = "pm25: " + getAvg(unique_marker.pm25) + "µg/m³" + "<br>" + retstring;
+        retstring = "pm25: " + getAvg(unique_marker.date_entries,"pm25") + "µg/m³" + "<br>" + retstring;
     }
     if(unique_marker.pm10 != undefined && unique_marker.pm10.length>0){
-        retstring = "pm10: " + getAvg(unique_marker.pm10) + "ppm" + "<br>" + retstring;
+        retstring = "pm10: " + getAvg(unique_marker.date_entries,"pm10") + "ppm" + "<br>" + retstring;
     }
     if(unique_marker.no2!= undefined && unique_marker.no2.length>0){
-        retstring = "no2: " + getAvg(unique_marker.no2) + "ppm" + "<br>" + retstring;
+        retstring = "no2: " + getAvg(unique_marker.date_entries,"no2") + "ppm" + "<br>" + retstring;
     }
     if(unique_marker.o3!= undefined && unique_marker.o3.length>0){
-        retstring = "o3: " + getAvg(unique_marker.o3) + "ppm" + "<br>" + retstring;
+        retstring = "o3: " + getAvg(unique_marker.date_entries, "o3") + "ppm" + "<br>" + retstring;
     }
     if(unique_marker.co!= undefined && unique_marker.co.length>0){
-        retstring = "co: " + getAvg(unique_marker.co) + "ppm"  + "<br>"+ retstring;
+        retstring = "co: " + getAvg(unique_marker.date_entries,"co") + "ppm"  + "<br>"+ retstring;
     }
     if(unique_marker.bc!= undefined && unique_marker.bc.length>0){
-        retstring = "bc: " + getAvg(unique_marker.pm25) + "bc"  + "<br>"+ retstring;
+        retstring = "bc: " + getAvg(unique_marker.date_entries,"bc") + "bc"  + "<br>"+ retstring;
     }
     return retstring;
 }
-function getAvg(value){
+function getAvg(value,parameter){
     ret = 0;
     for(var i = 0; i<value.length; i++){
         ret = ret + value[i];
