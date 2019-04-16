@@ -19,7 +19,8 @@ init = function(){
             unique_markers2:[],
             location1: starting_location1,
             location2: starting_location2,
-            checkedParams: ["pm25","pm10","no2","o3","bc","co"]
+            checkedParams1: ["pm25","pm10","no2","o3","bc","co"],
+            checkedParams2: ["pm25","pm10","no2","o3","bc","co"]
         },
         //computed - loop over data and 
         methods: {
@@ -224,6 +225,8 @@ trackMap = function(){
         }, 200);
     });
 }
+
+
 /*  latSearch and lngSearch functions update the maps position
     when the user changes the input fields for lat and longitude    */
 function latSearch1(event){
@@ -261,7 +264,7 @@ function locSearch2(event){
     },1000);
 }
 function FillUniqueMarkers(data,arr,map){
-    //console.log(data.results);
+    console.log(data.results);
     var num_new_markers=0;
 
     //if there is no markers in the array, add the first

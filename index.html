@@ -38,18 +38,18 @@
 					    </div>
 					    <div id="filter-page1" class="filter-page">
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
-	    					<div id='example-3'>
-                  <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams">
+	    					<div class="filers">
+                  <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
                   <label for="pm25">pm25</label>
-                  <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams">
+                  <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
                   <label for="pm10">pm10</label>
-                  <input type="checkbox" id="no2" value="no2" v-model="checkedParams">
+                  <input type="checkbox" id="no2" value="no2" v-model="checkedParams1">
                   <label for="no2">no2</label>
-                  <input type="checkbox" id="o3" value="o3" v-model="checkedParams">
+                  <input type="checkbox" id="o3" value="o3" v-model="checkedParams1">
                   <label for="o3">o3</label>
-                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams">
+                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
                   <label for="bc">bc</label>
-                  <input type="checkbox" id="co" value="co" v-model="checkedParams">
+                  <input type="checkbox" id="co" value="co" v-model="checkedParams1">
                   <label for="co">co</label>
                 </div>
 					    </div>
@@ -70,12 +70,12 @@
                  <tr>
                  <th class="sticky">Location</th> 
                  <th class="sticky">Date</th>          
-                 <th v-if="checkedParams.includes('pm25')" class="sticky">pm25</th>
-                 <th v-if="checkedParams.includes('pm10')"class="sticky">pm10</th>
-                 <th v-if="checkedParams.includes('no2')"class="sticky">no2</th>
-                 <th v-if="checkedParams.includes('o3')"class="sticky">o3</th>
-                 <th v-if="checkedParams.includes('bc')"lass="sticky">bc</th>
-                 <th v-if="checkedParams.includes('co')"class="sticky">co</th>
+                 <th v-if="checkedParams1.includes('pm25')" class="sticky">pm25</th>
+                 <th v-if="checkedParams1.includes('pm10')"class="sticky">pm10</th>
+                 <th v-if="checkedParams1.includes('no2')"class="sticky">no2</th>
+                 <th v-if="checkedParams1.includes('o3')"class="sticky">o3</th>
+                 <th v-if="checkedParams1.includes('bc')"class="sticky">bc</th>
+                 <th v-if="checkedParams1.includes('co')"class="sticky">co</th>
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
@@ -87,32 +87,32 @@
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td v-if="checkedParams.includes('pm25')" :class="getClass(`${entry.pm25}`)">
+                    <td v-if="checkedParams1.includes('pm25')" :class="getClass(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams.includes('pm10')" :class="getClass(`${entry.pm10}`)">
+                    <td v-if="checkedParams1.includes('pm10')" :class="getClass(`${entry.pm10}`)">
                       <div v-if= "entry.pm10!= null">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams.includes('no2')" :class="getClass(`${entry.no2}`)"> 
+                    <td v-if="checkedParams1.includes('no2')" :class="getClass(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams.includes('o3')" :class="getClass(`${entry.o3}`)"> 
+                    <td v-if="checkedParams1.includes('o3')" :class="getClass(`${entry.o3}`)"> 
                       <div v-if= "entry.o3!= null">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams.includes('bc')" :class="getClass(`${entry.bc}`)"> 
+                    <td v-if="checkedParams1.includes('bc')" :class="getClass(`${entry.bc}`)"> 
                       <div v-if= "entry.bc!= null">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>
-                    <td v-if="checkedParams.includes('co')" :class="getClass(`${entry.co}`)"> 
+                    <td v-if="checkedParams1.includes('co')" :class="getClass(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
@@ -141,7 +141,20 @@
 				    	</div>
 				    	<div id="filter-page2" class="filter-page">
 						    <button id="showNav2" class="screenButtons" onclick="showNav2()"><i class="fas fa-arrow-circle-left"></i></button>
-	    					Where Filters 2 will live
+	    					<div class="filers">
+                  <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams2">
+                  <label for="pm25">pm25</label>
+                  <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams2">
+                  <label for="pm10">pm10</label>
+                  <input type="checkbox" id="no2" value="no2" v-model="checkedParams2">
+                  <label for="no2">no2</label>
+                  <input type="checkbox" id="o3" value="o3" v-model="checkedParams2">
+                  <label for="o3">o3</label>
+                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams2">
+                  <label for="bc">bc</label>
+                  <input type="checkbox" id="co" value="co" v-model="checkedParams2">
+                  <label for="co">co</label>
+                </div>
 					    </div>
 					</div>	
 				    <div id="map2id" class="maps"></div>
@@ -159,14 +172,14 @@
                   <th class = "hazardous">Hazardous (301-500)</th>
                </tr>
                  <tr>
-                 <th class="sticky">Location</th> 
-                 <th class="sticky">Date</th>          
-                 <th class="sticky">pm25</th>
-                 <th class="sticky">pm10</th>
-                 <th class="sticky">no2</th>
-                 <th class="sticky">o3</th>
-                 <th class="sticky">bc</th>
-                 <th class="sticky">co</th>
+                  <th class="sticky">Location</th> 
+                   <th class="sticky">Date</th>
+                   <th v-if="checkedParams2.includes('pm25')" class="sticky">pm25</th>
+                   <th v-if="checkedParams2.includes('pm10')"class="sticky">pm10</th>
+                   <th v-if="checkedParams2.includes('no2')"class="sticky">no2</th>
+                   <th v-if="checkedParams2.includes('o3')"class="sticky">o3</th>
+                   <th v-if="checkedParams2.includes('bc')"class="sticky">bc</th>
+                   <th v-if="checkedParams2.includes('co')"class="sticky">co</th>
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers2">
@@ -178,32 +191,32 @@
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td :class="getClass(`${entry.pm25}`)">
+                    <td v-if="checkedParams2.includes('pm25')" :class="getClass(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.pm10}`)">
+                    <td v-if="checkedParams2.includes('pm10')" :class="getClass(`${entry.pm10}`)">
                       <div v-if= "entry.pm10!= null">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.no2}`)"> 
+                    <td v-if="checkedParams2.includes('no2')" :class="getClass(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.o3}`)"> 
+                    <td v-if="checkedParams2.includes('o3')" :class="getClass(`${entry.o3}`)"> 
                       <div v-if= "entry.o3!= null">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.bc}`)"> 
+                    <td v-if="checkedParams2.includes('bc')" :class="getClass(`${entry.bc}`)"> 
                       <div v-if= "entry.bc!= null">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>
-                    <td :class="getClass(`${entry.co}`)"> 
+                    <td v-if="checkedParams2.includes('co')" :class="getClass(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
