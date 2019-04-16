@@ -42,71 +42,73 @@
 					    </div>
 					  </div>
 				    <div id="map1id" class="maps"></div>
-            <table id="firstTable">
-            <thead>
-             <tr>
-                <th > Air Quality Index</th>
-                <th class = "good"> Good (0-50)</th>
-                <th class = "moderate"> Moderate (51-100)</th>
-                <th colspan ="2" class = "uhsg" style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
-                <th class = "unhealthy">Unhealthy (151-200)</th>
-                <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
-                <th class = "hazardous">Hazardous (301-500)</th>
-             </tr>
+            <div style="max-height:30vh; overflow-y:scroll;">
+              <table id="firstTable" >
+              <thead>
                <tr>
-               <th class="sticky">Location</th> 
-               <th class="sticky">Date</th>          
-               <th class="sticky">pm25</th>
-               <th class="sticky">pm10</th>
-               <th class="sticky">no2</th>
-               <th class="sticky">o3</th>
-               <th class="sticky">bc</th>
-               <th class="sticky">co</th>
-              </tr>
-            </thead>
-              <tbody class="data-table" v-for="item in unique_markers1">
-                <tr v-if="unique_markers1.length > 0" v-for="entry in item.date_entries">
-                  <td class="collapsible" >
-                    <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
-                  </td>
+                  <th > Air Quality Index</th>
+                  <th class = "good"> Good (0-50)</th>
+                  <th class = "moderate"> Moderate (51-100)</th>
+                  <th colspan ="2" class = "uhsg" style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
+                  <th class = "unhealthy">Unhealthy (151-200)</th>
+                  <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
+                  <th class = "hazardous">Hazardous (301-500)</th>
+               </tr>
+                 <tr>
+                 <th class="sticky">Location</th> 
+                 <th class="sticky">Date</th>          
+                 <th class="sticky">pm25</th>
+                 <th class="sticky">pm10</th>
+                 <th class="sticky">no2</th>
+                 <th class="sticky">o3</th>
+                 <th class="sticky">bc</th>
+                 <th class="sticky">co</th>
+                </tr>
+              </thead>
+                <tbody class="data-table" v-for="item in unique_markers1">
+                  <tr v-if="unique_markers1.length > 0" v-for="entry in item.date_entries">
+                    <td class="collapsible" >
+                      <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
+                    </td>
 
-                  <td >
-                    <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
-                  </td>
-                  <td :class="getClass(`${entry.pm25}`)">
-                    <div v-if= "entry.pm25 != null">
-                      <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.pm10}`)">
-                    <div v-if= "entry.pm10!= null">
-                      <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.no2}`)"> 
-                    <div v-if= "entry.no2!= null">
-                      <span>{{entry.no2}} <p class="units">ppb</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.o3}`)"> 
-                    <div v-if= "entry.o3!= null">
-                      <span>{{entry.o3}} <p class="units">ppm</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.bc}`)"> 
-                    <div v-if= "entry.bc!= null">
-                      <span>{{entry.bc}}</span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.co}`)"> 
-                    <div v-if= "entry.co!= null">
-                      <span>{{entry.co}} <p class="units">ppm</p></span>
-                    </div>
-                  </td>
-                </tr> 
+                    <td >
+                      <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
+                    </td>
+                    <td :class="getClass(`${entry.pm25}`)">
+                      <div v-if= "entry.pm25 != null">
+                        <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.pm10}`)">
+                      <div v-if= "entry.pm10!= null">
+                        <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.no2}`)"> 
+                      <div v-if= "entry.no2!= null">
+                        <span>{{entry.no2}} <p class="units">ppb</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.o3}`)"> 
+                      <div v-if= "entry.o3!= null">
+                        <span>{{entry.o3}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.bc}`)"> 
+                      <div v-if= "entry.bc!= null">
+                        <span>{{entry.bc}}</span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.co}`)"> 
+                      <div v-if= "entry.co!= null">
+                        <span>{{entry.co}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                  </tr> 
 
-              </tbody>
-          </table>
+                </tbody>
+            </table>
+          </div>
 				</td>
 				<td style="vertical-align:top" id="map2_and_nav">
 					<div class="nav-wrapper">
@@ -130,71 +132,74 @@
 					    </div>
 					</div>	
 				    <div id="map2id" class="maps"></div>
-          <table id="secondTable">
-           <thead>
-            <tr>
-                <th > Air Quality Index</th>
-                <th class = "good"> Good (0-50)</th>
-                <th class = "moderate"> Moderate (51-100)</th>
-                <th colspan ="2" class = "uhsg"style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
-                <th class = "unhealthy">Unhealthy (151-200)</th>
-                <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
-                <th class = "hazardous">Hazardous (301-500)</th>
-             </tr>
-               <tr>
-               <th class="sticky">Location</th> 
-               <th class="sticky">Date</th>          
-               <th class="sticky">pm25</th>
-               <th class="sticky">pm10</th>
-               <th class="sticky">no2</th>
-               <th class="sticky">o3</th>
-               <th class="sticky">bc</th>
-               <th class="sticky">co</th>
-              </tr>
-            </thead>
-              <tbody class="data-table" v-for="item in unique_markers2">
-                <tr v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
-                  <td class="collapsible" >
-                    <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
-                  </td>
+          <div style="max-height:30vh; overflow-y:scroll;">
+            <table id="secondTable">
 
-                  <td >
-                    <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
-                  </td>
-                  <td :class="getClass(`${entry.pm25}`)">
-                    <div v-if= "entry.pm25 != null">
-                      <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.pm10}`)">
-                    <div v-if= "entry.pm10!= null">
-                      <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.no2}`)"> 
-                    <div v-if= "entry.no2!= null">
-                      <span>{{entry.no2}} <p class="units">ppb</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.o3}`)"> 
-                    <div v-if= "entry.o3!= null">
-                      <span>{{entry.o3}} <p class="units">ppm</p></span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.bc}`)"> 
-                    <div v-if= "entry.bc!= null">
-                      <span>{{entry.bc}}</span>
-                    </div>
-                  </td>
-                  <td :class="getClass(`${entry.co}`)"> 
-                    <div v-if= "entry.co!= null">
-                      <span>{{entry.co}} <p class="units">ppm</p></span>
-                    </div>
-                  </td>
-                </tr> 
+             <thead>
+              <tr>
+                  <th > Air Quality Index</th>
+                  <th class = "good"> Good (0-50)</th>
+                  <th class = "moderate"> Moderate (51-100)</th>
+                  <th colspan ="2" class = "uhsg"style="font-size:75%"> Unhealthy for Sensitive Groups (101-150)</th>
+                  <th class = "unhealthy">Unhealthy (151-200)</th>
+                  <th  class = "veryUnhealthy"> Very Unhealthy (201-300)</th>
+                  <th class = "hazardous">Hazardous (301-500)</th>
+               </tr>
+                 <tr>
+                 <th class="sticky">Location</th> 
+                 <th class="sticky">Date</th>          
+                 <th class="sticky">pm25</th>
+                 <th class="sticky">pm10</th>
+                 <th class="sticky">no2</th>
+                 <th class="sticky">o3</th>
+                 <th class="sticky">bc</th>
+                 <th class="sticky">co</th>
+                </tr>
+              </thead>
+                <tbody class="data-table" v-for="item in unique_markers2">
+                  <tr v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
+                    <td class="collapsible" >
+                      <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
+                    </td>
 
-              </tbody>
-            </table>
+                    <td >
+                      <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
+                    </td>
+                    <td :class="getClass(`${entry.pm25}`)">
+                      <div v-if= "entry.pm25 != null">
+                        <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.pm10}`)">
+                      <div v-if= "entry.pm10!= null">
+                        <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.no2}`)"> 
+                      <div v-if= "entry.no2!= null">
+                        <span>{{entry.no2}} <p class="units">ppb</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.o3}`)"> 
+                      <div v-if= "entry.o3!= null">
+                        <span>{{entry.o3}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.bc}`)"> 
+                      <div v-if= "entry.bc!= null">
+                        <span>{{entry.bc}}</span>
+                      </div>
+                    </td>
+                    <td :class="getClass(`${entry.co}`)"> 
+                      <div v-if= "entry.co!= null">
+                        <span>{{entry.co}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                  </tr> 
+
+                </tbody>
+              </table>
+            </div>
           </div>
   			</td>
   		</tr>
