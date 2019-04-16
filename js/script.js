@@ -123,9 +123,12 @@ function OpenAQSearch1(){
     var bounds = app.map1.getBounds();
     var radius = app.map1.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000",
+        url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000&sort=desc",
         dataType: "json",
-        success: FillUniqueMarkers1
+        success: function(data){
+            FillUniqueMarkers(data,app.unique_markers1,app.map1);
+
+        }
     };
     $.ajax(request);
 }
@@ -139,10 +142,13 @@ function OpenAQSearch2(){
     var bounds = app.map2.getBounds();
     var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000",
+        url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000&sort=desc",
         dataType: "json",
-        success: FillUniqueMarkers2
+        success: function(data){
+            FillUniqueMarkers(data,app.unique_markers2, app.map2);
+        }
     };
+    console.log(request.url);
     $.ajax(request);
 }
 LocationFromLatLng1 = function(lat, lng) {
@@ -262,137 +268,72 @@ function locSearch2(event){
         OpenAQSearch2(); 
     },1000);
 }
-function FillUniqueMarkers1(data){
+function FillUniqueMarkers(data,arr,map){
     console.log(data.results);
     var num_new_markers=0;
+
+    //if there is no markers in the array, add the first
+    if(arr.length== 0 && data.results.length>0){
+        var newmarker = new unique_marker(data.results[0].coordinates.latitude, data.results[0].coordinates.longitude);
+        newmarker.addDateEntry(data.results[0].date,data.results[0].parameter,data.results[0].value)//
+        arr.push(newmarker);
+        num_new_markers++;
+    }
+    
     //var unique_markers = [];
     for(var i=0; i < data.results.length; i++){
-        
-        //if there is no markers in the array, add the first
-        if(app.unique_markers1.length==0){
-            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
-            app.unique_markers1.push(newmarker);
-            num_new_markers++;
-        }
-
         //check that if the new marker already exists in the unique_markers
         var exists = false;
-        for(var j = 0; j < app.unique_markers1.length; j++) {
-            if (app.unique_markers1[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers1[j].coordinates.longitude == data.results[i].coordinates.longitude){
-                exists = true;
-                app.unique_markers1[j].addParameter(data.results[i].parameter,data.results[i].value);
-            }
-        }
-        if(!exists){
-            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
-            app.unique_markers1.push(newmarker);
-            num_new_markers++;
-        }
-        //if date & lat lon already exist
-        var exists = false;
-        for(var j = 0; j < app.allPoints1.length; j++) {
-            if (app.allPoints1[j].coordinates.latitude == data.results[i].coordinates.latitude && app.allPoints1[j].coordinates.longitude == data.results[i].coordinates.longitude && app.allPoints1[j].date ==data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T'))){
-                exists = true;
-                /* POTENTIALLY REMOVE DUPLICATES HERE
-                duplicate = false;
-                var par = data.results[i].parameter;
-                console.log(app.allPoints1[j].no2);
-                for(var k =0; k<app.allPoints1[j].par.length; k++)
-                {
-                    if(data.results[i].value == app.allPoints1[j].data.results[i].parameter.value[i])
-                    {
-                       //app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
-                       console.log(data.results[i].value , app.allPoints1[j].date);
+        for(var j = 0; j < arr.length; j++) {
+            var date_exists = false;
+            if (arr[j].coordinates.latitude == data.results[i].coordinates.latitude && arr[j].coordinates.longitude == data.results[i].coordinates.longitude){
+                //loop through date entries specific for that unique location
+                var length = arr[j].date_entries.length;
+                for(var k = 0; k < length; k++){
+                    if (arr[j].date_entries[k].date.local == data.results[i].date.local){
+                        arr[j].date_entries[k].setParameter(data.results[i].parameter, data.results[i].value);
+                        date_exists = true;
+                        //console.log("break");
+                        break;
                     }
                 }
-                */
-                app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
-                
+                if(!date_exists){
+                    //console.log("in case!"+j)
+                    arr[j].addDateEntry(data.results[i].date, data.results[i].parameter, data.results[i].value);
+                }
+                exists = true;
+                break;  
             }
-        }
-        if(!exists){
-            var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
-            newPoint.addParameter(data.results[i].parameter,data.results[i].value);
-            app.allPoints1.push(newPoint);
-            
-        }
-    }
-    if(num_new_markers>0){
-        console.log("adding "+num_new_markers+"new markers");
-        ShowMarkers1(num_new_markers);
-    }
-}
-function FillUniqueMarkers2(data){
-    console.log(data.results);
-    var num_new_markers=0;
-    //var unique_markers = [];
-    for(var i=0; i < data.results.length; i++){
-        
-        //if there is no markers in the array, add the first
-        if(app.unique_markers2.length==0){
-            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
-            app.unique_markers2.push(newmarker);
-            num_new_markers++;
-            //add point to allPoints
         }
 
-        //check that if the new marker already exists in the unique_markers
-        var exists = false;
-        for(var j = 0; j < app.unique_markers2.length; j++) {
-            if (app.unique_markers2[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers2[j].coordinates.longitude == data.results[i].coordinates.longitude){
-                exists = true;
-                app.unique_markers2[j].addParameter(data.results[i].parameter,data.results[i].value);
-            }
-        }
         if(!exists){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
-            app.unique_markers2.push(newmarker);
+            newmarker.addDateEntry(data.results[i].date,data.results[i].parameter,data.results[i].value)//
+            arr.push(newmarker);
             num_new_markers++;
         }
-        var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
-        
-        newPoint.addParameter(data.results[i].parameter,data.results[i].value);
-        app.allPoints2.push(newPoint);
     }
     if(num_new_markers>0){
-        console.log("adding "+num_new_markers+"new markers");
-        ShowMarkers2(num_new_markers);
+        console.log("adding "+num_new_markers+" new markers");
+        ShowMarkers(num_new_markers, arr, map);
+        console.log(map);
     }
 }
-function ShowMarkers1(num_new_markers){
-    var num_old_markers = app.map1_marker_objects.length;
+function ShowMarkers(num_new_markers,arr, map){
+    var num_old_markers = arr.length-num_new_markers;
     for(var i = 0; i<num_new_markers; i++){
        
-        var marker = addMarker([app.unique_markers1[i+num_old_markers].coordinates.latitude,app.unique_markers1[i+num_old_markers].coordinates.longitude], app.map1)
-            .bindPopup(GetPopupString(app.unique_markers1[i+num_old_markers]));
+        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
+            .bindPopup(GetPopupString(arr[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
-        app.map1_marker_objects.push(marker);
+        arr[i+num_old_markers].marker = marker;
     }
-    console.log("map 1 currently has :"+app.unique_markers1.length + " markers");
-}
-function ShowMarkers2(num_new_markers){
-    var num_old_markers = app.map2_marker_objects.length;
-    for(var i = 0; i<num_new_markers; i++){
-        var marker = addMarker([app.unique_markers2[i+num_old_markers].coordinates.latitude,app.unique_markers2[i+num_old_markers].coordinates.longitude], app.map2)
-            .bindPopup(GetPopupString(app.unique_markers2[i+num_old_markers]));
-        marker.on('mouseover', function (e) {
-            this.openPopup();
-        });
-        marker.on('mouseout', function (e) {
-            this.closePopup();
-        });
-        app.map2_marker_objects.push(marker);
-    }
-    console.log("map 2 currently has :"+app.unique_markers2.length + " markers");
+    console.log("map 1 currently has :"+arr.length + " markers");
 }
 function GetPopupString(unique_marker){
     var retstring="";
@@ -424,51 +365,40 @@ function getAvg(value){
     ret = ret/value.length
     return Math.round(ret * 10000) / 10000;
 }
+function date_entry(){
+    this.date= null;
+    this.pm25 = null;
+    this.pm10 = null;
+    this.no2 = null;
+    this.o3 = null;
+    this.co = null;
+    this.bc = null;
+    this.setParameter = function (parameter,value){
+        if(parameter == "pm25"){this.pm25=value;}
+        if(parameter == "pm10"){this.pm10=value;}
+        if(parameter == "no2"){this.no2=value;}
+        if(parameter == "o3"){this.o3=value;}
+        if(parameter == "co"){this.co=value;}
+        if(parameter == "bc"){this.bc=value;}
+    }
+}
 function unique_marker(lat, lng){
     this.coordinates = [];
     this.coordinates.latitude = lat;
     this.coordinates.longitude = lng;
-    this.pm25 = [];
-    this.pm10 = [];
-    this.no2 = [];
-    this.o3 = [];
-    this.co = [];
-    this.bc = [];
-    this.addParameter = function (parameter,value){
-        if(parameter == "pm25"){this.pm25.push(value);}
-        if(parameter == "pm10"){this.pm10.push(value);}
-        if(parameter == "no2"){this.no2.push(value);}
-        if(parameter == "o3"){this.o3.push(value);}
-        if(parameter == "co"){this.co.push(value);}
-        if(parameter == "bc"){this.bc.push(value);}
+    this.marker = null;
+    this.date_entries = [];
+    this.addDateEntry = function(date,parameter,value){
+        var new_entry = new date_entry;
+        new_entry.date = date;
+        new_entry.setParameter(parameter,value);
+        this.date_entries.push(new_entry);
     }
-}
-function allPoints(lat,lng, date)
-{
-    this.coordinates = [];
-    this.coordinates.latitude = lat;
-    this.coordinates.longitude = lng;
-    this.date = date;
-    this.pm25 = [];
-    this.pm10 = [];
-    this.no2 = [];
-    this.o3 = [];
-    this.co = [];
-    this.bc = [];
-    this.addParameter = function (parameter,value){
-        if(parameter == "pm25"){this.pm25.push(value);}
-        if(parameter == "pm10"){this.pm10.push(value);}
-        if(parameter == "no2"){this.no2.push(value);}
-        if(parameter == "o3"){this.o3.push(value);}
-        if(parameter == "co"){this.co.push(value);}
-        if(parameter == "bc"){this.bc.push(value);}
-    } 
 }
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
     return marker;
 }
-
 /*   Loops    */
 DeleteOldMarkers = function(){
     var num_deleted=0;//for printing purposes only

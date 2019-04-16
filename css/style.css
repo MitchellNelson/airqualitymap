@@ -15,7 +15,7 @@ table {
 	width:50vw;
  }
  td{
- 	vertical-align :top;
+ 	
  	padding:0;
  	margin:0;
  	border:#44484f 1px solid;
@@ -47,16 +47,22 @@ thead {
 .collapsible {
   background-color: #eee;
   color: #444;
-  padding: 18px;
-  width: 100%;
-  outline: none;
-  font-size: 15px;
+  	padding: .5rem;
+  	outline: none;
+  	font-size: 1rem;
+  	text-align: center;
 }
-
+.data-table{
+	padding: .5rem;
+  	outline: none;
+  	font-size: 1rem;
+  	text-align: center;
+  	vertical-align :middle;
+}
 .nav-wrapper{
 	text-align: left;
 	height: 10vh;
-	min-height: 94px;
+	min-height: 115px;
 	background-color: #44484f;
 	color:white;
 }
@@ -74,7 +80,7 @@ thead {
 	font-size: .7rem;
 }
 .maps{ 
-	height: 90vh;
+	height: 60vh;
 	width: 50vw;
 }
 .screenButtons{

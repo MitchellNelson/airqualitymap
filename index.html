@@ -21,7 +21,7 @@
     <div id="app">
     	<table>
     		<tr>
-    			<td id="map1_and_nav">
+    			<td style="vertical-align:top" id="map1_and_nav">
     				<div class="nav-wrapper">
 	    				<div id="nav1" class="nav">
 	    					<button id="showFilter1" class="screenButtons"onclick="showFilter1()"><i class="icon-cog"></i></i></button>
@@ -40,7 +40,7 @@
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="icon-arrow-left"></i></button>
 	    					Where Filters 1 will live
 					    </div>
-					</div>
+					  </div>
 				    <div id="map1id" class="maps"></div>
             <table id="firstTable">
             <thead>
@@ -64,51 +64,37 @@
                <th class="sticky">co</th>
               </tr>
             </thead>
-              <tbody>
-               <div v-if="allPoints1.length > 0">
-                <tr v-for="item in allPoints1" >
-                  <td class="collapsible">
+              <tbody class="data-table" v-for="item in unique_markers1">
+                <tr v-if="unique_markers1.length > 0" v-for="entry in item.date_entries">
+                  <td class="collapsible" >
                     <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
                   </td>
-                  <td>
-                    <span> {{item.date}}</span>
+                  <td >
+                    <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                   </td>
-                  <td :class="getClass(`${item.pm25}`)">
-                    <div v-if= "item.pm25.length > 0"> 
-                      <span v-for= "value in item.pm25"> {{value}}, </span>
-                    </div>
+                  <td :class="getClass(`${entry.pm25}`)">
+                    <span>{{entry.pm25}}</span>
                   </td>
-                  <td :class="getClass(`${item.pm10}`)">
-                    <div v-if= "item.pm10.length > 0"> 
-                      <span v-for= "value in item.pm10"> {{value}}, </span>
-                    </div>
+                  <td :class="getClass(`${entry.pm10}`)">
+                    <span>{{entry.pm10}}</span>
                   </td>
-                  <td :class="getClass(`${item.no2}`)"> 
-                    <div v-if= "item.no2.length > 0"> 
-                      <span v-for= "value in item.no2"> {{value}}, </span>
-                    </div>
-                    </td>
-                    <td :class="getClass(`${item.o3}`)"> 
-                      <div v-if= "item.o3.length > 0"> 
-                        <span v-for= "value in item.o3"> {{value}}, </span>
-                      </div>
-                    </td>
-                    <td :class="getClass(`${item.bc}`)"> 
-                      <div v-if= "item.bc.length > 0"> 
-                        <span v-for= "value in item.bc"> {{value}}, </span>
-                      </div>
-                    </td>
-                    <td :class="getClass(`${item.co}`)"> 
-                      <div v-if= "item.co.length > 0" > 
-                        <span v-for= "value in item.co"> {{value}},</span>
-                      </div>
-                    </td>
-                  </tr> 
-                </div>
+                  <td :class="getClass(`${entry.no2}`)"> 
+                    <span>{{entry.no2}}</span>
+                  </td>
+                 <td :class="getClass(`${entry.o3}`)"> 
+                    <span>{{entry.o3}}</span>
+                  </td>
+                  <td :class="getClass(`${entry.bc}`)"> 
+                    <span>{{entry.bc}}</span>
+                  </td>
+                  <td :class="getClass(`${entry.co}`)"> 
+                    <span>{{entry.co}}</span>
+                  </td>
+                </tr> 
               </tbody>
           </table>
 				</td>
-				<td id="map2_and_nav">
+				<td style="vertical-align:top" id="map2_and_nav">
 					<div class="nav-wrapper">
 						<div id="nav2" class="nav">
 	    					<button id="showFilter2" class="screenButtons"onclick="showFilter2()"><i class="icon-cog"></i></i></button>
@@ -152,52 +138,33 @@
                <th class="sticky">co</th>
               </tr>
             </thead>
-              <tbody>
-               <div v-if="allPoints2.length > 0">
-                <tr v-for="item in allPoints2" >
-                  <td class="collapsible">
+              <tbody class="data-table" v-for="item in unique_markers2">
+                <tr v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
+                  <td class="collapsible" >
                     <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
                   </td>
-                  <td>
-                    <span> {{item.date}}</span>
+                  <td >
+                    <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                   </td>
-                  <td :class="getClass(`${item.pm25}`)">
-                    <div v-if= "item.pm25.length > 0"> 
-                      <span v-for= "value in item.pm25">{{value}}, </span>
-                    </div>
+                  <td :class="getClass(`${entry.pm25}`)">
+                    <span>{{entry.pm25}}</span>
                   </td>
-               
-                  <td :class="getClass(`${item.pm10}`)">
-                    <div v-if= "item.pm10.length > 0"> 
-                      <span v-for= "value in item.pm10"> {{value}}, </span>
-                    </div>
+                  <td :class="getClass(`${entry.pm10}`)">
+                    <span>{{entry.pm10}}</span>
                   </td>
-
-                  <td :class="getClass(`${item.no2}`)"> 
-                    <div v-if= "item.no2.length > 0"> 
-                      <span v-for= "value in item.no2"> {{value}}, </span>
-                    </div>
-                    </td>
-
-                    <td :class="getClass(`${item.o3}`)"> 
-                      <div v-if= "item.o3.length > 0"> 
-                        <span v-for= "value in item.o3"> {{value}}, </span>
-                      </div>
-                    </td>
-
-                    <td :class="getClass(`${item.bc}`)"> 
-                      <div v-if= "item.bc.length > 0"> 
-                        <span v-for= "value in item.bc"> {{value}}, </span>
-                      </div>
-                    </td>
-                    
-                    <td :class="getClass(`${item.co}`)"> 
-                      <div v-if= "item.co.length > 0" > 
-                        <span v-for= "value in item.co"> {{value}},</span>
-                      </div>
-                    </td>
-                  </tr> 
-                </div>
+                  <td :class="getClass(`${entry.no2}`)"> 
+                    <span>{{entry.no2}}</span>
+                  </td>
+                 <td :class="getClass(`${entry.o3}`)"> 
+                    <span>{{entry.o3}}</span>
+                  </td>
+                  <td :class="getClass(`${entry.bc}`)"> 
+                    <span>{{entry.bc}}</span>
+                  </td>
+                  <td :class="getClass(`${entry.co}`)"> 
+                    <span>{{entry.co}}</span>
+                  </td>
+                </tr> 
               </tbody>
             </table>
           </div>
