@@ -182,7 +182,7 @@ trackMap = function(){
             clearTimeout(openAQRequest);
         }
         openAQRequest = setTimeout(function(){ 
-            //DeleteOldMarkers();
+            DeleteOldMarkers(app.unique_markers1, app.map1);
             OpenAQSearch1();
             LocationFromLatLng1(app.center1.lat, app.center1.lng);
             openAQRequest=null;
@@ -194,7 +194,7 @@ trackMap = function(){
         }
         console.log("zoomend");
         openAQRequest = setTimeout(function(){ 
-            //DeleteOldMarkers();
+            DeleteOldMarkers(app.unique_markers1, app.map1);
             OpenAQSearch1();
             LocationFromLatLng1(app.center1.lat, app.center1.lng);
             openAQRequest=null;
@@ -212,7 +212,7 @@ trackMap = function(){
             clearTimeout(openAQRequest);
         }
         openAQRequest = setTimeout(function(){ 
-            DeleteOldMarkers();
+            DeleteOldMarkers(app.unique_markers2, app.map2);
             OpenAQSearch2();
             LocationFromLatLng2(app.center2.lat, app.center2.lng);
             openAQRequest=null;
@@ -224,7 +224,7 @@ trackMap = function(){
         }
         console.log("zoomend");
         openAQRequest = setTimeout(function(){ 
-            DeleteOldMarkers();
+            DeleteOldMarkers(app.unique_markers2, app.map2);
             OpenAQSearch2();
             LocationFromLatLng2(app.center2.lat, app.center2.lng);
             openAQRequest=null;
@@ -323,8 +323,8 @@ function ShowMarkers(num_new_markers,arr, map){
     var num_old_markers = arr.length-num_new_markers;
     for(var i = 0; i<num_new_markers; i++){
        
-        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
-            .bindPopup(GetPopupString(arr[i+num_old_markers]));
+        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map);
+            //.bindPopup(GetPopupString(arr[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -400,18 +400,18 @@ addMarker = function([lat,lng],map){
     return marker;
 }
 /*   Loops    */
-DeleteOldMarkers = function(){
+DeleteOldMarkers = function(arr,map){
     var num_deleted=0;//for printing purposes only
     var i = app.unique_markers2.length
     while (i--) {
-        if(!app.map2.getBounds().contains([app.unique_markers2[i].coordinates.latitude,app.unique_markers2[i].coordinates.longitude])){ 
-            app.map2.removeLayer(app.unique_markers2[i].marker);
-            app.unique_markers2.splice(i, 1);
+        if(!map.getBounds().contains([arr[i].coordinates.latitude,arr[i].coordinates.longitude])){ 
+            map.removeLayer(arr[i].marker);
+            arr.splice(i, 1);
             num_deleted++;
         } 
     }
     console.log("deleted :"+num_deleted + " markers");
-    console.log("currently have :"+app.unique_markers2.length + " markers");
+    console.log("currently have :"+arr.length + " markers");
 }
 fullscreen1 = function(){
     document.getElementById("map2_and_nav").style.display="none";
