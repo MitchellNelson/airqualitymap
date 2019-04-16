@@ -1,7 +1,7 @@
 var app;
 
 var starting_center1 = L.latLng(44.9430, -93.1895);
-var starting_center2 = L.latLng(40.82789112974715, -73.93912754952909);
+var starting_center2 = L.latLng(39.916451274939206, 116.38215586686088);
 var starting_location1 = "St. Paul";
 var starting_location2 = "New York City";
 var openAQRequest = null;
