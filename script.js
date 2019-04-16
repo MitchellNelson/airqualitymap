@@ -1,7 +1,7 @@
 var app;
 
 var starting_center1 = L.latLng(44.9430, -93.1895);
-var starting_center2 = L.latLng(40.82789112974715, -73.93912754952909);
+var starting_center2 = L.latLng(40.7590, -73.9845);
 var starting_location1 = "St. Paul";
 var starting_location2 = "New York City";
 var openAQRequest = null;
@@ -68,36 +68,29 @@ init = function(){
                 console.log(this.center2);
                 this.map2.panTo(this.center2);
             },
-            getClass(a) {
-            max =0
-            for(var i =0; i<a.length; i++)
-            {
-                if (a[i]>max)
-                {
-                    max = a[i]
-                }
-            }
-              if (max ==0) {
-                this.class=null
+            getClassO3(a) {
+ 			if(a ==0)
+			 {
+				this.class= null
                 return this.class
-              }   
-              else if (max > 0 && max<=50) {
+			 }
+             else if (a > 0 && a<=.054) {
                 this.class="good"
                 return this.class
               }
-              else if (max>50 && max<=100) {
+              else if (a>.055 && a<=.070) {
                 this.class = "moderate"
                 return this.class
               }
-              else if (max>100 && max<=150){
+              else if (a>.071 && a<=.085){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (max>150 && max<=200){
+              else if (a>.086 && a<=.105){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (max>200 && max<=300){
+              else if (a>.106 && a<=.200){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -105,7 +98,131 @@ init = function(){
                 this.class = "hazardous"
                 return this.class
               }
-            },  
+            },
+			getClassPM25(a) {
+			if(a ==0)
+			 {
+				this.class= null
+                return this.class
+			 }
+             else if (a > 0 && a<=12) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>12.1 && a<= 35.4) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 35.5 && a<= 55.4){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>55.5 && a<= 150.4){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>150.5 && a<= 250.4){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else{
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+			getClassPM10(a) {
+			 if(a ==0)
+			 {
+				this.class= null
+                return this.class
+			 }
+			 else if (a > 0 && a<=54) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>55 && a<= 154) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 155 && a<= 254){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>255 && a<= 354){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>355 && a<= 424){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else {
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+			getClassCO(a) {
+			if(a ==0)
+			 {
+				this.class= null
+                return this.class
+			 }
+			 else if (a > 0 && a<=4.4) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>4.5 && a<= 9.4) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 9.5 && a<= 12.4){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>12.5 && a<= 15.4){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>15.5 && a<= 30.4){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else {
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+			getClassNO2(a) {
+			if(a ==0)
+			 {
+				this.class= null
+                return this.class
+			 }
+			else if (a > 0 && a<=53) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>54 && a<= 100) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 101 && a<= 360){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>361 && a<= 649){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>650 && a<= 1249){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else {
+                this.class = "hazardous"
+                return this.class
+              }
+            }
         }
     });
     app.initMap();
@@ -123,12 +240,9 @@ function OpenAQSearch1(){
     var bounds = app.map1.getBounds();
     var radius = app.map1.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-        url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000&sort=desc",
+        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000",
         dataType: "json",
-        success: function(data){
-            FillUniqueMarkers(data,app.unique_markers1,app.map1);
-
-        }
+        success: FillUniqueMarkers1
     };
     $.ajax(request);
 }
@@ -142,13 +256,10 @@ function OpenAQSearch2(){
     var bounds = app.map2.getBounds();
     var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-        url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000&sort=desc",
+        url: "https://api.openaq.org/v1/measurements?order_by=location?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000",
         dataType: "json",
-        success: function(data){
-            FillUniqueMarkers(data,app.unique_markers2, app.map2);
-        }
+        success: FillUniqueMarkers2
     };
-    console.log(request.url);
     $.ajax(request);
 }
 LocationFromLatLng1 = function(lat, lng) {
@@ -268,72 +379,137 @@ function locSearch2(event){
         OpenAQSearch2(); 
     },1000);
 }
-function FillUniqueMarkers(data,arr,map){
+function FillUniqueMarkers1(data){
     console.log(data.results);
     var num_new_markers=0;
-
-    //if there is no markers in the array, add the first
-    if(arr.length== 0 && data.results.length>0){
-        var newmarker = new unique_marker(data.results[0].coordinates.latitude, data.results[0].coordinates.longitude);
-        newmarker.addDateEntry(data.results[0].date,data.results[0].parameter,data.results[0].value)//
-        arr.push(newmarker);
-        num_new_markers++;
-    }
-    
     //var unique_markers = [];
     for(var i=0; i < data.results.length; i++){
-        //check that if the new marker already exists in the unique_markers
-        var exists = false;
-        for(var j = 0; j < arr.length; j++) {
-            var date_exists = false;
-            if (arr[j].coordinates.latitude == data.results[i].coordinates.latitude && arr[j].coordinates.longitude == data.results[i].coordinates.longitude){
-                //loop through date entries specific for that unique location
-                var length = arr[j].date_entries.length;
-                for(var k = 0; k < length; k++){
-                    if (arr[j].date_entries[k].date.local == data.results[i].date.local){
-                        arr[j].date_entries[k].setParameter(data.results[i].parameter, data.results[i].value);
-                        date_exists = true;
-                        //console.log("break");
-                        break;
-                    }
-                }
-                if(!date_exists){
-                    //console.log("in case!"+j)
-                    arr[j].addDateEntry(data.results[i].date, data.results[i].parameter, data.results[i].value);
-                }
-                exists = true;
-                break;  
-            }
+        
+        //if there is no markers in the array, add the first
+        if(app.unique_markers1.length==0){
+            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers1.push(newmarker);
+            num_new_markers++;
         }
 
+        //check that if the new marker already exists in the unique_markers
+        var exists = false;
+        for(var j = 0; j < app.unique_markers1.length; j++) {
+            if (app.unique_markers1[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers1[j].coordinates.longitude == data.results[i].coordinates.longitude){
+                exists = true;
+                app.unique_markers1[j].addParameter(data.results[i].parameter,data.results[i].value);
+            }
+        }
         if(!exists){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addDateEntry(data.results[i].date,data.results[i].parameter,data.results[i].value)//
-            arr.push(newmarker);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers1.push(newmarker);
             num_new_markers++;
+        }
+        //if date & lat lon already exist
+        var exists = false;
+        for(var j = 0; j < app.allPoints1.length; j++) {
+            if (app.allPoints1[j].coordinates.latitude == data.results[i].coordinates.latitude && app.allPoints1[j].coordinates.longitude == data.results[i].coordinates.longitude && app.allPoints1[j].date ==data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T'))){
+                exists = true;
+                /* POTENTIALLY REMOVE DUPLICATES HERE
+                duplicate = false;
+                var par = data.results[i].parameter;
+                console.log(app.allPoints1[j].no2);
+                for(var k =0; k<app.allPoints1[j].par.length; k++)
+                {
+                    if(data.results[i].value == app.allPoints1[j].data.results[i].parameter.value[i])
+                    {
+                       //app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
+                       console.log(data.results[i].value , app.allPoints1[j].date);
+                    }
+                }
+                */
+                app.allPoints1[j].addParameter(data.results[i].parameter,data.results[i].value);
+                
+            }
+        }
+        if(!exists){
+            var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
+            newPoint.addParameter(data.results[i].parameter,data.results[i].value);
+            app.allPoints1.push(newPoint);
+            
         }
     }
     if(num_new_markers>0){
-        console.log("adding "+num_new_markers+" new markers");
-        ShowMarkers(num_new_markers, arr, map);
-        console.log(map);
+        console.log("adding "+num_new_markers+"new markers");
+        ShowMarkers1(num_new_markers);
     }
 }
-function ShowMarkers(num_new_markers,arr, map){
-    var num_old_markers = arr.length-num_new_markers;
+function FillUniqueMarkers2(data){
+    console.log(data.results);
+    var num_new_markers=0;
+    //var unique_markers = [];
+    for(var i=0; i < data.results.length; i++){
+        
+        //if there is no markers in the array, add the first
+        if(app.unique_markers2.length==0){
+            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers2.push(newmarker);
+            num_new_markers++;
+            //add point to allPoints
+        }
+
+        //check that if the new marker already exists in the unique_markers
+        var exists = false;
+        for(var j = 0; j < app.unique_markers2.length; j++) {
+            if (app.unique_markers2[j].coordinates.latitude == data.results[i].coordinates.latitude && app.unique_markers2[j].coordinates.longitude == data.results[i].coordinates.longitude){
+                exists = true;
+                app.unique_markers2[j].addParameter(data.results[i].parameter,data.results[i].value);
+            }
+        }
+        if(!exists){
+            var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
+            newmarker.addParameter(data.results[i].parameter,data.results[i].value);
+            app.unique_markers2.push(newmarker);
+            num_new_markers++;
+        }
+        var newPoint = new allPoints(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude,data.results[i].date.utc.substring(0,data.results[i].date.utc.indexOf('T')));
+        
+        newPoint.addParameter(data.results[i].parameter,data.results[i].value);
+        app.allPoints2.push(newPoint);
+    }
+    if(num_new_markers>0){
+        console.log("adding "+num_new_markers+"new markers");
+        ShowMarkers2(num_new_markers);
+    }
+}
+function ShowMarkers1(num_new_markers){
+    var num_old_markers = app.map1_marker_objects.length;
     for(var i = 0; i<num_new_markers; i++){
        
-        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
-            .bindPopup(GetPopupString(arr[i+num_old_markers]));
+        var marker = addMarker([app.unique_markers1[i+num_old_markers].coordinates.latitude,app.unique_markers1[i+num_old_markers].coordinates.longitude], app.map1)
+            .bindPopup(GetPopupString(app.unique_markers1[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
         marker.on('mouseout', function (e) {
             this.closePopup();
         });
-        arr[i+num_old_markers].marker = marker;
+        app.map1_marker_objects.push(marker);
     }
-    console.log("map 1 currently has :"+arr.length + " markers");
+    console.log("map 1 currently has :"+app.unique_markers1.length + " markers");
+}
+function ShowMarkers2(num_new_markers){
+    var num_old_markers = app.map2_marker_objects.length;
+    for(var i = 0; i<num_new_markers; i++){
+        var marker = addMarker([app.unique_markers2[i+num_old_markers].coordinates.latitude,app.unique_markers2[i+num_old_markers].coordinates.longitude], app.map2)
+            .bindPopup(GetPopupString(app.unique_markers2[i+num_old_markers]));
+        marker.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        app.map2_marker_objects.push(marker);
+    }
+    console.log("map 2 currently has :"+app.unique_markers2.length + " markers");
 }
 function GetPopupString(unique_marker){
     var retstring="";
@@ -365,48 +541,60 @@ function getAvg(value){
     ret = ret/value.length
     return Math.round(ret * 10000) / 10000;
 }
-function date_entry(){
-    this.date= null;
-    this.pm25 = null;
-    this.pm10 = null;
-    this.no2 = null;
-    this.o3 = null;
-    this.co = null;
-    this.bc = null;
-    this.setParameter = function (parameter,value){
-        if(parameter == "pm25"){this.pm25=value;}
-        if(parameter == "pm10"){this.pm10=value;}
-        if(parameter == "no2"){this.no2=value;}
-        if(parameter == "o3"){this.o3=value;}
-        if(parameter == "co"){this.co=value;}
-        if(parameter == "bc"){this.bc=value;}
-    }
-}
 function unique_marker(lat, lng){
     this.coordinates = [];
     this.coordinates.latitude = lat;
     this.coordinates.longitude = lng;
-    this.marker = null;
-    this.date_entries = [];
-    this.addDateEntry = function(date,parameter,value){
-        var new_entry = new date_entry;
-        new_entry.date = date;
-        new_entry.setParameter(parameter,value);
-        this.date_entries.push(new_entry);
+    this.pm25 = [];
+    this.pm10 = [];
+    this.no2 = [];
+    this.o3 = [];
+    this.co = [];
+    this.bc = [];
+    this.addParameter = function (parameter,value){
+        if(parameter == "pm25"){this.pm25.push(value);}
+        if(parameter == "pm10"){this.pm10.push(value);}
+        if(parameter == "no2"){this.no2.push(value);}
+        if(parameter == "o3"){this.o3.push(value);}
+        if(parameter == "co"){this.co.push(value);}
+        if(parameter == "bc"){this.bc.push(value);}
     }
+}
+function allPoints(lat,lng, date)
+{
+    this.coordinates = [];
+    this.coordinates.latitude = lat;
+    this.coordinates.longitude = lng;
+    this.date = date;
+    this.pm25 = [];
+    this.pm10 = [];
+    this.no2 = [];
+    this.o3 = [];
+    this.co = [];
+    this.bc = [];
+    this.addParameter = function (parameter,value){
+        if(parameter == "pm25"){this.pm25.push(value);}
+        if(parameter == "pm10"){this.pm10.push(value);}
+        if(parameter == "no2"){this.no2.push(value);}
+        if(parameter == "o3"){this.o3.push(value);}
+        if(parameter == "co"){this.co.push(value);}
+        if(parameter == "bc"){this.bc.push(value);}
+    } 
 }
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
     return marker;
 }
+
 /*   Loops    */
 DeleteOldMarkers = function(){
     var num_deleted=0;//for printing purposes only
     var i = app.unique_markers2.length
     while (i--) {
         if(!app.map2.getBounds().contains([app.unique_markers2[i].coordinates.latitude,app.unique_markers2[i].coordinates.longitude])){ 
-            app.map2.removeLayer(app.unique_markers2[i].marker);
             app.unique_markers2.splice(i, 1);
+            app.map2.removeLayer(app.map2_marker_objects[i]);
+            app.map2_marker_objects.splice(i,1);
             num_deleted++;
         } 
     }
