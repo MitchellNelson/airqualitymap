@@ -38,7 +38,7 @@
 					    </div>
 					    <div id="filter-page1" class="filter-page">
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
-	    					<div class="filers">
+	    					<center><div class="filers">
                   <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
                   <label for="pm25">pm25</label>
                   <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
@@ -51,7 +51,7 @@
                   <label for="bc">bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams1">
                   <label for="co">co</label>
-                </div>
+                </div></center>
 					    </div>
 					  </div>
 				    <div id="map1id" class="maps"></div>
@@ -79,11 +79,20 @@
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
-                  <tr v-if="unique_markers1.length > 0" v-for="entry in item.date_entries">
-                    <td class="collapsible" >
-                      <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
+                  <tr @click="item.visible = !item.visible">
+                    <td class="collapsible sticky" style="top:2rem;">
+                      <span >
+                        {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
+                        <i v-if="item.visible==false" class="drop-buttons fas fa-sort-down"></i>
+                        <i v-else class="drop-buttons fas fa-sort-up"></i>
+                      </span>
                     </td>
+                  </tr>
 
+                  <tr v-if="item.visible==true" v-if="unique_markers1.length > 0" v-for="entry in item.date_entries">
+                    <td>
+                      <span > </span>
+                    </td>
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
@@ -141,7 +150,7 @@
 				    	</div>
 				    	<div id="filter-page2" class="filter-page">
 						    <button id="showNav2" class="screenButtons" onclick="showNav2()"><i class="fas fa-arrow-circle-left"></i></button>
-	    					<div class="filers">
+	    					<center><div class="filers">
                   <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams2">
                   <label for="pm25">pm25</label>
                   <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams2">
@@ -154,7 +163,7 @@
                   <label for="bc">bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams2">
                   <label for="co">co</label>
-                </div>
+                </div></center>
 					    </div>
 					</div>	
 				    <div id="map2id" class="maps"></div>
@@ -183,15 +192,27 @@
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers2">
-                  <tr v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
-                    <td class="collapsible" >
-                      <span >{{item.coordinates.latitude}},{{item.coordinates.longitude}}</span>
+
+                  <tr @click="item.visible = !item.visible">
+                    <td class="collapsible sticky" style="top:2rem;" >
+                      <span >
+                        {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
+                        <i v-if="item.visible==false" class="drop-buttons fas fa-sort-down"></i>
+                        <i v-else class="drop-buttons fas fa-sort-up"></i>
+                      </span>
+                    </td>
+                  </tr>
+
+
+                  <tr v-if="item.visible==true" v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
+                    <td>
+                      <span > </span>
                     </td>
 
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td v-if="checkedParams2.includes('pm25')" :class="getClass(`${entry.pm25}`)">
+                   <td v-if="checkedParams2.includes('pm25')" :class="getClass(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>

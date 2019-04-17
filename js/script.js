@@ -379,6 +379,7 @@ function date_entry(){
     }
 }
 function unique_marker(lat, lng){
+    this.visible=false;
     this.coordinates = [];
     this.coordinates.latitude = lat;
     this.coordinates.longitude = lng;
