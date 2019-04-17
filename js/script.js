@@ -20,7 +20,8 @@ init = function(){
             location1: starting_location1,
             location2: starting_location2,
             checkedParams1: ["pm25","pm10","no2","o3","bc","co"],
-            checkedParams2: ["pm25","pm10","no2","o3","bc","co"]
+            checkedParams2: ["pm25","pm10","no2","o3","bc","co"],
+            heat: null
         },
         //computed - loop over data and 
         methods: {
@@ -68,37 +69,136 @@ init = function(){
                 OpenAQSearch2();
 
             },
-            getClass(a) {
-            max =0
-              if (a ==0) {
-                this.class=null
-                return this.class
-              }   
-              else if (a > 0 && a<=50) {
+            getClassO3(a) {
+            if ( a<=.054) {
                 this.class="good"
                 return this.class
               }
-              else if (a>50 && a<=100) {
+              else if (a>.055 && a<=.070) {
                 this.class = "moderate"
                 return this.class
               }
-              else if (a>100 && a<=150){
+              else if (a>.071 && a<=.085){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>150 && a<=200){
+              else if (a>.086 && a<=.105){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>200 && a<=300){
+              else if (a>.106 && a<=.200){
                 this.class = "veryUnhealthy"
                 return this.class
               }
-              else if(a>300) {
+              else if (a> .200){
                 this.class = "hazardous"
                 return this.class
               }
-            },  
+            },
+            getClassPM25(a) {
+            if (a<=12) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>12.1 && a<= 35.4) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 35.5 && a<= 55.4){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>55.5 && a<= 150.4){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>150.5 && a<= 250.4){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else if (a> 250.4){
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+            getClassPM10(a) {
+            if ( a<=54) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>55 && a<= 154) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 155 && a<= 254){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>255 && a<= 354){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>355 && a<= 424){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else if( a >424) {
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+            getClassCO(a) {
+             if ( a<=4.4) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>4.5 && a<= 9.4) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 9.5 && a<= 12.4){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>12.5 && a<= 15.4){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>15.5 && a<= 30.4){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else if (a>30.4){
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
+            getClassNO2(a) {
+            if ( a<=53) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>54 && a<= 100) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 101 && a<= 360){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>361 && a<= 649){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>650 && a<= 1249){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else if (a>1249){
+                this.class = "hazardous"
+                return this.class
+              }
+            }  
         }
     });
     app.initMap();
@@ -226,7 +326,6 @@ trackMap = function(){
     });
 }
 
-
 /*  latSearch and lngSearch functions update the maps position
     when the user changes the input fields for lat and longitude    */
 function latSearch1(event){
@@ -262,6 +361,12 @@ function locSearch2(event){
         app.mounted2();  
         DeleteOldMarkers(app.unique_markers2,app.map2);
     },1000);
+}
+function filter(event){
+    setTimeout(function(){
+        console.log("filtering")  
+        DeleteFilteredPoints(app.unique_markers2,app.map2);
+    },1500);
 }
 function FillUniqueMarkers(data,arr,map){
     console.log(data.results);
@@ -333,27 +438,69 @@ function ShowMarkers(num_new_markers,arr, map){
 }
 function GetPopupString(unique_marker){
     var retstring="";
-    if(unique_marker.pm25 != undefined && unique_marker.pm25.length>0){
-        retstring = "pm25: " + getAvg(unique_marker.date_entries,"pm25") + "µg/m³" + "<br>" + retstring;
+    var array = getArrays(unique_marker);
+    if(array[0].length != 0){
+        retstring = "pm25: " + getAvg(pm25Array) + "µg/m³" + "<br>" + retstring;
     }
-    if(unique_marker.pm10 != undefined && unique_marker.pm10.length>0){
-        retstring = "pm10: " + getAvg(unique_marker.date_entries,"pm10") + "ppm" + "<br>" + retstring;
+    if(array[1].length != 0 ){
+        retstring = "pm10: " + getAvg(pm10Array) + "ppm" + "<br>" + retstring;
     }
-    if(unique_marker.no2!= undefined && unique_marker.no2.length>0){
-        retstring = "no2: " + getAvg(unique_marker.date_entries,"no2") + "ppm" + "<br>" + retstring;
+    if(array[2].length!= 0 ){
+        retstring = "no2: " + getAvg(no2Array) + "ppm" + "<br>" + retstring;
     }
-    if(unique_marker.o3!= undefined && unique_marker.o3.length>0){
-        retstring = "o3: " + getAvg(unique_marker.date_entries, "o3") + "ppm" + "<br>" + retstring;
+    if(array[3].length!= 0){
+        retstring = "o3: " + getAvg(o3Array) + "ppm" + "<br>" + retstring;
     }
-    if(unique_marker.co!= undefined && unique_marker.co.length>0){
-        retstring = "co: " + getAvg(unique_marker.date_entries,"co") + "ppm"  + "<br>"+ retstring;
+    if(array[4].length!= 0){
+        retstring = "co: " + getAvg(coArray) + "ppm"  + "<br>"+ retstring;
     }
-    if(unique_marker.bc!= undefined && unique_marker.bc.length>0){
-        retstring = "bc: " + getAvg(unique_marker.date_entries,"bc") + "bc"  + "<br>"+ retstring;
+    if(array[5].length!= 0){
+        retstring = "bc: " + getAvg(bcArray) + "bc"  + "<br>"+ retstring;
     }
     return retstring;
 }
-function getAvg(value,parameter){
+function getArrays(unique_marker, chemical)
+{
+    var pm25Array = [];
+    var pm10Array =[];
+    var no2Array = [];
+    var o3Array = [];
+    var coArray= [];
+    var bcArray= [];
+    console.log(unique_marker);
+    for(var j =0; j< unique_marker.date_entries.length; j++)
+    {
+        if (unique_marker.date_entries[j].pm25 !=null && chemical ==null || chemical =="pm25")
+        {
+            pm25Array = pm25Array + unique_marker.date_entries[j].pm25;
+        }
+        if (unique_marker.date_entries[j].pm10!=null && chemical ==null || chemical =="pm10")
+        {
+            pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
+        }
+        if (unique_marker.date_entries[j].no2 !=null && chemical ==null || chemical =="no2")
+        {
+            no2Array = no2Array + unique_marker.date_entries[j].no2;
+        }
+        if (unique_marker.date_entries[j].o3 !=null && chemical ==null || chemical =="o3")
+        {
+            o3Array = o3Array + unique_marker.date_entries[j].o3;
+        }
+        if (unique_marker.date_entries[j].co !=null && chemical ==null || chemical =="co")
+        {
+            coArray = coArray + unique_marker.date_entries[j].co;
+        }
+        if (unique_marker.date_entries[j].bc !=null && chemical ==null || chemical =="bc")
+        {
+            bcArray = bcArray + unique_marker.date_entries[j].bc;
+        }
+    }
+    var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray ];
+    return all;
+
+}
+function getAvg(value){
+
     ret = 0;
     for(var i = 0; i<value.length; i++){
         ret = ret + value[i];
@@ -391,6 +538,16 @@ function unique_marker(lat, lng){
         new_entry.setParameter(parameter,value);
         this.date_entries.push(new_entry);
     }
+}
+
+function heatMap1()
+{
+    var array = [];
+    for (var i=0; i< app.unique_markers1.length; i++)
+    {
+        array[i] = [app.unique_markers1[i].lat, app.unique_markers1[i].lng, getAvg(getArrays(app.unique_markers1[i],checkedParams1[0]))];
+    }
+    var heat = L.heatLayer(array[i], {radius: 25}).addTo(app.map1);
 }
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
@@ -459,6 +616,7 @@ showFilter2 = function(){
     document.getElementById("filter-page2").style.display="inline";
 }
 showNav2 = function(){
+
     document.getElementById("filter-page2").style.display="none";
     document.getElementById("nav2").style.display="block";
 }

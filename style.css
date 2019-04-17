@@ -120,3 +120,6 @@ thead {
 #halfscreen1, #halfscreen2{
 	display:none;
 }
+#heat1, #heat2{
+	display:none;
+}
