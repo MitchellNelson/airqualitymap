@@ -16,6 +16,7 @@
    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script type="application/javascript" src="js/script.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="Leaflet.heat-gh-pages/dist/leaflet-heat.js"></script>
 </head>
 <body onload="init()">
     <div id="app">
@@ -51,6 +52,10 @@
                   <label for="bc">bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams1">
                   <label for="co">co</label>
+                  <div v-if = "checkedParams1.length ==1">
+                    <input type="checkbox" id="heat1" value="true" v-model="heat" @input="heatMap1"> 
+                    <label for="heat">Heat Map</label>
+                  </div>
                 </div>
 					    </div>
 					  </div>
@@ -74,8 +79,9 @@
                  <th v-if="checkedParams1.includes('pm10')"class="sticky">pm10</th>
                  <th v-if="checkedParams1.includes('no2')"class="sticky">no2</th>
                  <th v-if="checkedParams1.includes('o3')"class="sticky">o3</th>
-                 <th v-if="checkedParams1.includes('bc')"class="sticky">bc</th>
                  <th v-if="checkedParams1.includes('co')"class="sticky">co</th>
+                 <th v-if="checkedParams1.includes('bc')"class="sticky">bc</th>
+                 
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
@@ -87,32 +93,32 @@
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td v-if="checkedParams1.includes('pm25')" :class="getClass(`${entry.pm25}`)">
+                    <td v-if="checkedParams1.includes('pm25')" :class="getClassPM25(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('pm10')" :class="getClass(`${entry.pm10}`)">
+                    <td v-if="checkedParams1.includes('pm10')" :class="getClassPM10(`${entry.pm10}`)">
                       <div v-if= "entry.pm10!= null">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('no2')" :class="getClass(`${entry.no2}`)"> 
+                    <td v-if="checkedParams1.includes('no2')" :class="getClassNO2(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('o3')" :class="getClass(`${entry.o3}`)"> 
+                    <td v-if="checkedParams1.includes('o3')" :class="getClassO3(`${entry.o3}`)"> 
                       <div v-if= "entry.o3!= null">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('bc')" :class="getClass(`${entry.bc}`)"> 
+                    <td v-if="checkedParams1.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
                       <div v-if= "entry.bc!= null">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('co')" :class="getClass(`${entry.co}`)"> 
+                    <td v-if="checkedParams1.includes('co')" :class="getClassCO(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
@@ -154,6 +160,10 @@
                   <label for="bc">bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams2">
                   <label for="co">co</label>
+                  <div v-if = "checkedParams2.length ==1">
+                    <input type="checkbox" id="heat2" value="heat"> 
+                    <label for="heat">Heat Map</label>
+                  </div>
                 </div>
 					    </div>
 					</div>	
@@ -178,8 +188,8 @@
                    <th v-if="checkedParams2.includes('pm10')"class="sticky">pm10</th>
                    <th v-if="checkedParams2.includes('no2')"class="sticky">no2</th>
                    <th v-if="checkedParams2.includes('o3')"class="sticky">o3</th>
-                   <th v-if="checkedParams2.includes('bc')"class="sticky">bc</th>
                    <th v-if="checkedParams2.includes('co')"class="sticky">co</th>
+                   <th v-if="checkedParams2.includes('bc')"class="sticky">bc</th>
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers2">
@@ -191,32 +201,32 @@
                     <td >
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
-                    <td v-if="checkedParams2.includes('pm25')" :class="getClass(`${entry.pm25}`)">
+                    <td v-if="checkedParams2.includes('pm25')" :class="getClassPM25(`${entry.pm25}`)">
                       <div v-if= "entry.pm25 != null">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('pm10')" :class="getClass(`${entry.pm10}`)">
+                    <td v-if="checkedParams2.includes('pm10')" :class="getClassPM10(`${entry.pm10}`)">
                       <div v-if= "entry.pm10!= null">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('no2')" :class="getClass(`${entry.no2}`)"> 
+                    <td v-if="checkedParams2.includes('no2')" :class="getClassNO2(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('o3')" :class="getClass(`${entry.o3}`)"> 
+                    <td v-if="checkedParams2.includes('o3')" :class="getClassO3(`${entry.o3}`)"> 
                       <div v-if= "entry.o3!= null">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('bc')" :class="getClass(`${entry.bc}`)"> 
+                    <td v-if="checkedParams2.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
                       <div v-if= "entry.bc!= null">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('co')" :class="getClass(`${entry.co}`)"> 
+                    <td v-if="checkedParams2.includes('co')" :class="getClassCO(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
