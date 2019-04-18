@@ -45,10 +45,12 @@ thead tr{
 	font-size: .8rem;
 }
 .sticky{
-	position: -webkit-sticky;
-	position: sticky;
+  position: -webkit-sticky;
+  position: -moz-sticky;
+  position: -ms-sticky;
+  position: -o-sticky;
 	top: 0;
-	z-index: 10000;
+	z-index: 100;
 }
 .collapsible {
   	background-color: #eee;
@@ -60,6 +62,7 @@ thead tr{
 }
 .collapsible:hover{
 	cursor: pointer;
+	background-color: #ddd;
 }
 .drop-buttons{
 	float:right;

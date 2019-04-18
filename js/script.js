@@ -23,7 +23,11 @@ init = function(){
             checkedParams2: ["pm25","pm10","no2","o3","bc","co"],
             heat: null
         },
-        //computed - loop over data and 
+        computed:{
+            avg_pm25 :function(){
+                
+            }
+        },
         methods: {
             initMap(){
                 this.map1 = L.map('map1id').setView(starting_center1, 13);
@@ -472,27 +476,33 @@ function getArrays(unique_marker, chemical)
     {
         if (unique_marker.date_entries[j].pm25 !=null && chemical ==null || chemical =="pm25")
         {
-            pm25Array = pm25Array + unique_marker.date_entries[j].pm25;
+            //pm25Array = pm25Array + unique_marker.date_entries[j].pm25;
+            pm25Array.push(unique_marker.date_entries[j].pm25);
         }
         if (unique_marker.date_entries[j].pm10!=null && chemical ==null || chemical =="pm10")
         {
-            pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
+            //pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
+            pm10Array.push(unique_marker.date_entries[j].pm10);
         }
         if (unique_marker.date_entries[j].no2 !=null && chemical ==null || chemical =="no2")
         {
-            no2Array = no2Array + unique_marker.date_entries[j].no2;
+            //no2Array = no2Array + unique_marker.date_entries[j].no2;
+            no2Array.push(unique_marker.date_entries[j].no2);
         }
         if (unique_marker.date_entries[j].o3 !=null && chemical ==null || chemical =="o3")
         {
-            o3Array = o3Array + unique_marker.date_entries[j].o3;
+            //o3Array = o3Array + unique_marker.date_entries[j].o3;
+            o3Array.push(unique_marker.date_entries[j].o3);
         }
         if (unique_marker.date_entries[j].co !=null && chemical ==null || chemical =="co")
         {
-            coArray = coArray + unique_marker.date_entries[j].co;
+            //coArray = coArray + unique_marker.date_entries[j].co;
+            coArray.push(unique_marker.date_entries[j].co);
         }
         if (unique_marker.date_entries[j].bc !=null && chemical ==null || chemical =="bc")
         {
-            bcArray = bcArray + unique_marker.date_entries[j].bc;
+            //bcArray = bcArray + unique_marker.date_entries[j].bc;
+            bcArray.push(unique_marker.date_entries[j].bc);
         }
     }
     var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray ];
@@ -620,5 +630,3 @@ showNav2 = function(){
     document.getElementById("filter-page2").style.display="none";
     document.getElementById("nav2").style.display="block";
 }
-
-

@@ -87,8 +87,8 @@
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
                   <tr @click="item.visible = !item.visible">
-                    <td class="collapsible sticky" style="top:2rem;">
-                      <span >
+                    <td class="collapsible" style="top:2rem;">
+                      <span  >
                         {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
                         <i v-if="item.visible==false" class="drop-buttons fas fa-sort-down"></i>
                         <i v-else class="drop-buttons fas fa-sort-up"></i>
@@ -209,7 +209,7 @@
                 <tbody class="data-table" v-for="item in unique_markers2">
 
                   <tr @click="item.visible = !item.visible">
-                    <td class="collapsible sticky" style="top:2rem;" >
+                    <td class="collapsible" style="top:2rem;" >
                       <span >
                         {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
                         <i v-if="item.visible==false" class="drop-buttons fas fa-sort-down"></i>
