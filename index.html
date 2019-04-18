@@ -54,8 +54,8 @@
                   <label for="co">co</label>
                 </div></center>
                   <div v-if = "checkedParams1.length ==1">
-                    <input type="checkbox" id="heat1" value="true" v-model="heat" @input="heatMap1"> 
-                    <label for="heat">Heat Map</label>
+                    <input type="checkbox" id="heat1" v-model="heat1" @input="heatMap1"> 
+                    <label for="heat1">Heat Map</label>
                   </div>
                 </div>
 					    </div>
@@ -172,10 +172,9 @@
                   <label for="co">co</label>
 
                 </div></center>
-
                   <div v-if = "checkedParams2.length ==1">
-                    <input type="checkbox" id="heat2" value="heat"> 
-                    <label for="heat">Heat Map</label>
+                    <input type="checkbox" id="heat2" v-model="heat2" @input="heatMap2"> 
+                    <label for="heat2">Heat Map</label>
                   </div>
                 </div>
 

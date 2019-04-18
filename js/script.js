@@ -21,7 +21,8 @@ init = function(){
             location2: starting_location2,
             checkedParams1: ["pm25","pm10","no2","o3","bc","co"],
             checkedParams2: ["pm25","pm10","no2","o3","bc","co"],
-            heat: null
+            heat1: false,
+            heat2 : false
         },
         computed:{
             avg_pm25 :function(){
@@ -56,7 +57,6 @@ init = function(){
                     self.center1.lat = response.data[0].lat;
                     self.center1.lng = response.data[0].lon;
                 })
-                console.log(this.center1);
                 this.map1.panTo(this.center1);
                 OpenAQSearch1();
             },
@@ -68,7 +68,6 @@ init = function(){
                     self.center2.lat = response.data[0].lat;
                     self.center2.lng = response.data[0].lon;
                 })
-                console.log(this.center2);
                 this.map2.panTo(this.center2);
                 OpenAQSearch2();
 
@@ -471,7 +470,6 @@ function getArrays(unique_marker, chemical)
     var o3Array = [];
     var coArray= [];
     var bcArray= [];
-    console.log(unique_marker);
     for(var j =0; j< unique_marker.date_entries.length; j++)
     {
         if (unique_marker.date_entries[j].pm25 !=null && chemical ==null || chemical =="pm25")
@@ -505,7 +503,7 @@ function getArrays(unique_marker, chemical)
             bcArray.push(unique_marker.date_entries[j].bc);
         }
     }
-    var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray ];
+    var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray];
     return all;
 
 }
@@ -549,15 +547,90 @@ function unique_marker(lat, lng){
         this.date_entries.push(new_entry);
     }
 }
+function heatMapGradient(parameter, value)
+{
+    var gradient = null;
+    if (parameter == "pm25")
+    {
+        gradient = value /250;
+        //gradient = {35.4: 'green' ,  150.4:'orange', 250:'red'}
+    }
+    else if (parameter == "pm10")
+    {
+        gradient = value /424;
+        //gradient = {154:'green' , 354:'orange' , 424:'red'}
+    }
+    else if(parameter == "co")
+    {
+        gradient = value /30.4;
+        //gradient = {9.4:'green' , 15.4:'orange' , 30.4:'red'}
+    }
+    else if (parameter =="no2")
+    {
+        gradient = value /1249;
+        //gradient = {100:'green' , 649:'orange' , 1249:'red'}
+    }
+    else if (parameter =="o3")
+    {
+        gradient = value /.200;
+        //gradient = {.085:'green' , .105:'orange' , .200:'red'}
+    }
+    return gradient;
+}
+function getMapRadiusKM (map) 
+{
+    var mapBoundNorthEast = map.getBounds().getNorthEast();
+    var mapDistance = mapBoundNorthEast.distanceTo(map.getCenter());
+    return mapDistance/1000;
+}
 
 function heatMap1()
 {
-    var array = [];
-    for (var i=0; i< app.unique_markers1.length; i++)
-    {
-        array[i] = [app.unique_markers1[i].lat, app.unique_markers1[i].lng, getAvg(getArrays(app.unique_markers1[i],checkedParams1[0]))];
-    }
-    var heat = L.heatLayer(array[i], {radius: 25}).addTo(app.map1);
+    setTimeout(function(){
+        if (app.heat1 == true)
+        {
+            var array = [];
+            for (var i=0; i< app.unique_markers1.length; i++)
+            {
+                array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers1[i],app.checkedParams1[0])),app.checkedParams1[0]) ];
+            }
+            var heat2 = L.heatLayer(array, {
+                radius: 50, 
+                gradient: {.3:'green' , .6:'orange' , 1:'red'},
+                minOpacity: .5
+            }).addTo(app.map1); 
+        }
+        else
+        {
+            //remove?
+            //heat2.onRemove(app.map2);
+        }
+
+    },1000);
+}
+function heatMap2()
+{
+    setTimeout(function(){
+        if (app.heat2 == true)
+        {
+            var array = [];
+            for (var i=0; i< app.unique_markers2.length; i++)
+            {
+                array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers2[i],app.checkedParams2[0])),app.checkedParams2[0]) ];
+            }
+            var heat2 = L.heatLayer(array, {
+                radius: 50, 
+                gradient: {.3:'green' , .6:'orange' , 1:'red'},
+                minOpacity: .5
+            }).addTo(app.map2); 
+        }
+        else
+        {
+            //remove?
+            //heat2.onRemove(app.map2);
+        }
+
+    },1000);
 }
 addMarker = function([lat,lng],map){
     var marker = L.marker([lat, lng]).addTo(map);
