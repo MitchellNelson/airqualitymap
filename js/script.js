@@ -24,11 +24,7 @@ init = function(){
             heat1: false,
             heat2 : false
         },
-        computed:{
-            avg_pm25 :function(){
-                
-            }
-        },
+
         methods: {
             initMap(){
                 this.map1 = L.map('map1id').setView(starting_center1, 13);
@@ -427,8 +423,8 @@ function ShowMarkers(num_new_markers,arr, map){
     var num_old_markers = arr.length-num_new_markers;
     for(var i = 0; i<num_new_markers; i++){
        
-        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map);
-            //.bindPopup(GetPopupString(arr[i+num_old_markers]));
+        var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
+            .bindPopup(GetPopupString(arr[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -443,22 +439,22 @@ function GetPopupString(unique_marker){
     var retstring="";
     var array = getArrays(unique_marker);
     if(array[0].length != 0){
-        retstring = "pm25: " + getAvg(pm25Array) + "µg/m³" + "<br>" + retstring;
+        retstring = "pm25: " + getAvg(array[0]) + "µg/m³" + "<br>" + retstring;
     }
     if(array[1].length != 0 ){
-        retstring = "pm10: " + getAvg(pm10Array) + "ppm" + "<br>" + retstring;
+        retstring = "pm10: " + getAvg(array[1]) + "ppm" + "<br>" + retstring;
     }
     if(array[2].length!= 0 ){
-        retstring = "no2: " + getAvg(no2Array) + "ppm" + "<br>" + retstring;
+        retstring = "no2: " + getAvg(array[2]) + "ppm" + "<br>" + retstring;
     }
     if(array[3].length!= 0){
-        retstring = "o3: " + getAvg(o3Array) + "ppm" + "<br>" + retstring;
+        retstring = "o3: " + getAvg(array[3]) + "ppm" + "<br>" + retstring;
     }
     if(array[4].length!= 0){
-        retstring = "co: " + getAvg(coArray) + "ppm"  + "<br>"+ retstring;
+        retstring = "co: " + getAvg(array[4]) + "ppm"  + "<br>"+ retstring;
     }
     if(array[5].length!= 0){
-        retstring = "bc: " + getAvg(bcArray) + "bc"  + "<br>"+ retstring;
+        retstring = "bc: " + getAvg(array[5]) + "bc"  + "<br>"+ retstring;
     }
     return retstring;
 }
@@ -472,32 +468,32 @@ function getArrays(unique_marker, chemical)
     var bcArray= [];
     for(var j =0; j< unique_marker.date_entries.length; j++)
     {
-        if (unique_marker.date_entries[j].pm25 !=null && chemical ==null || chemical =="pm25")
+        if (unique_marker.date_entries[j].pm25 !=null)
         {
             //pm25Array = pm25Array + unique_marker.date_entries[j].pm25;
             pm25Array.push(unique_marker.date_entries[j].pm25);
         }
-        if (unique_marker.date_entries[j].pm10!=null && chemical ==null || chemical =="pm10")
+        if (unique_marker.date_entries[j].pm10!=null)
         {
             //pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
             pm10Array.push(unique_marker.date_entries[j].pm10);
         }
-        if (unique_marker.date_entries[j].no2 !=null && chemical ==null || chemical =="no2")
+        if (unique_marker.date_entries[j].no2 !=null)
         {
             //no2Array = no2Array + unique_marker.date_entries[j].no2;
             no2Array.push(unique_marker.date_entries[j].no2);
         }
-        if (unique_marker.date_entries[j].o3 !=null && chemical ==null || chemical =="o3")
+        if (unique_marker.date_entries[j].o3 !=null)
         {
             //o3Array = o3Array + unique_marker.date_entries[j].o3;
             o3Array.push(unique_marker.date_entries[j].o3);
         }
-        if (unique_marker.date_entries[j].co !=null && chemical ==null || chemical =="co")
+        if (unique_marker.date_entries[j].co !=null)
         {
             //coArray = coArray + unique_marker.date_entries[j].co;
             coArray.push(unique_marker.date_entries[j].co);
         }
-        if (unique_marker.date_entries[j].bc !=null && chemical ==null || chemical =="bc")
+        if (unique_marker.date_entries[j].bc !=null)
         {
             //bcArray = bcArray + unique_marker.date_entries[j].bc;
             bcArray.push(unique_marker.date_entries[j].bc);
@@ -505,7 +501,6 @@ function getArrays(unique_marker, chemical)
     }
     var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray];
     return all;
-
 }
 function getAvg(value){
 
