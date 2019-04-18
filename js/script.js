@@ -27,26 +27,54 @@ init = function(){
         watch: {
             checkedParams1: function(){
                 for(var i=0; i<this.unique_markers1.length; i++){
-                    this.unique_markers1[i].marker.unbindPopup()
-                    this.unique_markers1[i].marker.bindPopup(GetPopupString(this.unique_markers1[i], this.checkedParams1));
+                    this.unique_markers1[i].marker.unbindPopup();//remove old popup
+                    var new_popup_string = GetPopupString(this.unique_markers1[i], this.checkedParams1);
+                    this.unique_markers1[i].marker.bindPopup(new_popup_string);
+                    if(!this.map1.hasLayer(this.unique_markers1[i].marker)){//if marker is not on the map
+                        this.unique_markers1[i].marker.addTo(this.map1);
+                    }
+                    if (new_popup_string==""){
+                        this.map1.removeLayer(this.unique_markers1[i].marker);
+                    }
                 }
             },
             unique_markers1: function(){
                 for(var i=0; i<this.unique_markers1.length; i++){
-                    this.unique_markers1[i].marker.unbindPopup()
-                    this.unique_markers1[i].marker.bindPopup(GetPopupString(this.unique_markers1[i], this.checkedParams1));
+                    this.unique_markers1[i].marker.unbindPopup();//remove old popup
+                    var new_popup_string = GetPopupString(this.unique_markers1[i], this.checkedParams1);
+                    this.unique_markers1[i].marker.bindPopup(new_popup_string);
+                    if(!this.map1.hasLayer(this.unique_markers1[i].marker)){//if marker is not on the map
+                        this.unique_markers1[i].marker.addTo(this.map1);
+                    }
+                    if (new_popup_string==""){
+                        this.map1.removeLayer(this.unique_markers1[i].marker);
+                    }
                 }
             },
             checkedParams2: function(){
                 for(var i=0; i<this.unique_markers2.length; i++){
-                    this.unique_markers2[i].marker.unbindPopup()
-                    this.unique_markers2[i].marker.bindPopup(GetPopupString(this.unique_markers2[i], this.checkedParams2));
+                    this.unique_markers2[i].marker.unbindPopup();//remove old popup
+                    var new_popup_string = GetPopupString(this.unique_markers2[i], this.checkedParams2);
+                    this.unique_markers2[i].marker.bindPopup(new_popup_string);
+                    if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
+                        this.unique_markers2[i].marker.addTo(this.map2);
+                    }
+                    if (new_popup_string==""){
+                        this.map2.removeLayer(this.unique_markers2[i].marker);
+                    }
                 }
             },
             unique_markers2: function(){
                 for(var i=0; i<this.unique_markers2.length; i++){
-                    this.unique_markers2[i].marker.unbindPopup()
-                    this.unique_markers2[i].marker.bindPopup(GetPopupString(this.unique_markers2[i], this.checkedParams2));
+                    this.unique_markers2[i].marker.unbindPopup();//remove old popup
+                    var new_popup_string = GetPopupString(this.unique_markers2[i], this.checkedParams2);
+                    this.unique_markers2[i].marker.bindPopup(new_popup_string);
+                    if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
+                        this.unique_markers2[i].marker.addTo(this.map2);
+                    }
+                    if (new_popup_string==""){
+                        this.map2.removeLayer(this.unique_markers2[i].marker);
+                    }
                 }
             }
         },
