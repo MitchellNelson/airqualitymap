@@ -1,6 +1,6 @@
 var app;
 
-var starting_center1 = L.latLng(44.9430, -93.1895);
+var starting_center1 = L.latLng(44.96694285687524, -93.23948822915554);
 var starting_center2 = L.latLng(39.916451274939206, 116.38215586686088);
 var starting_location1 = "St. Paul";
 var starting_location2 = "Bejing";
@@ -24,7 +24,32 @@ init = function(){
             heat1: false,
             heat2 : false
         },
-
+        watch: {
+            checkedParams1: function(){
+                for(var i=0; i<this.unique_markers1.length; i++){
+                    this.unique_markers1[i].marker.unbindPopup()
+                    this.unique_markers1[i].marker.bindPopup(GetPopupString(this.unique_markers1[i], this.checkedParams1));
+                }
+            },
+            unique_markers1: function(){
+                for(var i=0; i<this.unique_markers1.length; i++){
+                    this.unique_markers1[i].marker.unbindPopup()
+                    this.unique_markers1[i].marker.bindPopup(GetPopupString(this.unique_markers1[i], this.checkedParams1));
+                }
+            },
+            checkedParams2: function(){
+                for(var i=0; i<this.unique_markers2.length; i++){
+                    this.unique_markers2[i].marker.unbindPopup()
+                    this.unique_markers2[i].marker.bindPopup(GetPopupString(this.unique_markers2[i], this.checkedParams2));
+                }
+            },
+            unique_markers2: function(){
+                for(var i=0; i<this.unique_markers2.length; i++){
+                    this.unique_markers2[i].marker.unbindPopup()
+                    this.unique_markers2[i].marker.bindPopup(GetPopupString(this.unique_markers2[i], this.checkedParams2));
+                }
+            }
+        },
         methods: {
             initMap(){
                 this.map1 = L.map('map1id').setView(starting_center1, 13);
@@ -424,7 +449,7 @@ function ShowMarkers(num_new_markers,arr, map){
     for(var i = 0; i<num_new_markers; i++){
        
         var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
-            .bindPopup(GetPopupString(arr[i+num_old_markers]));
+            //.bindPopup(GetPopupString(arr[i+num_old_markers]));
         marker.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -435,25 +460,25 @@ function ShowMarkers(num_new_markers,arr, map){
     }
     console.log("map 1 currently has :"+arr.length + " markers");
 }
-function GetPopupString(unique_marker){
+function GetPopupString(unique_marker, checked){
     var retstring="";
     var array = getArrays(unique_marker);
-    if(array[0].length != 0){
+    if(array[0].length != 0 && checked.includes("pm25")){
         retstring = "pm25: " + getAvg(array[0]) + "µg/m³" + "<br>" + retstring;
     }
-    if(array[1].length != 0 ){
+    if(array[1].length != 0 && checked.includes("pm10")){
         retstring = "pm10: " + getAvg(array[1]) + "ppm" + "<br>" + retstring;
     }
-    if(array[2].length!= 0 ){
+    if(array[2].length!= 0 && checked.includes("no2")){
         retstring = "no2: " + getAvg(array[2]) + "ppm" + "<br>" + retstring;
     }
-    if(array[3].length!= 0){
+    if(array[3].length!= 0 && checked.includes("o3")){
         retstring = "o3: " + getAvg(array[3]) + "ppm" + "<br>" + retstring;
     }
-    if(array[4].length!= 0){
+    if(array[4].length!= 0 && checked.includes("co")){
         retstring = "co: " + getAvg(array[4]) + "ppm"  + "<br>"+ retstring;
     }
-    if(array[5].length!= 0){
+    if(array[5].length!= 0 && checked.includes("bc")){
         retstring = "bc: " + getAvg(array[5]) + "bc"  + "<br>"+ retstring;
     }
     return retstring;
