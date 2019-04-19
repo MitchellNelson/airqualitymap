@@ -12,5 +12,5 @@ Implementation of CISC 375 Project 2 using Vue.js. Two side-by-side maps allow u
 
 ## Authors
 
-ex. Mitchell Nelson (https://github.com/nels4929)
-ex. Leah Emerson (https://github.com/leahemerson)
+* Mitchell Nelson (https://github.com/nels4929)
+* Leah Emerson (https://github.com/leahemerson)
