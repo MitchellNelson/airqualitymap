@@ -22,7 +22,9 @@ init = function(){
             checkedParams1: ["pm25","pm10","no2","o3","bc","co"],
             checkedParams2: ["pm25","pm10","no2","o3","bc","co"],
             heat1: false,
-            heat2 : false
+            heat2 : false,
+            heatLayer1: null,
+            heatLayer2: null
         },
         watch: {
             checkedParams1: function(){
@@ -108,6 +110,11 @@ init = function(){
                 })
                 this.map1.panTo(this.center1);
                 OpenAQSearch1();
+                
+                if (this.heat1 == true)
+                {
+                    this.this.heatLayer1.redraw().addTo(this.map1); 
+                }
             },
             mounted2() {
                 const self = this;
@@ -119,6 +126,10 @@ init = function(){
                 })
                 this.map2.panTo(this.center2);
                 OpenAQSearch2();
+                if (this.heat2 == true)
+                {
+                    this.heatLayer2.redraw().addTo(this.map2);
+                }
 
             },
             getClassO3(a) {
@@ -383,21 +394,37 @@ trackMap = function(){
 function latSearch1(event){
     setTimeout(function(){ 
             app.map1.panTo(app.center1);
+            if (app.heat1 == true)
+            {
+                app.heatLayer1.redraw().addTo(app.map1);
+            }
         }, 600);
 }
 function lngSearch1(event){
     setTimeout(function(){ 
             app.map1.panTo(app.center1);
+            if (app.heat1 == true)
+            {
+                app.heatLayer1.redraw().addTo(app.map1);
+            }
         }, 600);
 }
 function latSearch2(event){
     setTimeout(function(){ 
             app.map2.panTo(app.center2);
+            if (app.heat2 == true)
+            {
+                app.heatLayer2.redraw().addTo(app.map2);
+            }
         }, 600);
 }
 function lngSearch2(event){
     setTimeout(function(){ 
             app.map2.panTo(app.center2);
+            if (app.heat2 == true)
+            {
+                app.heatLayer2.redraw().addTo(app.map2);
+            }
         }, 600);
 }
 function locSearch1(event){
@@ -486,6 +513,14 @@ function ShowMarkers(num_new_markers,arr, map){
         });
         arr[i+num_old_markers].marker = marker;
     }
+    /*if (app.heat2 == true)
+    {
+        app.heatLayer2.redraw().addTo(app.map2);
+    }
+    else if (app.heat1 == true)
+    {
+        app.heatLayer1.redraw().addTo(app.map1);
+    }*/
     console.log("map 1 currently has :"+arr.length + " markers");
 }
 function GetPopupString(unique_marker, checked){
@@ -647,7 +682,7 @@ function heatMap1()
             {
                 array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers1[i],app.checkedParams1[0])),app.checkedParams1[0]) ];
             }
-            var heat2 = L.heatLayer(array, {
+            app.heat1Layer = L.heatLayer(array, {
                 radius: 50, 
                 gradient: {.3:'green' , .6:'orange' , 1:'red'},
                 minOpacity: .5
@@ -655,7 +690,9 @@ function heatMap1()
         }
         else
         {
+            console.log("false");
             //remove?
+            app.map1.removeLayer(app.heat1Layer);
             //heat2.onRemove(app.map2);
         }
 
@@ -671,7 +708,7 @@ function heatMap2()
             {
                 array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers2[i],app.checkedParams2[0])),app.checkedParams2[0]) ];
             }
-            var heat2 = L.heatLayer(array, {
+            app.heat2Layer= L.heatLayer(array, {
                 radius: 50, 
                 gradient: {.3:'green' , .6:'orange' , 1:'red'},
                 minOpacity: .5
@@ -679,8 +716,7 @@ function heatMap2()
         }
         else
         {
-            //remove?
-            //heat2.onRemove(app.map2);
+            app.map2.removeLayer(app.heat2Layer);
         }
 
     },1000);
