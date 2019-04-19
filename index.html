@@ -20,7 +20,6 @@
 </head>
 <body onload="init()">
     <div id="app">
-      <span id = "header"> <a href = "html/about.html">  About</a> </span>
     	<table>
         <thead>
           <tr id = "header"> 
@@ -80,7 +79,7 @@
 					    </div>
 					  </div>
 				    <div id="map1id" class="maps"></div>
-            <div style="max-height:30vh; overflow-y:scroll;">
+            <div style="max-height:25vh; overflow-y:scroll;">
 
               <table id="firstTable" >
               <thead>
@@ -108,8 +107,8 @@
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
                   <tr @click="item.visible = !item.visible">
-                    <td class="collapsible" style="top:2rem;">
-                      <span  >
+                    <td class="collapsible" >
+                      <span>
                         {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
                         <i v-if="item.visible==false" class="drop-buttons fas fa-sort-down"></i>
                         <i v-else class="drop-buttons fas fa-sort-up"></i>
@@ -210,7 +209,7 @@
 					    </div>
 					</div>	
 				    <div id="map2id" class="maps"></div>
-          <div style="max-height:30vh; overflow-y:scroll;">
+          <div style="max-height:25vh; overflow-y:scroll;">
             <table id="secondTable">
 
              <thead>
