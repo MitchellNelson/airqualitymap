@@ -19,8 +19,8 @@ init = function(){
             unique_markers2:[],
             location1: starting_location1,
             location2: starting_location2,
-            checkedParams1: ["pm25","pm10","no2","o3","bc","co"],
-            checkedParams2: ["pm25","pm10","no2","o3","bc","co"],
+            checkedParams1: ["pm25","pm10","so2","no2","o3","co","bc"],
+            checkedParams2: ["pm25","pm10","so2","no2","o3","co","bc"],
             heat1: false,
             heat2 : false,
             heatLayer1: null,
@@ -210,6 +210,32 @@ init = function(){
                 return this.class
               }
             }, 
+            getClassSO2(a) {
+            if ( a<=35) {
+                this.class="good"
+                return this.class
+              }
+              else if (a>35 && a<= 75) {
+                this.class = "moderate"
+                return this.class
+              }
+              else if (a> 76 && a<= 185){
+                this.class = "uhsg"
+                return this.class
+              }
+              else if (a>186 && a<= 304){
+                this.class = "unhealthy"
+                return this.class
+              }
+              else if (a>305 && a<= 604){
+                this.class = "veryUnhealthy"
+                return this.class
+              }
+              else if( a >605) {
+                this.class = "hazardous"
+                return this.class
+              }
+            }, 
             getClassCO(a) {
              if ( a<=4.4) {
                 this.class="good"
@@ -327,6 +353,9 @@ LocationFromLatLng2 = function(lat, lng) {
         }
     })
 }
+/*  Adds event listeners to trigger various functions at the end 
+    of a pan or zoom event
+*/
 trackMap = function(){
     app.map1.addEventListener("move",function(){
         setTimeout(function(){ 
@@ -390,7 +419,8 @@ trackMap = function(){
 }
 
 /*  latSearch and lngSearch functions update the maps position
-    when the user changes the input fields for lat and longitude    */
+    when the user changes the input fields for lat and longitude    
+*/
 function latSearch1(event){
     setTimeout(function(){ 
             app.map1.panTo(app.center1);
@@ -527,29 +557,36 @@ function GetPopupString(unique_marker, checked){
     var retstring="";
     var array = getArrays(unique_marker);
     if(array[0].length != 0 && checked.includes("pm25")){
-        retstring = "pm25: " + getAvg(array[0]) + "µg/m³" + "<br>" + retstring;
+        retstring = "pm25: " + getAvg(array[0]) + " µg/m³" + "<br>" + retstring;
     }
     if(array[1].length != 0 && checked.includes("pm10")){
-        retstring = "pm10: " + getAvg(array[1]) + "ppm" + "<br>" + retstring;
+        retstring = "pm10: " + getAvg(array[1]) + " µg/m³" + "<br>" + retstring;
     }
-    if(array[2].length!= 0 && checked.includes("no2")){
-        retstring = "no2: " + getAvg(array[2]) + "ppm" + "<br>" + retstring;
+    if(array[2].length != 0 && checked.includes("so2")){
+        retstring = "so2: " + getAvg(array[2]) + " ppb" + "<br>" + retstring;
     }
-    if(array[3].length!= 0 && checked.includes("o3")){
-        retstring = "o3: " + getAvg(array[3]) + "ppm" + "<br>" + retstring;
+    if(array[3].length!= 0 && checked.includes("no2")){
+        retstring = "no2: " + getAvg(array[3]) + " ppb" + "<br>" + retstring;
     }
-    if(array[4].length!= 0 && checked.includes("co")){
-        retstring = "co: " + getAvg(array[4]) + "ppm"  + "<br>"+ retstring;
+    if(array[4].length!= 0 && checked.includes("o3")){
+        retstring = "o3: " + getAvg(array[4]) + " ppm" + "<br>" + retstring;
     }
-    if(array[5].length!= 0 && checked.includes("bc")){
-        retstring = "bc: " + getAvg(array[5]) + "bc"  + "<br>"+ retstring;
+    if(array[5].length!= 0 && checked.includes("co")){
+        retstring = "co: " + getAvg(array[5]) + " ppm"  + "<br>"+ retstring;
+    }
+    if(array[6].length!= 0 && checked.includes("bc")){
+        retstring = "bc: " + getAvg(array[6]) + " bc"  + "<br>"+ retstring;
     }
     return retstring;
 }
-function getArrays(unique_marker, chemical)
+/*  Takes in a unique_maker object and returns an object with arrays
+    for each air parameter
+*/
+function getArrays(unique_marker)
 {
     var pm25Array = [];
     var pm10Array =[];
+    var so2Array =[];
     var no2Array = [];
     var o3Array = [];
     var coArray= [];
@@ -565,6 +602,11 @@ function getArrays(unique_marker, chemical)
         {
             //pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
             pm10Array.push(unique_marker.date_entries[j].pm10);
+        }
+        if (unique_marker.date_entries[j].so2!=null)
+        {
+            
+            so2Array.push(unique_marker.date_entries[j].so2);
         }
         if (unique_marker.date_entries[j].no2 !=null)
         {
@@ -587,40 +629,60 @@ function getArrays(unique_marker, chemical)
             bcArray.push(unique_marker.date_entries[j].bc);
         }
     }
-    var all = [pm25Array,pm10Array,no2Array,o3Array,coArray,bcArray];
+    var all = [pm25Array,pm10Array,so2Array,no2Array,o3Array,coArray,bcArray];
     return all;
 }
-function getAvg(value){
+/*  Takes in an array of values and returns the average
+*/
+function getAvg(values){
 
     ret = 0;
-    for(var i = 0; i<value.length; i++){
-        ret = ret + value[i];
+    for(var i = 0; i<values.length; i++){
+        ret = ret + values[i];
     }
-    ret = ret/value.length
+    ret = ret/values.length
     return Math.round(ret * 10000) / 10000;
 }
+/*  Stores all possible air particles / parameter for the the 
+    unique_marker object. Units are converted first using:
+    toDesiredUnits(desired, given, value, molecular_weight)
+*/
 function date_entry(){
     this.date= null;
     this.pm25 = null;
     this.pm10 = null;
+    this.so2 = null;
     this.no2 = null;
     this.o3 = null;
     this.co = null;
     this.bc = null;
     this.setParameter = function (parameter,value,unit){
-        if(parameter == "pm25"){
-            if(unit != "µg/m³"){
-                console.log(unit + " | " + value);
-            }
-            this.pm25=value;
+        if(parameter == "pm25"){//desired units: ug/m3
+            this.pm25=Math.round(value * 1000) / 1000;// always reported in ug/m3
         }
-        if(parameter == "pm10"){this.pm10=value;}
-        if(parameter == "no2"){this.no2=value;}
-        if(parameter == "o3"){this.o3=value;}
-        if(parameter == "co"){this.co=value;}
-        if(parameter == "bc"){this.bc=value;}
+        if(parameter == "pm10"){//desired units: ug/m3
+            this.pm10=Math.round(value * 1000) / 1000;// always reported in ug/m3
+        }
+        if(parameter == "so2"){
+            this.so2=Math.round(toDesiredUnits("ppb",unit,value,64.066) * 1000) / 1000;
+        }
+        if(parameter == "no2"){//desired units: ppb
+            this.no2=Math.round(toDesiredUnits("ppb",unit,value,46.0055) * 1000) / 1000;
+        }
+        if(parameter == "o3"){//desired units: ppm
+            this.o3=Math.round(toDesiredUnits("ppm",unit,value,48) * 1000) / 1000;
+        }
+        if(parameter == "co"){
+            this.co=Math.round(toDesiredUnits("ppm",unit,value,28.01) * 1000) / 1000;
+        }
+        if(parameter == "bc"){
+            this.bc=Math.round(value * 1000) / 1000;
+        }
     }
 }
+/*  Format to store all unique locations. Each unique location can have 
+    an array of time stamps that go in the date_entries field
+*/
 function unique_marker(lat, lng){
     this.visible=false;
     this.coordinates = [];
@@ -631,8 +693,37 @@ function unique_marker(lat, lng){
     this.addDateEntry = function(date,parameter,value,units){
         var new_entry = new date_entry;
         new_entry.date = date;
-        new_entry.setParameter(parameter,value);
+        new_entry.setParameter(parameter,value,units);
         this.date_entries.push(new_entry);
+    }
+}
+/*  Takes a desired, given, current value, and the molecular weight
+    of the air particle / paramter. 
+*/
+function toDesiredUnits(desired, given, value, molecular_weight){
+    if(desired == given){
+        return value;
+    }
+    else if(desired == "ppm" && given == "ppb"){
+        return value / 1000;
+    }
+    else if(desired == "ppb" && given == "ppm"){
+        return value * 1000;
+    }
+    else if(desired == "µg/m³" && given == "ppm"){
+        return 0.0409 * (value * 1000) * molecular_weight
+    }  
+    else if(desired == "µg/m³" && given == "ppb"){
+        return 0.0409 * (value) * molecular_weight
+    }  
+    else if(desired == "ppm" && given == "µg/m³"){
+        return ((24.45 * value) / molecular_weight)/1000
+    }  
+    else if(desired == "ppb" && given == "µg/m³"){
+        return ((24.45 * value) / molecular_weight)
+    } 
+    else{
+        return value;
     }
 }
 function heatMapGradient(parameter, value)
@@ -680,7 +771,7 @@ function heatMap1()
             var array = [];
             for (var i=0; i< app.unique_markers1.length; i++)
             {
-                array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers1[i],app.checkedParams1[0])),app.checkedParams1[0]) ];
+                array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers1[i])),app.checkedParams1[0]) ];
             }
             app.heat1Layer = L.heatLayer(array, {
                 radius: 50, 
@@ -706,7 +797,7 @@ function heatMap2()
             var array = [];
             for (var i=0; i< app.unique_markers2.length; i++)
             {
-                array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers2[i],app.checkedParams2[0])),app.checkedParams2[0]) ];
+                array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers2[i])),app.checkedParams2[0]) ];
             }
             app.heat2Layer= L.heatLayer(array, {
                 radius: 50, 

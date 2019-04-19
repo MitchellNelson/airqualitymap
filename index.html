@@ -20,12 +20,12 @@
 </head>
 <body onload="init()">
     <div id="app">
-      <span id = "header"> <a href = "about.html">  About</a> </span>
+      <span id = "header"> <a href = "html/about.html">  About</a> </span>
     	<table>
         <thead>
           <tr id = "header"> 
             <th><a href = "index.html">  Air Quality Map </a></th>
-            <th> <a href = "about.html">  About </a> </th>
+            <th> <a href = "html/about.html">  About </a> </th>
           </tr>
         </thead>
       <tr>
@@ -52,14 +52,16 @@
                   <label>pm25</label>
                   <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
                   <label>pm10</label>
+                  <input type="checkbox" id="so2" value="so2" v-model="checkedParams1">
+                  <label>so2</label>
                   <input type="checkbox" id="no2" value="no2" v-model="checkedParams1">
                   <label>no2</label>
                   <input type="checkbox" id="o3" value="o3" v-model="checkedParams1">
                   <label>o3</label>
-                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
-                  <label>bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams1">
                   <label>co</label>
+                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
+                  <label>bc</label>
                 </div></center>
                   <div v-if = "checkedParams1.length ==1">
                     <input type="checkbox" id="heat1" v-model="heat1" @input="heatMap1"> 
@@ -96,6 +98,7 @@
                  <th class="sticky">Date</th>          
                  <th v-if="checkedParams1.includes('pm25')" class="sticky">pm25</th>
                  <th v-if="checkedParams1.includes('pm10')"class="sticky">pm10</th>
+                 <th v-if="checkedParams1.includes('so2')"class="sticky">so2</th>
                  <th v-if="checkedParams1.includes('no2')"class="sticky">no2</th>
                  <th v-if="checkedParams1.includes('o3')"class="sticky">o3</th>
                  <th v-if="checkedParams1.includes('co')"class="sticky">co</th>
@@ -131,6 +134,11 @@
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
+                    <td v-if="checkedParams1.includes('so2')" :class="getClassSO2(`${entry.so2}`)">
+                      <div v-if= "entry.so2!= null">
+                        <span>{{entry.so2}} <p class="units">ppb</p></span>
+                      </div>
+                    </td>
                     <td v-if="checkedParams1.includes('no2')" :class="getClassNO2(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
@@ -141,14 +149,14 @@
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams1.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
-                      <div v-if= "entry.bc!= null">
-                        <span>{{entry.bc}}</span>
-                      </div>
-                    </td>
                     <td v-if="checkedParams1.includes('co')" :class="getClassCO(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                    <td v-if="checkedParams1.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
+                      <div v-if= "entry.bc!= null">
+                        <span>{{entry.bc}}</span>
                       </div>
                     </td>
                   </tr> 
@@ -181,14 +189,16 @@
                   <label>pm25</label>
                   <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams2">
                   <label>pm10</label>
+                  <input type="checkbox" id="so2" value="so2" v-model="checkedParams2">
+                  <label>so2</label>
                   <input type="checkbox" id="no2" value="no2" v-model="checkedParams2">
                   <label>no2</label>
                   <input type="checkbox" id="o3" value="o3" v-model="checkedParams2">
                   <label>o3</label>
-                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams2">
-                  <label>bc</label>
                   <input type="checkbox" id="co" value="co" v-model="checkedParams2">
                   <label>co</label>
+                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams2">
+                  <label>bc</label>
 
                 </div></center>
                   <div v-if = "checkedParams2.length ==1">
@@ -218,6 +228,7 @@
                    <th class="sticky">Date</th>
                    <th v-if="checkedParams2.includes('pm25')" class="sticky">pm25</th>
                    <th v-if="checkedParams2.includes('pm10')"class="sticky">pm10</th>
+                   <th v-if="checkedParams2.includes('so2')"class="sticky">so2</th>
                    <th v-if="checkedParams2.includes('no2')"class="sticky">no2</th>
                    <th v-if="checkedParams2.includes('o3')"class="sticky">o3</th>
                    <th v-if="checkedParams2.includes('co')"class="sticky">co</th>
@@ -257,6 +268,11 @@
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
+                    <td v-if="checkedParams2.includes('so2')" :class="getClassSO2(`${entry.so2}`)">
+                      <div v-if= "entry.so2!= null">
+                        <span>{{entry.so2}} <p class="units">ppb</p></span>
+                      </div>
+                    </td>
                     <td v-if="checkedParams2.includes('no2')" :class="getClassNO2(`${entry.no2}`)"> 
                       <div v-if= "entry.no2!= null">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
@@ -267,14 +283,14 @@
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
-                    <td v-if="checkedParams2.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
-                      <div v-if= "entry.bc!= null">
-                        <span>{{entry.bc}}</span>
-                      </div>
-                    </td>
                     <td v-if="checkedParams2.includes('co')" :class="getClassCO(`${entry.co}`)"> 
                       <div v-if= "entry.co!= null">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
+                      </div>
+                    </td>
+                    <td v-if="checkedParams2.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
+                      <div v-if= "entry.bc!= null">
+                        <span>{{entry.bc}}</span>
                       </div>
                     </td>
                   </tr> 
