@@ -427,7 +427,7 @@ function FillUniqueMarkers(data,arr,map){
     //if there is no markers in the array, add the first
     if(arr.length== 0 && data.results.length>0){
         var newmarker = new unique_marker(data.results[0].coordinates.latitude, data.results[0].coordinates.longitude);
-        newmarker.addDateEntry(data.results[0].date,data.results[0].parameter,data.results[0].value)//
+        newmarker.addDateEntry(data.results[0].date,data.results[0].parameter,data.results[0].value, data.results[0].unit)//
         arr.push(newmarker);
         num_new_markers++;
     }
@@ -443,7 +443,7 @@ function FillUniqueMarkers(data,arr,map){
                 var length = arr[j].date_entries.length;
                 for(var k = 0; k < length; k++){
                     if (arr[j].date_entries[k].date.local == data.results[i].date.local){
-                        arr[j].date_entries[k].setParameter(data.results[i].parameter, data.results[i].value);
+                        arr[j].date_entries[k].setParameter(data.results[i].parameter, data.results[i].value, data.results[i].unit);
                         date_exists = true;
                         //console.log("break");
                         break;
@@ -451,7 +451,7 @@ function FillUniqueMarkers(data,arr,map){
                 }
                 if(!date_exists){
                     //console.log("in case!"+j)
-                    arr[j].addDateEntry(data.results[i].date, data.results[i].parameter, data.results[i].value);
+                    arr[j].addDateEntry(data.results[i].date, data.results[i].parameter, data.results[i].value, data.results[i].unit);
                 }
                 exists = true;
                 break;  
@@ -460,7 +460,7 @@ function FillUniqueMarkers(data,arr,map){
 
         if(!exists){
             var newmarker = new unique_marker(data.results[i].coordinates.latitude, data.results[i].coordinates.longitude);
-            newmarker.addDateEntry(data.results[i].date,data.results[i].parameter,data.results[i].value)//
+            newmarker.addDateEntry(data.results[i].date,data.results[i].parameter,data.results[i].value, data.results[i].unit)//
             arr.push(newmarker);
             num_new_markers++;
         }
@@ -572,8 +572,13 @@ function date_entry(){
     this.o3 = null;
     this.co = null;
     this.bc = null;
-    this.setParameter = function (parameter,value){
-        if(parameter == "pm25"){this.pm25=value;}
+    this.setParameter = function (parameter,value,unit){
+        if(parameter == "pm25"){
+            if(unit != "µg/m³"){
+                console.log(unit + " | " + value);
+            }
+            this.pm25=value;
+        }
         if(parameter == "pm10"){this.pm10=value;}
         if(parameter == "no2"){this.no2=value;}
         if(parameter == "o3"){this.o3=value;}
@@ -588,7 +593,7 @@ function unique_marker(lat, lng){
     this.coordinates.longitude = lng;
     this.marker = null;
     this.date_entries = [];
-    this.addDateEntry = function(date,parameter,value){
+    this.addDateEntry = function(date,parameter,value,units){
         var new_entry = new date_entry;
         new_entry.date = date;
         new_entry.setParameter(parameter,value);
