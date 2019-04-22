@@ -321,14 +321,14 @@ function getThirtyDaysAgo(){
 function OpenAQSearch1(){
     console.log("sending request");
     //setup all vars to be plugged into the request url
-    var d = new Date();
+    //var d = new Date();
     var date_to = app.date_to1; //d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-    d.setDate(d.getDate() - 30);
+    //d.setDate(d.getDate() - 30);
     var date_from = app.date_from1; //(d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     var bounds = app.map1.getBounds();
     var radius = app.map1.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
-        url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000&sort=desc",
+        url: "https://api.openaq.org/v1/measurements?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000&sort=desc",
         dataType: "json",
         success: function(data){
             FillUniqueMarkers(data,app.unique_markers1,app.map1);
@@ -843,7 +843,7 @@ addMarker = function([lat,lng],map){
 /*   Loops    */
 DeleteOldMarkers = function(arr,map){
     var num_deleted=0;//for printing purposes only
-    var i = arr.length
+    var i = arr.length;
     while (i--) {
         if(!map.getBounds().contains([arr[i].coordinates.latitude,arr[i].coordinates.longitude])){ 
             map.removeLayer(arr[i].marker);
@@ -856,7 +856,7 @@ DeleteOldMarkers = function(arr,map){
 }
 function DeleteAllMarkers(arr, map){
     var num_deleted=0;//for printing purposes only
-    var i = arr.length
+    var i = arr.length;
     while (i--) { 
             map.removeLayer(arr[i].marker);
             arr.splice(i, 1);
@@ -866,8 +866,10 @@ function DeleteAllMarkers(arr, map){
     console.log("currently have :"+arr.length + " markers");
 }
 fullscreen1 = function(){
+    document.getElementById("firstTable").style.display="none";
     document.getElementById("map2_and_nav").style.display="none";
     document.getElementsByClassName("maps")[0].style.width="100vw";
+    document.getElementsByClassName("maps")[0].style.height="100vh";
     document.getElementById("fullscreen1").style.display="none";
     document.getElementById("halfscreen1").style.display="inline";
     app.map1.invalidateSize();
@@ -875,7 +877,9 @@ fullscreen1 = function(){
     //DeleteOldMarkers1();
 }
 halfscreen1 = function(){
+    document.getElementById("firstTable").style.display="inline";
     document.getElementsByClassName("maps")[0].style.width="50vw";
+    document.getElementsByClassName("maps")[0].style.height="60vh";
     document.getElementById("halfscreen1").style.display="none";
     document.getElementById("fullscreen1").style.display="inline";
     document.getElementById("map2_and_nav").style.display="table-cell";
@@ -884,8 +888,10 @@ halfscreen1 = function(){
     //DeleteOldMarkers1();
 }
 fullscreen2 = function(){
+    document.getElementById("secondTable").style.display="none";
     document.getElementById("map1_and_nav").style.display="none";
     document.getElementsByClassName("maps")[1].style.width="100vw";
+    document.getElementsByClassName("maps")[1].style.height="100vh";
     document.getElementById("fullscreen2").style.display="none";
     document.getElementById("halfscreen2").style.display="inline";
     app.map1.invalidateSize();
@@ -893,7 +899,9 @@ fullscreen2 = function(){
     //DeleteOldMarkers();
 }
 halfscreen2 = function(){
+    document.getElementById("secondTable").style.display="inline";
     document.getElementsByClassName("maps")[1].style.width="50vw";
+    document.getElementsByClassName("maps")[1].style.height="60vh";
     document.getElementById("halfscreen2").style.display="none";
     document.getElementById("fullscreen2").style.display="inline";
     document.getElementById("map1_and_nav").style.display="table-cell";
