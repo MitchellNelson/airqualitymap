@@ -46,22 +46,28 @@
 					    </div>
 					    <div id="filter-page1" class="filter-page">
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
-	    					<center><div class="filers">
-                  <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
-                  <label>pm25</label>
-                  <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
-                  <label>pm10</label>
-                  <input type="checkbox" id="so2" value="so2" v-model="checkedParams1">
-                  <label>so2</label>
-                  <input type="checkbox" id="no2" value="no2" v-model="checkedParams1">
-                  <label>no2</label>
-                  <input type="checkbox" id="o3" value="o3" v-model="checkedParams1">
-                  <label>o3</label>
-                  <input type="checkbox" id="co" value="co" v-model="checkedParams1">
-                  <label>co</label>
-                  <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
-                  <label>bc</label>
-                </div></center>
+	    					<center>
+                  <div class="filers">
+                    <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
+                    <label>pm25</label>
+                    <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
+                    <label>pm10</label>
+                    <input type="checkbox" id="so2" value="so2" v-model="checkedParams1">
+                    <label>so2</label>
+                    <input type="checkbox" id="no2" value="no2" v-model="checkedParams1">
+                    <label>no2</label>
+                    <input type="checkbox" id="o3" value="o3" v-model="checkedParams1">
+                    <label>o3</label>
+                    <input type="checkbox" id="co" value="co" v-model="checkedParams1">
+                    <label>co</label>
+                    <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
+                    <label>bc</label>
+                  </div>
+                  <div>
+                    From: <input type="date" id="date_from" v-model="date_from1">
+                    To: <input type="date" id="date_from" v-model="date_to1">
+                  </div>
+                </center>
                   <div v-if = "checkedParams1.length ==1">
                     <input type="checkbox" id="heat1" v-model="heat1" @input="heatMap1"> 
                     <label for="heat1">Heat Map</label>

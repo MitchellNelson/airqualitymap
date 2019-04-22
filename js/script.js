@@ -1,11 +1,14 @@
 var app;
-
 var starting_center1 = L.latLng(44.96694285687524, -93.23948822915554);
 var starting_center2 = L.latLng(39.916451274939206, 116.38215586686088);
 var starting_location1 = "St. Paul";
 var starting_location2 = "Bejing";
 var openAQRequest = null;
 var locationRequest = null;
+var today=getToday();
+var thirty_days_ago=getThirtyDaysAgo();
+console.log(today);
+console.log(thirty_days_ago);
 
 init = function(){
     app = new Vue({
@@ -21,12 +24,19 @@ init = function(){
             location2: starting_location2,
             checkedParams1: ["pm25","pm10","so2","no2","o3","co","bc"],
             checkedParams2: ["pm25","pm10","so2","no2","o3","co","bc"],
+            date_from1: thirty_days_ago,
+            date_to1: today,
             heat1: false,
             heat2 : false,
             heatLayer1: null,
             heatLayer2: null
         },
         watch: {
+            date_from1: function(){
+                console.log("date_from1 changed")
+                DeleteAllMarkers(this.unique_markers1, this.map1);
+                OpenAQSearch1();
+            },
             checkedParams1: function(){
                 for(var i=0; i<this.unique_markers1.length; i++){
                     this.unique_markers1[i].marker.unbindPopup();//remove old popup
@@ -295,13 +305,26 @@ init = function(){
     OpenAQSearch1();
     OpenAQSearch2();
 }
+function getTwoDigitMonth(month){
+    return formattedNumber = ("0" + month).slice(-2);
+}
+function getToday(){
+    var d = new Date();
+    return d.getFullYear()+"-"+getTwoDigitMonth(d.getMonth()+1)+"-"+d.getDate();
+}
+function getThirtyDaysAgo(){
+    var d = new Date();
+    d.setDate(d.getDate() - 30);
+    var date_from = (d).getFullYear()+"-"+getTwoDigitMonth(d.getMonth()+1)+"-"+d.getDate();
+    return date_from
+}
 function OpenAQSearch1(){
     console.log("sending request");
     //setup all vars to be plugged into the request url
     var d = new Date();
-    var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    var date_to = app.date_to1; //d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     d.setDate(d.getDate() - 30);
-    var date_from = (d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    var date_from = app.date_from1; //(d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     var bounds = app.map1.getBounds();
     var radius = app.map1.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
@@ -312,6 +335,7 @@ function OpenAQSearch1(){
 
         }
     };
+    console.log(request.url); 
     $.ajax(request);
 }
 function OpenAQSearch2(){
@@ -330,7 +354,7 @@ function OpenAQSearch2(){
             FillUniqueMarkers(data,app.unique_markers2, app.map2);
         }
     };
-    console.log(request.url);
+
     $.ajax(request);
 }
 LocationFromLatLng1 = function(lat, lng) {
@@ -826,6 +850,17 @@ DeleteOldMarkers = function(arr,map){
             arr.splice(i, 1);
             num_deleted++;
         } 
+    }
+    console.log("deleted :"+num_deleted + " markers");
+    console.log("currently have :"+arr.length + " markers");
+}
+function DeleteAllMarkers(arr, map){
+    var num_deleted=0;//for printing purposes only
+    var i = arr.length
+    while (i--) { 
+            map.removeLayer(arr[i].marker);
+            arr.splice(i, 1);
+            num_deleted++;
     }
     console.log("deleted :"+num_deleted + " markers");
     console.log("currently have :"+arr.length + " markers");
