@@ -817,32 +817,36 @@ function heatMapGradient(parameter, value)
     var gradient = null;
     if (parameter == "pm25")
     {
-        gradient = value /500.4;
+        gradient = value /100;
     }
     else if (parameter == "pm10")
     {
-        gradient = value /604;
+        gradient = value /354;
     }
     else if(parameter == "co")
     {
-        gradient = value /50.4;
+        gradient = value /12.4;
     }
     else if (parameter =="no2")
     {
-        gradient = value /2049;
+        gradient = value /360;
     }
     else if (parameter =="o3")
     {
-        gradient = value /.604;
+        gradient = value /.085;
     }
     else if (parameter =="so2")
     {
-        gradient = value /1004;
+        gradient = value /185;
     }
     //Cant find anything for bc
     else if (parameter =="bc")
     {
-        gradient = value /1004;
+        gradient = value /100;
+    }
+    else if(gradient >1)
+    {
+        gradient =1;
     }
     else {
         gradient =0;
@@ -861,24 +865,27 @@ function heatMap1()
     setTimeout(function(){
         if (app.heat1 == true)
         {
-            var array = [];
+            var array = new Array();
             for (var i=0; i< app.unique_markers1.length; i++)
             {
                 if(getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]).length > 0)
                 {
-                    array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]))) ) ];
+                    array.push([app.unique_markers1[i].coordinates.latitude, 
+                                app.unique_markers1[i].coordinates.longitude , 
+                                heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]))) ) ]);
                 }
             }
-            app.heat1Layer = L.heatLayer(array, {
+
+            app.heatLayer1 = L.heatLayer(array, {
                 radius: 50, 
-                gradient: {.3:'green' , .6:'orange' , 1:'red'},
-                minOpacity: .3
+                gradient: {0.3:'green' , 0.4:'orange' , 0.7:'red'},
+                minOpacity: .5
             }).addTo(app.map1); 
         }
         else
         {
             
-            app.map1.removeLayer(app.heat1Layer);
+            app.map1.removeLayer(app.heatLayer1);
             this.heat1 = false;
         }
 
@@ -889,25 +896,27 @@ function heatMap2()
     setTimeout(function(){
         if (app.heat2 == true)
         {
-            var array = [];
+            var array = new Array();
             for (var i=0; i< app.unique_markers2.length; i++)
             {
 
                 if(getArray (getArrays(app.unique_markers2[i]), app.checkedParams2[0]).length > 0)
                 {
-                    array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(app.checkedParams2[0], (getAvg ( getArray (getArrays(app.unique_markers2[i]), app.checkedParams2[0]))) ) ];
+                    array.push([app.unique_markers2[i].coordinates.latitude,
+                             app.unique_markers2[i].coordinates.longitude , 
+                            heatMapGradient(app.checkedParams2[0], (getAvg(getArray(getArrays(app.unique_markers2[i]), app.checkedParams2[0]))))]);
                 }
             }
            console.log(array);
-            app.heat2Layer= L.heatLayer(array, {
+            app.heatLayer2= L.heatLayer(array, {
                 radius: 50, 
-                gradient: {.3:'green' , .6:'orange' , 1:'red'},
-                minOpacity: .3
+                gradient: {0.7:'red' , 0.4:'orange' , 0.3:'green'},
+                minOpacity: .5,
             }).addTo(app.map2); 
         }
         else
         {
-            app.map2.removeLayer(app.heat2Layer);
+            app.map2.removeLayer(app.heatLayer2);
             this.heat2 = false;
         }
 
