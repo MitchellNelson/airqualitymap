@@ -29,7 +29,7 @@ init = function(){
             heat1: false,
             heat2 : false,
             heatLayer1: null,
-            heatLayer2: null
+            heatLayer2: null,
         },
         watch: {
             date_from1: function(){
@@ -47,6 +47,8 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
+                        this.unique_markers1[i].display = false;
+
                     }
                 }
             },
@@ -60,6 +62,7 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
+                        this.unique_markers1[i].display = false;
                     }
                 }
             },
@@ -70,9 +73,15 @@ init = function(){
                     this.unique_markers2[i].marker.bindPopup(new_popup_string);
                     if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
                         this.unique_markers2[i].marker.addTo(this.map2);
+
                     }
                     if (new_popup_string==""){
                         this.map2.removeLayer(this.unique_markers2[i].marker);
+                        //console.log(this.unique_markers2[i]);
+                        this.unique_markers2[i].display = false;
+                    }
+                    else{
+                        this.unique_markers2[i].display = true;
                     }
                 }
             },
@@ -86,6 +95,10 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map2.removeLayer(this.unique_markers2[i].marker);
+                        this.unique_markers2[i].display = false;
+                    }
+                    else{
+                        this.unique_markers2[i].display = true;
                     }
                 }
             }
@@ -147,19 +160,19 @@ init = function(){
                 this.class="good"
                 return this.class
               }
-              else if (a>.055 && a<=.070) {
+              else if (a>.054 && a<=.070) {
                 this.class = "moderate"
                 return this.class
               }
-              else if (a>.071 && a<=.085){
+              else if (a>.070 && a<=.085){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>.086 && a<=.105){
+              else if (a>.085 && a<=.105){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>.106 && a<=.200){
+              else if (a>.105 && a<=.200){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -177,15 +190,15 @@ init = function(){
                 this.class = "moderate"
                 return this.class
               }
-              else if (a> 35.5 && a<= 55.4){
+              else if (a> 35.4 && a<= 55.4){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>55.5 && a<= 150.4){
+              else if (a>55.4 && a<= 150.4){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>150.5 && a<= 250.4){
+              else if (a>150.4 && a<= 250.4){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -203,15 +216,15 @@ init = function(){
                 this.class = "moderate"
                 return this.class
               }
-              else if (a> 155 && a<= 254){
+              else if (a> 154 && a<= 254){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>255 && a<= 354){
+              else if (a>254 && a<= 354){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>355 && a<= 424){
+              else if (a>354 && a<= 424){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -229,19 +242,19 @@ init = function(){
                 this.class = "moderate"
                 return this.class
               }
-              else if (a> 76 && a<= 185){
+              else if (a> 75 && a<= 185){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>186 && a<= 304){
+              else if (a>185 && a<= 304){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>305 && a<= 604){
+              else if (a>304 && a<= 604){
                 this.class = "veryUnhealthy"
                 return this.class
               }
-              else if( a >605) {
+              else if( a >604) {
                 this.class = "hazardous"
                 return this.class
               }
@@ -251,19 +264,19 @@ init = function(){
                 this.class="good"
                 return this.class
               }
-              else if (a>4.5 && a<= 9.4) {
+              else if (a>4.4 && a<= 9.4) {
                 this.class = "moderate"
                 return this.class
               }
-              else if (a> 9.5 && a<= 12.4){
+              else if (a> 9.4 && a<= 12.4){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>12.5 && a<= 15.4){
+              else if (a>12.4 && a<= 15.4){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>15.5 && a<= 30.4){
+              else if (a>15.4 && a<= 30.4){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -281,15 +294,15 @@ init = function(){
                 this.class = "moderate"
                 return this.class
               }
-              else if (a> 101 && a<= 360){
+              else if (a> 100 && a<= 360){
                 this.class = "uhsg"
                 return this.class
               }
-              else if (a>361 && a<= 649){
+              else if (a>360 && a<= 649){
                 this.class = "unhealthy"
                 return this.class
               }
-              else if (a>650 && a<= 1249){
+              else if (a>649 && a<= 1249){
                 this.class = "veryUnhealthy"
                 return this.class
               }
@@ -656,6 +669,41 @@ function getArrays(unique_marker)
     var all = [pm25Array,pm10Array,so2Array,no2Array,o3Array,coArray,bcArray];
     return all;
 }
+function getArray(all, parameter)
+{
+    var one = [];
+    if (parameter == "pm25")
+    {
+        one = all[0];
+    }
+    else if (parameter == "pm10")
+    {
+        one = all[1];
+    }
+    else if(parameter == "so2")
+    {
+         one = all[2];
+    }
+    else if (parameter =="no2")
+    {
+        one = all[3];
+    }
+    else if (parameter =="o3")
+    {
+         one = all[4];
+    }
+    else if (parameter =="co")
+    {
+        one = all[5];
+    }
+    //Cant find anything for bc
+    else if (parameter =="bc")
+    {   
+        one = all[6];
+    }
+    //console.log(one);
+    return one;
+}
 /*  Takes in an array of values and returns the average
 */
 function getAvg(values){
@@ -714,6 +762,7 @@ function unique_marker(lat, lng){
     this.coordinates.longitude = lng;
     this.marker = null;
     this.date_entries = [];
+    this.display = true;
     this.addDateEntry = function(date,parameter,value,units){
         var new_entry = new date_entry;
         new_entry.date = date;
@@ -755,28 +804,35 @@ function heatMapGradient(parameter, value)
     var gradient = null;
     if (parameter == "pm25")
     {
-        gradient = value /250;
-        //gradient = {35.4: 'green' ,  150.4:'orange', 250:'red'}
+        gradient = value /500.4;
     }
     else if (parameter == "pm10")
     {
-        gradient = value /424;
-        //gradient = {154:'green' , 354:'orange' , 424:'red'}
+        gradient = value /604;
     }
     else if(parameter == "co")
     {
-        gradient = value /30.4;
-        //gradient = {9.4:'green' , 15.4:'orange' , 30.4:'red'}
+        gradient = value /50.4;
     }
     else if (parameter =="no2")
     {
-        gradient = value /1249;
-        //gradient = {100:'green' , 649:'orange' , 1249:'red'}
+        gradient = value /2049;
     }
     else if (parameter =="o3")
     {
-        gradient = value /.200;
-        //gradient = {.085:'green' , .105:'orange' , .200:'red'}
+        gradient = value /.604;
+    }
+    else if (parameter =="so2")
+    {
+        gradient = value /1004;
+    }
+    //Cant find anything for bc
+    else if (parameter =="bc")
+    {
+        gradient = value /1004;
+    }
+    else {
+        gradient =0;
     }
     return gradient;
 }
@@ -795,7 +851,10 @@ function heatMap1()
             var array = [];
             for (var i=0; i< app.unique_markers1.length; i++)
             {
-                array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers1[i])),app.checkedParams1[0]) ];
+                if(getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]).length > 0)
+                {
+                    array[i] = [app.unique_markers1[i].coordinates.latitude, app.unique_markers1[i].coordinates.longitude , heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]))) ) ];
+                }
             }
             app.heat1Layer = L.heatLayer(array, {
                 radius: 50, 
@@ -805,10 +864,9 @@ function heatMap1()
         }
         else
         {
-            console.log("false");
-            //remove?
+            
             app.map1.removeLayer(app.heat1Layer);
-            //heat2.onRemove(app.map2);
+            this.heat1 = false;
         }
 
     },1000);
@@ -821,17 +879,23 @@ function heatMap2()
             var array = [];
             for (var i=0; i< app.unique_markers2.length; i++)
             {
-                array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(getAvg(getArrays(app.unique_markers2[i])),app.checkedParams2[0]) ];
+
+                if(getArray (getArrays(app.unique_markers2[i]), app.checkedParams2[0]).length > 0)
+                {
+                    array[i] = [app.unique_markers2[i].coordinates.latitude, app.unique_markers2[i].coordinates.longitude , heatMapGradient(app.checkedParams2[0], (getAvg ( getArray (getArrays(app.unique_markers2[i]), app.checkedParams2[0]))) ) ];
+                }
             }
+           console.log(array);
             app.heat2Layer= L.heatLayer(array, {
                 radius: 50, 
                 gradient: {.3:'green' , .6:'orange' , 1:'red'},
-                minOpacity: .5
+                minOpacity: .3
             }).addTo(app.map2); 
         }
         else
         {
             app.map2.removeLayer(app.heat2Layer);
+            this.heat2 = false;
         }
 
     },1000);
