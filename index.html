@@ -286,7 +286,7 @@
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers2">
 
-                  <tr @click="item.visible = !item.visible">
+                  <tr v-if= "item.display ==true" @click="item.visible = !item.visible">
                     <td class="collapsible" style="top:2rem;" >
                       <span >
                         {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}
@@ -297,7 +297,7 @@
                   </tr>
 
 
-                  <tr v-if="item.visible==true" v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
+                  <tr v-if="item.visible==true && item.display ==true" v-if="unique_markers2.length > 0" v-for="entry in item.date_entries">
                     <td>
                       <span > </span>
                     </td>
