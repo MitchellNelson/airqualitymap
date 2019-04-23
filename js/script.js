@@ -859,7 +859,7 @@ function heatMap1()
             app.heat1Layer = L.heatLayer(array, {
                 radius: 50, 
                 gradient: {.3:'green' , .6:'orange' , 1:'red'},
-                minOpacity: .5
+                minOpacity: .3
             }).addTo(app.map1); 
         }
         else
