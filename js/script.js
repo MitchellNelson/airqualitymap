@@ -26,7 +26,18 @@ init = function(){
             checkedParams2: ["pm25","pm10","so2","no2","o3","co","bc"],
             date_from1: thirty_days_ago,
             date_to1: today,
+            date_from2: thirty_days_ago,
+            date_to2: today,
             filter_values1: {
+                "pm25":{max:1500, min:0},
+                "pm10":{max:1500, min:0},
+                "so2":{max:1500, min:0},
+                "no2":{max:1500, min:0},
+                "o3":{max:1500, min:0},
+                "co":{max:1500, min:0},
+                "bc":{max:1500, min:0}
+            },
+            filter_values2: {
                 "pm25":{max:1500, min:0},
                 "pm10":{max:1500, min:0},
                 "so2":{max:1500, min:0},
@@ -45,6 +56,11 @@ init = function(){
                 console.log("date_from1 changed")
                 DeleteAllMarkers(this.unique_markers1, this.map1);
                 OpenAQSearch1();
+            },
+            date_from2: function(){
+                console.log("date_from2 changed")
+                DeleteAllMarkers(this.unique_markers2, this.map2);
+                OpenAQSearch2();
             },
             checkedParams1: function(){
                 for(var i=0; i<this.unique_markers1.length; i++){
@@ -367,10 +383,10 @@ function OpenAQSearch1(){
 function OpenAQSearch2(){
     console.log("sending request");
     //setup all vars to be plugged into the request url
-    var d = new Date();
-    var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-    d.setDate(d.getDate() - 30);
-    var date_from = (d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    //var d = new Date();
+    var date_to = app.date_to2; //d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+   // d.setDate(d.getDate() - 30);
+    var date_from = app.date_from2; //(d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     var bounds = app.map2.getBounds();
     var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
@@ -585,10 +601,10 @@ function ShowMarkers(num_new_markers,arr, map){
        
         var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
             //.bindPopup(GetPopupString(arr[i+num_old_markers]));
-        marker.on('mouseover', function (e) {
+        marker.on('mouseover', function () {
             this.openPopup();
         });
-        marker.on('mouseout', function (e) {
+        marker.on('mouseout', function () {
             this.closePopup();
         });
         arr[i+num_old_markers].marker = marker;
@@ -855,7 +871,6 @@ function getMapRadiusKM (map)
     var mapDistance = mapBoundNorthEast.distanceTo(map.getCenter());
     return mapDistance/1000;
 }
-
 function heatMap1()
 {
     setTimeout(function(){
@@ -877,11 +892,9 @@ function heatMap1()
         }
         else
         {
-            
             app.map1.removeLayer(app.heat1Layer);
             this.heat1 = false;
         }
-
     },1000);
 }
 function heatMap2()
@@ -910,7 +923,6 @@ function heatMap2()
             app.map2.removeLayer(app.heat2Layer);
             this.heat2 = false;
         }
-
     },1000);
 }
 addMarker = function([lat,lng],map){
