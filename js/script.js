@@ -882,7 +882,7 @@ function heatMap1()
 
                     array.push([app.unique_markers1[i].coordinates.latitude, 
                                 app.unique_markers1[i].coordinates.longitude , 
-                                heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]))) ) ]);
+                                heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i], app.filter_values1), app.checkedParams1[0]))) ) ]);
 
                 }
             }
@@ -917,7 +917,7 @@ function heatMap2()
 
                     array.push([app.unique_markers2[i].coordinates.latitude,
                              app.unique_markers2[i].coordinates.longitude , 
-                            heatMapGradient(app.checkedParams2[0], (getAvg(getArray(getArrays(app.unique_markers2[i]), app.checkedParams2[0]))))]);
+                            heatMapGradient(app.checkedParams2[0], (getAvg(getArray(getArrays(app.unique_markers2[i], app.filter_values2), app.checkedParams2[0]))))]);
                 }
             }
            console.log(array);
