@@ -48,48 +48,62 @@
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
 	    					<center>
                   <div class="filers">
-                    <table>
+                    <table> 
                       <td>
                         <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
                         <label>pm2.5</label>
                         <br>
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.pm25.min" :value="filter_values1.pm25.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.pm25.max" :value="filter_values1.pm25.max">
                       </td>
                       <td>
                         <input type="checkbox" id="pm10" value="pm10" v-model="checkedParams1">
                         <label>pm10</label>
                         <br>                       
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.pm10.min" :value="filter_values1.pm10.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.pm10.max" :value="filter_values1.pm10.max">
                       </td>
                       <td>
                         <input type="checkbox" id="so2" value="so2" v-model="checkedParams1">
                         <label>so2</label>
-                        <br>                       
-                        <input type="text" size="5" value="test">
+                        <br>                        
+                        <input type="text" size="5" v-model="filter_values1.so2.min" :value="filter_values1.so2.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.so2.max" :value="filter_values1.so2.max">
                       </td>
                       <td>
                         <input type="checkbox" id="no2" value="no2" v-model="checkedParams1">
                         <label>no2</label>
                         <br>                        
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.no2.min" :value="filter_values1.no2.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.so2.max" :value="filter_values1.so2.max">
                       </td>
                       <td>
                         <input type="checkbox" id="o3" value="o3" v-model="checkedParams1">
                         <label>o3</label>
                         <br>   
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.o3.min" :value="filter_values1.o3.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.so2.max" :value="filter_values1.so2.max">
                       </td>
                       <td>
                         <input type="checkbox" id="co" value="co" v-model="checkedParams1">
                         <label>co</label>
                         <br>
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.co.min" :value="filter_values1.co.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.so2.max" :value="filter_values1.so2.max">
                       </td>
                       <td>
                         <input type="checkbox" id="bc" value="bc" v-model="checkedParams1">
                         <label>bc</label>
                         <br>
-                        <input type="text" size="5" value="test">
+                        <input type="text" size="5" v-model="filter_values1.bc.min" :value="filter_values1.bc.min">
+                        <br>
+                        <input type="text" size="5" v-model="filter_values1.so2.max" :value="filter_values1.so2.max">
                       </td>
                     </table>
                   </div>
@@ -160,37 +174,37 @@
                       <span> {{new Date(entry.date.utc).toLocaleString()}}</span>
                     </td>
                     <td v-if="checkedParams1.includes('pm25')" :class="getClassPM25(`${entry.pm25}`)">
-                      <div v-if= "entry.pm25 != null">
+                      <div v-if= "entry.pm25 != null && entry.pm25 >= filter_values1.pm25.min && entry.pm25 <= filter_values1.pm25.max">
                         <span>{{entry.pm25}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('pm10')" :class="getClassPM10(`${entry.pm10}`)">
-                      <div v-if= "entry.pm10!= null">
+                      <div v-if= "entry.pm10!= null && entry.pm10 >= filter_values1.pm10.min && entry.pm10 <= filter_values1.pm10.max">
                         <span>{{entry.pm10}} <p class="units">ug/m^3</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('so2')" :class="getClassSO2(`${entry.so2}`)">
-                      <div v-if= "entry.so2!= null">
+                      <div v-if= "entry.so2!= null && entry.so2 >= filter_values1.so2.min && entry.so2 <= filter_values1.so2.max">
                         <span>{{entry.so2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('no2')" :class="getClassNO2(`${entry.no2}`)"> 
-                      <div v-if= "entry.no2!= null">
+                      <div v-if= "entry.no2!= null && entry.no2 >= filter_values1.no2.min && entry.no2 <= filter_values1.no2.max">
                         <span>{{entry.no2}} <p class="units">ppb</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('o3')" :class="getClassO3(`${entry.o3}`)"> 
-                      <div v-if= "entry.o3!= null">
+                      <div v-if= "entry.o3!= null && entry.o3 >= filter_values1.o3.min && entry.o3 <= filter_values1.o3.max">
                         <span>{{entry.o3}} <p class="units">ppm</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('co')" :class="getClassCO(`${entry.co}`)"> 
-                      <div v-if= "entry.co!= null">
+                      <div v-if= "entry.co!= null && entry.co >= filter_values1.co.min && entry.co <= filter_values1.co.max">
                         <span>{{entry.co}} <p class="units">ppm</p></span>
                       </div>
                     </td>
                     <td v-if="checkedParams1.includes('bc')" :class="getClassO3(`${entry.bc}`)"> 
-                      <div v-if= "entry.bc!= null">
+                      <div v-if= "entry.bc!= null && entry.bc >= filter_values1.bc.min && entry.bc <= filter_values1.bc.max">
                         <span>{{entry.bc}}</span>
                       </div>
                     </td>

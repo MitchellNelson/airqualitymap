@@ -16,8 +16,8 @@ init = function(){
         data:{
             map1:null,
             map2:null,
-            center1:starting_center1,
-            center2:starting_center2,
+            center1: starting_center1,
+            center2: starting_center2,
             unique_markers1:[],
             unique_markers2:[],
             location1: starting_location1,
@@ -26,6 +26,15 @@ init = function(){
             checkedParams2: ["pm25","pm10","so2","no2","o3","co","bc"],
             date_from1: thirty_days_ago,
             date_to1: today,
+            filter_values1: {
+                "pm25":{max:1500, min:0},
+                "pm10":{max:1500, min:0},
+                "so2":{max:1500, min:0},
+                "no2":{max:1500, min:0},
+                "o3":{max:1500, min:0},
+                "co":{max:1500, min:0},
+                "bc":{max:1500, min:0}
+            },
             heat1: false,
             heat2 : false,
             heatLayer1: null,
@@ -47,7 +56,9 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
+
                         this.unique_markers1[i].display = false;
+
 
                     }
                 }
@@ -62,7 +73,9 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
+
                         this.unique_markers1[i].display = false;
+
                     }
                 }
             },
@@ -933,7 +946,7 @@ fullscreen1 = function(){
     document.getElementById("firstTable").style.display="none";
     document.getElementById("map2_and_nav").style.display="none";
     document.getElementsByClassName("maps")[0].style.width="100vw";
-    document.getElementsByClassName("maps")[0].style.height="100vh";
+    document.getElementsByClassName("maps")[0].style.height="85vh";
     document.getElementById("fullscreen1").style.display="none";
     document.getElementById("halfscreen1").style.display="inline";
     app.map1.invalidateSize();
@@ -955,7 +968,7 @@ fullscreen2 = function(){
     document.getElementById("secondTable").style.display="none";
     document.getElementById("map1_and_nav").style.display="none";
     document.getElementsByClassName("maps")[1].style.width="100vw";
-    document.getElementsByClassName("maps")[1].style.height="100vh";
+    document.getElementsByClassName("maps")[1].style.height="85vh";
     document.getElementById("fullscreen2").style.display="none";
     document.getElementById("halfscreen2").style.display="inline";
     app.map1.invalidateSize();
