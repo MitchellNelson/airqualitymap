@@ -165,7 +165,13 @@ a:hover{
 .filters{
 	font-size:.8rem;
 }
-.filters input{
+.about-page tr{
+	width:100vw;
+}
+.about-page tbody tr td{
+	width:50%;
+}
+.filters  input{
 	height: 10px;
 }
 #header{
