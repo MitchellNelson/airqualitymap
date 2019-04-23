@@ -108,7 +108,7 @@
                     </table>
                   </div>
                   <div>
-                    From: <input type="date" id="date_from1" v-model="date_from1" max="2019-02-01">
+                    From: <input type="date" id="date_from1" v-model="date_from1">
                     To: <input type="date" id="date_to1" v-model="date_to1">
                   </div>
                 </center>
@@ -156,7 +156,7 @@
                 </tr>
               </thead>
                 <tbody class="data-table" v-for="item in unique_markers1">
-                  <tr @click="item.visible = !item.visible">
+                  <tr v-if= "item.display ==true" @click="item.visible = !item.visible">
                     <td class="collapsible" >
                       <span>
                         {{item.coordinates.latitude}},<br>{{item.coordinates.longitude}}

@@ -56,10 +56,10 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
-
                         this.unique_markers1[i].display = false;
-
-
+                    }
+                    else{
+                        this.unique_markers1[i].display = true;
                     }
                 }
             },
@@ -73,9 +73,10 @@ init = function(){
                     }
                     if (new_popup_string==""){
                         this.map1.removeLayer(this.unique_markers1[i].marker);
-
                         this.unique_markers1[i].display = false;
-
+                    }
+                    else{
+                        this.unique_markers1[i].display = true;
                     }
                 }
             },
@@ -86,7 +87,6 @@ init = function(){
                     this.unique_markers2[i].marker.bindPopup(new_popup_string);
                     if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
                         this.unique_markers2[i].marker.addTo(this.map2);
-
                     }
                     if (new_popup_string==""){
                         this.map2.removeLayer(this.unique_markers2[i].marker);
