@@ -22,7 +22,7 @@ table {
  	border:#44484f 1px solid;
  }
  input{
- 	padding:5px;
+ 	padding:2px;
  	margin-left:.5rem;
  	font-size: .7rem;
  	border:none;
@@ -165,9 +165,12 @@ a:hover{
 .units{
 	font-size: .6rem;
 }
-/*.filter-size td{
-	height:500px;
-}*/
+.filters{
+	font-size:.8rem;
+}
+.filters input{
+	height: 10px;
+}
 #header{
 	text-align: center;
 	background-color: white;

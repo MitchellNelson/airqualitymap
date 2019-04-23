@@ -26,14 +26,25 @@ init = function(){
             checkedParams2: ["pm25","pm10","so2","no2","o3","co","bc"],
             date_from1: thirty_days_ago,
             date_to1: today,
+            date_from2: thirty_days_ago,
+            date_to2: today,
             filter_values1: {
-                "pm25":{max:1500, min:0},
-                "pm10":{max:1500, min:0},
-                "so2":{max:1500, min:0},
-                "no2":{max:1500, min:0},
-                "o3":{max:1500, min:0},
-                "co":{max:1500, min:0},
-                "bc":{max:1500, min:0}
+                "pm25":{max:1500, min:-100},
+                "pm10":{max:1500, min:-100},
+                "so2":{max:1500, min:-100},
+                "no2":{max:1500, min:-100},
+                "o3":{max:1500, min:-100},
+                "co":{max:1500, min:-100},
+                "bc":{max:1500, min:-100}
+            },
+            filter_values2: {
+                "pm25":{max:1500, min:-100},
+                "pm10":{max:1500, min:-100},
+                "so2":{max:1500, min:-100},
+                "no2":{max:1500, min:-100},
+                "o3":{max:1500, min:-100},
+                "co":{max:1500, min:-100},
+                "bc":{max:1500, min:-100}
             },
             heat1: false,
             heat2 : false,
@@ -46,74 +57,34 @@ init = function(){
                 DeleteAllMarkers(this.unique_markers1, this.map1);
                 OpenAQSearch1();
             },
+            date_from2: function(){
+                console.log("date_from2 changed")
+                DeleteAllMarkers(this.unique_markers2, this.map2);
+                OpenAQSearch2();
+            },
+            filter_values1: { 
+                    handler(val, oldVal){
+                    updatePopup1();
+                },
+                deep: true
+            },
             checkedParams1: function(){
-                for(var i=0; i<this.unique_markers1.length; i++){
-                    this.unique_markers1[i].marker.unbindPopup();//remove old popup
-                    var new_popup_string = GetPopupString(this.unique_markers1[i], this.checkedParams1);
-                    this.unique_markers1[i].marker.bindPopup(new_popup_string);
-                    if(!this.map1.hasLayer(this.unique_markers1[i].marker)){//if marker is not on the map
-                        this.unique_markers1[i].marker.addTo(this.map1);
-                    }
-                    if (new_popup_string==""){
-                        this.map1.removeLayer(this.unique_markers1[i].marker);
-                        this.unique_markers1[i].display = false;
-                    }
-                    else{
-                        this.unique_markers1[i].display = true;
-                    }
-                }
+                updatePopup1();
             },
             unique_markers1: function(){
-                for(var i=0; i<this.unique_markers1.length; i++){
-                    this.unique_markers1[i].marker.unbindPopup();//remove old popup
-                    var new_popup_string = GetPopupString(this.unique_markers1[i], this.checkedParams1);
-                    this.unique_markers1[i].marker.bindPopup(new_popup_string);
-                    if(!this.map1.hasLayer(this.unique_markers1[i].marker)){//if marker is not on the map
-                        this.unique_markers1[i].marker.addTo(this.map1);
-                    }
-                    if (new_popup_string==""){
-                        this.map1.removeLayer(this.unique_markers1[i].marker);
-                        this.unique_markers1[i].display = false;
-                    }
-                    else{
-                        this.unique_markers1[i].display = true;
-                    }
-                }
+                updatePopup1();
+            },
+            filter_values2: { 
+                    handler(val, oldVal){
+                    updatePopup2();
+                },
+                deep: true
             },
             checkedParams2: function(){
-                for(var i=0; i<this.unique_markers2.length; i++){
-                    this.unique_markers2[i].marker.unbindPopup();//remove old popup
-                    var new_popup_string = GetPopupString(this.unique_markers2[i], this.checkedParams2);
-                    this.unique_markers2[i].marker.bindPopup(new_popup_string);
-                    if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
-                        this.unique_markers2[i].marker.addTo(this.map2);
-                    }
-                    if (new_popup_string==""){
-                        this.map2.removeLayer(this.unique_markers2[i].marker);
-                        //console.log(this.unique_markers2[i]);
-                        this.unique_markers2[i].display = false;
-                    }
-                    else{
-                        this.unique_markers2[i].display = true;
-                    }
-                }
+                updatePopup2();
             },
             unique_markers2: function(){
-                for(var i=0; i<this.unique_markers2.length; i++){
-                    this.unique_markers2[i].marker.unbindPopup();//remove old popup
-                    var new_popup_string = GetPopupString(this.unique_markers2[i], this.checkedParams2);
-                    this.unique_markers2[i].marker.bindPopup(new_popup_string);
-                    if(!this.map2.hasLayer(this.unique_markers2[i].marker)){//if marker is not on the map
-                        this.unique_markers2[i].marker.addTo(this.map2);
-                    }
-                    if (new_popup_string==""){
-                        this.map2.removeLayer(this.unique_markers2[i].marker);
-                        this.unique_markers2[i].display = false;
-                    }
-                    else{
-                        this.unique_markers2[i].display = true;
-                    }
-                }
+                updatePopup2();
             }
         },
         methods: {
@@ -357,7 +328,7 @@ function OpenAQSearch1(){
         url: "https://api.openaq.org/v1/measurements?date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center1.lat+","+app.center1.lng+"&radius="+radius+"&limit=10000&sort=desc",
         dataType: "json",
         success: function(data){
-            FillUniqueMarkers(data,app.unique_markers1,app.map1);
+            FillUniqueMarkers(data,app.unique_markers1,app.map1, app.filter_values1);
 
         }
     };
@@ -367,17 +338,17 @@ function OpenAQSearch1(){
 function OpenAQSearch2(){
     console.log("sending request");
     //setup all vars to be plugged into the request url
-    var d = new Date();
-    var date_to = d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
-    d.setDate(d.getDate() - 30);
-    var date_from = (d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+    //var d = new Date();
+    var date_to = app.date_to2; //d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+   // d.setDate(d.getDate() - 30);
+    var date_from = app.date_from2; //(d).getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
     var bounds = app.map2.getBounds();
     var radius = app.map2.distance([bounds._northEast.lat,bounds._northEast.lng],[bounds._southWest.lat, bounds._southWest.lng])/2;
     var request = {
         url: "https://api.openaq.org/v1/measurements?order_by=date&date_from="+date_from+"&date_to="+date_to+"&coordinates="+app.center2.lat+","+app.center2.lng+"&radius="+radius+"&limit=10000&sort=desc",
         dataType: "json",
         success: function(data){
-            FillUniqueMarkers(data,app.unique_markers2, app.map2);
+            FillUniqueMarkers(data,app.unique_markers2, app.map2, app.filter_values2);
         }
     };
 
@@ -527,7 +498,7 @@ function filter(event){
         DeleteFilteredPoints(app.unique_markers2,app.map2);
     },1500);
 }
-function FillUniqueMarkers(data,arr,map){
+function FillUniqueMarkers(data, arr, map, filter_values){
     console.log(data.results);
     var num_new_markers=0;
 
@@ -574,7 +545,7 @@ function FillUniqueMarkers(data,arr,map){
     }
     if(num_new_markers>0){
         console.log("adding "+num_new_markers+" new markers");
-        ShowMarkers(num_new_markers, arr, map);
+        ShowMarkers(num_new_markers, arr, map, filter_values);
         console.log(map);
     }
 }
@@ -585,10 +556,10 @@ function ShowMarkers(num_new_markers,arr, map){
        
         var marker = addMarker([arr[i+num_old_markers].coordinates.latitude,arr[i+num_old_markers].coordinates.longitude], map)
             //.bindPopup(GetPopupString(arr[i+num_old_markers]));
-        marker.on('mouseover', function (e) {
+        marker.on('mouseover', function () {
             this.openPopup();
         });
-        marker.on('mouseout', function (e) {
+        marker.on('mouseout', function () {
             this.closePopup();
         });
         arr[i+num_old_markers].marker = marker;
@@ -603,9 +574,9 @@ function ShowMarkers(num_new_markers,arr, map){
     }*/
     console.log("map 1 currently has :"+arr.length + " markers");
 }
-function GetPopupString(unique_marker, checked){
+function GetPopupString(unique_marker, checked, filter_values){
     var retstring="";
-    var array = getArrays(unique_marker);
+    var array = getArrays(unique_marker, filter_values);
     if(array[0].length != 0 && checked.includes("pm25")){
         retstring = "pm25: " + getAvg(array[0]) + " µg/m³" + "<br>" + retstring;
     }
@@ -629,10 +600,45 @@ function GetPopupString(unique_marker, checked){
     }
     return retstring;
 }
+function updatePopup1(){
+    for(var i=0; i<app.unique_markers1.length; i++){
+        app.unique_markers1[i].marker.unbindPopup();//remove old popup
+        var new_popup_string = GetPopupString(app.unique_markers1[i], app.checkedParams1, app.filter_values1);
+        app.unique_markers1[i].marker.bindPopup(new_popup_string);
+        if(!app.map1.hasLayer(app.unique_markers1[i].marker)){//if marker is not on the map
+            app.unique_markers1[i].marker.addTo(app.map1);
+        }
+        if (new_popup_string==""){
+            app.map1.removeLayer(app.unique_markers1[i].marker);
+            app.unique_markers1[i].display = false;
+        }
+        else{
+            app.unique_markers1[i].display = true;
+        }
+    }
+}
+function updatePopup2(){
+    for(var i=0; i<app.unique_markers2.length; i++){
+        app.unique_markers2[i].marker.unbindPopup();//remove old popup
+        var new_popup_string = GetPopupString(app.unique_markers2[i], app.checkedParams2, app.filter_values2);
+        app.unique_markers2[i].marker.bindPopup(new_popup_string);
+        if(!app.map2.hasLayer(app.unique_markers2[i].marker)){//if marker is not on the map
+            app.unique_markers2[i].marker.addTo(app.map2);
+        }
+        if (new_popup_string==""){
+            app.map2.removeLayer(app.unique_markers2[i].marker);
+            //console.log(this.unique_markers2[i]);
+            app.unique_markers2[i].display = false;
+        }
+        else{
+            app.unique_markers2[i].display = true;
+        }
+    }
+}
 /*  Takes in a unique_maker object and returns an object with arrays
     for each air parameter
 */
-function getArrays(unique_marker)
+function getArrays(unique_marker, filter_values)
 {
     var pm25Array = [];
     var pm10Array =[];
@@ -643,37 +649,41 @@ function getArrays(unique_marker)
     var bcArray= [];
     for(var j =0; j< unique_marker.date_entries.length; j++)
     {
-        if (unique_marker.date_entries[j].pm25 !=null)
+        var pm25 = unique_marker.date_entries[j].pm25;
+        if (pm25 !=null && pm25 <= filter_values.pm25.max && pm25 >= filter_values.pm25.min)
         {
-            //pm25Array = pm25Array + unique_marker.date_entries[j].pm25;
-            pm25Array.push(unique_marker.date_entries[j].pm25);
+            pm25Array.push(pm25);
         }
-        if (unique_marker.date_entries[j].pm10!=null)
+        var pm10 = unique_marker.date_entries[j].pm10;
+        if (pm10!=null && pm10 <= filter_values.pm10.max && pm10 >= filter_values.pm10.min)
         {
-            //pm10Array = pm10Array + unique_marker.date_entries[j].pm10;
             pm10Array.push(unique_marker.date_entries[j].pm10);
         }
-        if (unique_marker.date_entries[j].so2!=null)
+        var so2 = unique_marker.date_entries[j].so2;
+        if (so2!=null && so2 <= filter_values.so2.max && so2 >= filter_values.so2.min)
         {
-            
             so2Array.push(unique_marker.date_entries[j].so2);
         }
-        if (unique_marker.date_entries[j].no2 !=null)
+        var no2 = unique_marker.date_entries[j].no2;
+        if (no2!=null && no2 <= filter_values.no2.max && no2 >= filter_values.no2.min)
         {
             //no2Array = no2Array + unique_marker.date_entries[j].no2;
             no2Array.push(unique_marker.date_entries[j].no2);
         }
-        if (unique_marker.date_entries[j].o3 !=null)
+        var o3 = unique_marker.date_entries[j].o3;
+        if (o3!=null && o3 <= filter_values.o3.max && o3 >= filter_values.o3.min)
         {
             //o3Array = o3Array + unique_marker.date_entries[j].o3;
             o3Array.push(unique_marker.date_entries[j].o3);
         }
-        if (unique_marker.date_entries[j].co !=null)
+        var co = unique_marker.date_entries[j].co;
+        if (co!=null && co <= filter_values.co.max && co >= filter_values.co.min)
         {
             //coArray = coArray + unique_marker.date_entries[j].co;
             coArray.push(unique_marker.date_entries[j].co);
         }
-        if (unique_marker.date_entries[j].bc !=null)
+        var bc = unique_marker.date_entries[j].bc;
+        if (bc!=null && bc <= filter_values.bc.max && bc >= filter_values.bc.min)
         {
             //bcArray = bcArray + unique_marker.date_entries[j].bc;
             bcArray.push(unique_marker.date_entries[j].bc);
@@ -859,7 +869,6 @@ function getMapRadiusKM (map)
     var mapDistance = mapBoundNorthEast.distanceTo(map.getCenter());
     return mapDistance/1000;
 }
-
 function heatMap1()
 {
     setTimeout(function(){
@@ -868,11 +877,13 @@ function heatMap1()
             var array = new Array();
             for (var i=0; i< app.unique_markers1.length; i++)
             {
-                if(getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]).length > 0)
+                if(getArray (getArrays(app.unique_markers1[i], app.filter_values1), app.checkedParams1[0]).length > 0)
                 {
+
                     array.push([app.unique_markers1[i].coordinates.latitude, 
                                 app.unique_markers1[i].coordinates.longitude , 
                                 heatMapGradient(app.checkedParams1[0], (getAvg ( getArray (getArrays(app.unique_markers1[i]), app.checkedParams1[0]))) ) ]);
+
                 }
             }
 
@@ -884,11 +895,12 @@ function heatMap1()
         }
         else
         {
+
             
             app.map1.removeLayer(app.heatLayer1);
+
             this.heat1 = false;
         }
-
     },1000);
 }
 function heatMap2()
@@ -900,8 +912,9 @@ function heatMap2()
             for (var i=0; i< app.unique_markers2.length; i++)
             {
 
-                if(getArray (getArrays(app.unique_markers2[i]), app.checkedParams2[0]).length > 0)
+                if(getArray (getArrays(app.unique_markers2[i], app.filter_values2), app.checkedParams2[0]).length > 0)
                 {
+
                     array.push([app.unique_markers2[i].coordinates.latitude,
                              app.unique_markers2[i].coordinates.longitude , 
                             heatMapGradient(app.checkedParams2[0], (getAvg(getArray(getArrays(app.unique_markers2[i]), app.checkedParams2[0]))))]);
@@ -919,7 +932,6 @@ function heatMap2()
             app.map2.removeLayer(app.heatLayer2);
             this.heat2 = false;
         }
-
     },1000);
 }
 addMarker = function([lat,lng],map){
