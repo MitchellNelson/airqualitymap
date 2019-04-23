@@ -28,7 +28,7 @@
           </tr>
         </thead>
       <tr>
-    		<tr>
+    		<tr class = "filter-size">
     			<td style="vertical-align:top" id="map1_and_nav">
     				<div class="nav-wrapper">
 	    				<div id="nav1" class="nav">
@@ -48,6 +48,7 @@
 						    <button id="showNav1" class="screenButtons" onclick="showNav1()"><i class="fas fa-arrow-circle-left"></i></button>
 	    					<center>
                   <div class="filters">
+
                     <table> 
                       <td>
                         <input type="checkbox" id="pm25" value="pm25" v-model="checkedParams1">
@@ -118,7 +119,7 @@
                     <label for="heat1">Heat Map</label>
                     <table>  
                       <thead>
-                       <tr>
+                       <tr style = "line-height: 15px">
                           <th class = "good"> Good/Moderate</th>
                           <th class = "uhsg"> Unhealthy for Sensitive Groups / Unhealthy</th>
                           <th  class = "unhealthy"> Very Unhealthy/Hazardous </th>

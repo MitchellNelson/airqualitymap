@@ -90,7 +90,7 @@ a:hover{
 }
 .nav-wrapper{
 	text-align: left;
-	height: 10vh;
+	height: 25vh;
 	min-height: 115px;
 	background-color: #44484f;
 	color:white;
@@ -100,6 +100,9 @@ a:hover{
 }
 .filter-page{
 	display: none;
+}
+.filter-size{
+	line-height: 25px;
 }
 .location-search .location-search input{
 
