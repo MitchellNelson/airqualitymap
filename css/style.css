@@ -90,7 +90,7 @@ a:hover{
 }
 .nav-wrapper{
 	text-align: left;
-	height: 25vh;
+	height: 17vh;
 	min-height: 115px;
 	background-color: #44484f;
 	color:white;
@@ -168,7 +168,7 @@ a:hover{
 .filters{
 	font-size:.8rem;
 }
-.about-page tr{
+.about-page{
 	width:100vw;
 }
 .about-page tbody tr td{
@@ -176,6 +176,11 @@ a:hover{
 }
 .filters  input{
 	height: 10px;
+}
+.heat-div{
+	font-size: .8rem;
+	margin:0;
+	padding:0;
 }
 #header{
 	text-align: center;

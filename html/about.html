@@ -9,13 +9,13 @@
 
 </head>
 <body>
-  <span>
+  <div>
   <table class="about-page">
     <thead>
       <tr id = "header"> 
         <th><a href = "../index.html">  Air Quality Map </a></th>
         <th> <a href = "about.html">  About </a> </th>
-
+      </tr>
       <tr>
         <th> Leah Emerson</th>
         <th> Mitchell Nelson</th>
@@ -39,8 +39,16 @@
           <!-- Video -->
       </tr>
     </tbody>
-
-
+  </table>
+  </div>
+  <div>
+    <ul>
+      <li>Gets air quality measurements from the Open AQ Platform (https://docs.openaq.org) for the past 30 days for the area within view of the maps</li>
+      <li>UI Filters to choose air particles of interest</li>
+      <li>Heatmap visualization overlay on the map when only one particle type selected</li>
+      <li>Background color of particle values in the table match the Air Quality Index from the EPA</li>
+      <li>Uses the Nominatim API (https://wiki.openstreetmap.org/wiki/Nominatim) to search via place name in addition to lat/long coordinates</li>
+    </ul>
   </div>
 </body>
 </html>

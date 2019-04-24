@@ -114,12 +114,12 @@
                   </div>
                   
                 </center>
-                  <div v-if = "checkedParams1.length ==1">
+                  <div v-if = "checkedParams1.length ==1" class="heat-div">
                     <input type="checkbox" id="heat1" v-model="heat1" @input="heatMap1"> 
                     <label for="heat1">Heat Map</label>
                     <table>  
                       <thead>
-                       <tr style = "line-height: 15px">
+                       <tr style = "line-height: 10px">
                           <th class = "good"> Good/Moderate</th>
                           <th class = "uhsg"> Unhealthy for Sensitive Groups / Unhealthy</th>
                           <th  class = "unhealthy"> Very Unhealthy/Hazardous </th>
@@ -131,7 +131,7 @@
 					    </div>
 					  </div>
 				    <div id="map1id" class="maps"></div>
-            <div style="max-height:25vh; overflow-y:scroll;">
+            <div style="max-height:21vh; overflow-y:scroll;">
 
               <table id="firstTable" >
               <thead>
@@ -302,12 +302,12 @@
                     </div>
                     
                   </center>
-                  <div v-if = "checkedParams2.length ==1">
+                  <div v-if = "checkedParams2.length ==1" class="heat-div">
                     <input type="checkbox" id="heat1" v-model="heat2" @input="heatMap2"> 
                     <label for="heat2">Heat Map</label>
                     <table>  
                       <thead>
-                       <tr>
+                       <tr style = "line-height: 10px">
                           <th class = "good"> Good/Moderate</th>
                           <th class = "uhsg"> Unhealthy for Sensitive Groups / Unhealthy</th>
                           <th  class = "unhealthy"> Very Unhealthy/Hazardous </th>
@@ -321,7 +321,7 @@
 					    </div>
 					</div>	
 				    <div id="map2id" class="maps"></div>
-          <div style="max-height:25vh; overflow-y:scroll;">
+          <div style="max-height:21vh; overflow-y:scroll;">
             <table id="secondTable">
 
              <thead>
