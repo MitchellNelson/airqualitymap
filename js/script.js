@@ -52,6 +52,16 @@ init = function(){
             heatLayer2: null,
         },
         watch: {
+            date_to1: function(){
+                console.log("date_from1 changed")
+                DeleteAllMarkers(this.unique_markers1, this.map1);
+                OpenAQSearch1();
+            },
+            date_to2: function(){
+                console.log("date_from2 changed")
+                DeleteAllMarkers(this.unique_markers2, this.map2);
+                OpenAQSearch2();
+            },
             date_from1: function(){
                 console.log("date_from1 changed")
                 DeleteAllMarkers(this.unique_markers1, this.map1);
