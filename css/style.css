@@ -98,6 +98,10 @@ a:hover{
 .nav{
 	margin-left: 1rem;
 }
+.video{
+	text-align: center;
+	margin-top: 2rem;
+}
 .filter-page{
 	display: none;
 }
