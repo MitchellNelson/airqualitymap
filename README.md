@@ -2,6 +2,9 @@
 
 Implementation of CISC 375 Project 2 using Vue.js. Two side-by-side maps allow users to compare different air particles from different locations. 
 
+## Demo
+https://nels4929.github.io/airqualitymap/
+
 ## Features
 
 * Gets air quality measurements from the Open AQ Platform (https://docs.openaq.org) for the past 30 days for the area within view of the maps
